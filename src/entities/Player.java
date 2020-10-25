@@ -36,7 +36,7 @@ public class Player extends Entity{
 		}
 	}
 	
-	@Override
+
 	public void tick() {
 		
 		moved = false;

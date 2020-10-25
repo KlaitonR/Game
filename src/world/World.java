@@ -83,7 +83,7 @@ public class World {
 		int x3 = xNext / TILE_SIZE;
 		int y3 = (yNext + TILE_SIZE -1) / TILE_SIZE;
 		
-		int x4 = (xNext + TILE_SIZE -1) / TILE_SIZE;
+		int x4 = (xNext + TILE_SIZE - 1) / TILE_SIZE;
 		int y4 = (yNext + TILE_SIZE -1) / TILE_SIZE;
 		
 		return !((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
