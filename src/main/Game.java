@@ -20,18 +20,18 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static JFrame frame;
 	private Thread thread;
 	private boolean isRunning = true;
-	private final int WIDTH = 240;
-	private final int HEIGHT = 160; 
+	static public final int WIDTH = 240;
+	static public final int HEIGHT = 160; 
 	private final int SCALE  = 3;
 	
 	private BufferedImage image;
 	
-	public java.util.List<Entity> entities;
+	static public java.util.List<Entity> entities;
 	static public Spritsheet spritesheet;
 	
 	public static World world;
 	
-	public Player player;
+	public static Player player;
 	
 	public Game() {
 		
@@ -40,16 +40,14 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
 		
-		world =  new World("/map.png");
-		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-		
 		entities =  new ArrayList<Entity>();
 		spritesheet =  new Spritsheet("/spritesheet.png");
-		
 		player  = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
-		
 		entities.add(player);
+		world =  new World("/map.png");
+		
+		
 	}
 	
 	public static void main(String args[]) {
@@ -93,7 +91,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			
 			e.tick();
 		}
-		
 	}
 	
 	public void render() {
@@ -104,9 +101,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		}
 		
 		Graphics g = image.getGraphics();
-		g.setColor(new Color(0,255,0));
+		g.setColor(new Color(0,0,0));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
+		world.render(g);
 		
 		for(int i = 0; i<entities.size(); i++) {
 			Entity e = entities.get(i);
@@ -157,7 +155,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			player.rigth = true;
-		}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_E) {
+		}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			player.left = true;
 		}
 		
@@ -173,7 +171,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			player.rigth = false;
-		}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_E) {
+		}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			player.left = false;
 		}
 		
