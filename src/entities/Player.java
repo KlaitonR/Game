@@ -12,6 +12,7 @@ public class Player extends Entity{
 	public int rightDir = 0, leftDir = 1, upDir = 2, downDir = 3;
 	public int dir = rightDir;
 	public double speed = 1.4;
+	public int life = 100;
 	
 	private BufferedImage [] rightPlayer;
 	private BufferedImage [] leftPlayer;

@@ -38,13 +38,21 @@ public class Enemy extends Entity{
 		}
 	}
 	
+	public boolean isColiddingWithPlayer() {
+		
+		Rectangle enemyCurrent = new Rectangle(this.getX() + maskx, this.getY() + masky, maskw, maskh);
+		Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
+
+		return enemyCurrent.intersects(player);
+	}
+	
 	public boolean isColidding(int xNext, int yNext) {
 		
 		Rectangle enemyCurrent = new Rectangle(xNext + maskx, yNext + masky, maskw, maskh);
 		
 		for(int i =0; i < Game.enemies.size(); i++) {
 			Enemy e = Game.enemies.get(i);
-			if(e==this)
+			if(e==this && (e instanceof Enemy))
 				continue;
 			
 			Rectangle targetEnemy= new Rectangle(e.getX() + maskx,e.getY() + masky, maskw, maskh);
@@ -65,8 +73,10 @@ public class Enemy extends Entity{
 		else if(speed>0.8)
 			speed -= 0.25;
 		
+		if(!isColiddingWithPlayer()) {
+		
 			if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY()) && !isColidding((int)(x+speed), this.getY())) {
-				moved =  true;
+				moved = true;
 				x += speed;
 				dir = rightDir;
 			}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY()) && !isColidding((int)(x-speed), this.getY())){
@@ -76,14 +86,23 @@ public class Enemy extends Entity{
 			}
 			
 			if((int)y < Game.player.getY() && World.isFree(this.getX(), (int)(y+speed)) && !isColidding(this.getX(), (int)(y+speed))) {
-				moved =  true;
+				moved = true;
 				y += speed;
 				dir = downDir;
 			}else if ((int)y > Game.player.getY() && World.isFree(this.getX(), (int)(y-speed)) && !isColidding(this.getX(), (int)(y-speed))){
-				moved =  true;
+				moved = true;
 				y -= speed;
 				dir = upDir;
 			}
+		}else {
+			
+			if(Game.rand.nextInt(100) < 10) {
+				Game.player.life -= Game.rand.nextInt(3);
+				if(Game.player.life <= 0) { 
+					System.exit(1);
+				}
+			}
+		}
 		
 		if(moved) {
 			frames++;
@@ -114,6 +133,5 @@ public class Enemy extends Entity{
 //		g.setColor(Color.black);
 //		g.fillRect(this.getX() - Camera.x, this.getY() - Camera.y, 16, 16);
 	}
-
 
 }
