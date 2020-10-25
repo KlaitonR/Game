@@ -8,7 +8,11 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.JFrame;
+
+import entities.Enemy;
 import entities.Entity;
 import entities.Player;
 import graficos.Spritsheet;
@@ -27,21 +31,24 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private BufferedImage image;
 	
 	static public java.util.List<Entity> entities;
+	static public java.util.List<Enemy> enemies;
 	static public Spritsheet spritesheet;
 	
 	public static World world;
 	
 	public static Player player;
 	
+	public static Random rand;
+	
 	public Game() {
 		
+		rand = new Random();
 		addKeyListener(this);
-		
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
-		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities =  new ArrayList<Entity>();
+		enemies =  new ArrayList<Enemy>();
 		spritesheet =  new Spritsheet("/spritesheet.png");
 		player  = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
