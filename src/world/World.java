@@ -59,7 +59,8 @@ public class World {
 						
 					}else if(pixelAtual == 0xFF00FF00) { //Cura
 						
-						Game.entities.add(new LifePack(xx*16, yy*16, 16, 16, Entity.LIFE_PACK_EN));
+						LifePack lifePack = new LifePack(xx*16, yy*16, 16, 16, Entity.LIFE_PACK_EN);
+						Game.entities.add(lifePack);
 		
 					}else if(pixelAtual == 0xFFFFFF00) { //Munição
 						
