@@ -12,7 +12,8 @@ public class Player extends Entity{
 	public int rightDir = 0, leftDir = 1, upDir = 2, downDir = 3;
 	public int dir = rightDir;
 	public double speed = 1.4;
-	public int life = 100;
+	public int maskx = 3, masky = 0, maskw = 10, maskh = 14;
+	public double life = 100, maxLife = 100;
 	
 	private BufferedImage [] rightPlayer;
 	private BufferedImage [] leftPlayer;
@@ -96,5 +97,6 @@ public class Player extends Entity{
 			g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 		else if(dir == downDir)
 			g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+	
 	}
 }

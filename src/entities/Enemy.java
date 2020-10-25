@@ -1,5 +1,6 @@
 package entities;
 
+//import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -11,7 +12,7 @@ public class Enemy extends Entity{
 	
 	private double speed = Game.rand.nextDouble();
 	
-	private int maskx = 8, masky = 8, maskw = 8, maskh = 14;
+	private int maskx = 4, masky = 0, maskw = 9, maskh = 16;
 	
 	private BufferedImage [] rightEnemy;
 	private BufferedImage [] leftEnemy;
@@ -41,7 +42,7 @@ public class Enemy extends Entity{
 	public boolean isColiddingWithPlayer() {
 		
 		Rectangle enemyCurrent = new Rectangle(this.getX() + maskx, this.getY() + masky, maskw, maskh);
-		Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
+		Rectangle player = new Rectangle(Game.player.getX() + Game.player.maskx, Game.player.getY()+ Game.player.masky, Game.player.maskw, Game.player.maskh);
 
 		return enemyCurrent.intersects(player);
 	}
@@ -131,7 +132,10 @@ public class Enemy extends Entity{
 			g.drawImage(downEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 	
 //		g.setColor(Color.black);
-//		g.fillRect(this.getX() - Camera.x, this.getY() - Camera.y, 16, 16);
+//		g.fillRect(this.getX() - Camera.x + maskx, this.getY() - Camera.y + masky, maskw, maskh);
+//		
+//		g.setColor(Color.black);
+//		g.fillRect(Game.player.getX() - Camera.x + Game.player.maskx, Game.player.getY() - Camera.y + Game.player.masky, Game.player.maskw, Game.player.maskh);
 	}
 
 }
