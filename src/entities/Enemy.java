@@ -1,16 +1,16 @@
 package entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import main.Game;
-import world.Camera;
 import world.World;
 
 public class Enemy extends Entity{
 	
-	private double speed = 0.6;
+	private double speed = 0.7;
+	
+	private int maskx = 8, masky = 8, maskw = 8, maskh = 14;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -19,14 +19,14 @@ public class Enemy extends Entity{
 	
 	public boolean isColidding(int xNext, int yNext) {
 		
-		Rectangle enemyCurrent = new Rectangle(xNext, yNext, World.TILE_SIZE,  World.TILE_SIZE);
+		Rectangle enemyCurrent = new Rectangle(xNext + maskx, yNext + masky, maskw, maskh);
 		
 		for(int i =0; i < Game.enemies.size(); i++) {
 			Enemy e = Game.enemies.get(i);
 			if(e==this)
 				continue;
 			
-			Rectangle targetEnemy= new Rectangle(e.getX(),e.getY(), World.TILE_SIZE,  World.TILE_SIZE);
+			Rectangle targetEnemy= new Rectangle(e.getX() + maskx,e.getY() + masky, maskw, maskh);
 			if(enemyCurrent.intersects(targetEnemy)) {
 				return true;
 			}
@@ -37,7 +37,7 @@ public class Enemy extends Entity{
 	
 	public void tick() {
 		
-		if(Game.rand.nextInt(100) < 30) {
+		if(Game.rand.nextInt(100) < 40) {
 			if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY()) && !isColidding((int)(x+speed), this.getY())) {
 				x += speed;
 			}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY()) && !isColidding((int)(x-speed), this.getY())){
