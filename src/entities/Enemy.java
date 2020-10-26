@@ -75,7 +75,7 @@ public class Enemy extends Entity{
 			speed -= 0.25;
 		
 		if(!isColiddingWithPlayer()) {
-		
+			
 			if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY()) && !isColidding((int)(x+speed), this.getY())) {
 				moved = true;
 				x += speed;
@@ -99,6 +99,7 @@ public class Enemy extends Entity{
 			
 			if(Game.rand.nextInt(100) < 10) {
 				Game.player.life -= Game.rand.nextInt(3);
+				Game.player.isDamage = true;
 				if(Game.player.life <= 0) { 
 					System.exit(1);
 				}
