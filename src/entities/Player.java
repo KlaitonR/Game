@@ -47,6 +47,7 @@ public class Player extends Entity{
 	private int damageFrames;
 	
 	private boolean hasGun;
+	public boolean shoot;
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -180,7 +181,7 @@ public class Player extends Entity{
 		checkCollisionAmmo();
 		checkCollisionGun();
 		
-		if(life <= 0) {
+		if(life <= 0) { // Game over
 			
 			Game.entities =  new ArrayList<Entity>();
 			Game.enemies =  new ArrayList<Enemy>();
@@ -197,6 +198,49 @@ public class Player extends Entity{
 			if(this.damageFrames == 8) {
 				damageFrames = 0;
 				isDamage = false;
+			}
+		}
+		
+		if(shoot) {
+			
+			shoot = false;
+			
+			if(hasGun && ammo > 0) {
+				ammo--;
+				int dx = 0;
+				int dy = 0;
+				int px = 0;
+				int py = 0;
+				
+				if(dir == rightDir) {
+					dx = 1;
+					px = 12;
+					py = 7;
+				}else if (dir == leftDir){
+					dx = -1;
+					px = 0;
+					py = 7;
+				}
+				
+				if (dir == downDir) {
+					dy = 1;
+					px = 6;
+					py = 6;
+				}else if (dir == upDir){
+					dy = -1;
+					px = 5;
+					py = 0;
+				}
+				
+				if(dir == rightDir || dir == leftDir) {
+					BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, dx, 0);
+					Game.bulletShootes.add(bulletShoot);
+				}
+				
+				if(dir == downDir || dir == upDir) {
+					BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, 0, dy);
+					Game.bulletShootes.add(bulletShoot);
+				}
 			}
 		}
 		
