@@ -3,7 +3,6 @@ package entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 import graficos.Spritsheet;
 import main.Game;
 import world.Camera;
@@ -19,7 +18,7 @@ public class Player extends Entity{
 	public double speed = 1.4;
 	public double life = 100, maxLife = 100;
 	public int ammo = 0;
-	
+	public double mx, my;
 	
 	private BufferedImage [] rightPlayer;
 	private BufferedImage [] leftPlayer;
@@ -48,6 +47,8 @@ public class Player extends Entity{
 	
 	private boolean hasGun;
 	public boolean shoot;
+	public boolean mouseShoot;
+	
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -179,7 +180,9 @@ public class Player extends Entity{
 		
 		checkCollisionLifePack();
 		checkCollisionAmmo();
-		checkCollisionGun();
+		
+		if(!hasGun)
+			checkCollisionGun();
 		
 		if(life <= 0) { // Game over
 			
@@ -196,7 +199,7 @@ public class Player extends Entity{
 		if(isDamage) {
 			damageFrames++;
 			if(this.damageFrames == 8) {
-				damageFrames = 0;
+				damageFrames = 0; 
 				isDamage = false;
 			}
 		}
@@ -241,6 +244,46 @@ public class Player extends Entity{
 					BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, 0, dy);
 					Game.bulletShootes.add(bulletShoot);
 				}
+			}
+		}
+		
+		if(mouseShoot) {
+			
+			mouseShoot = false;
+			
+			if(hasGun && ammo > 0) {
+				ammo--;
+				double angle = Math.atan2( my - (this.getY()+8 - Camera.y), mx - (this.getX()+8 - Camera.x));
+				double dx = Math.cos(angle);
+				double dy = Math.sin(angle);
+				int px = 0;
+				int py = 0;
+				
+				if(dir == rightDir) {
+					dx = 1;
+					px = 12;
+					py = 7;
+				}else if (dir == leftDir){
+					dx = -1;
+					px = 0;
+					py = 7;
+				}
+				
+				if (dir == downDir) {
+					dy = 1;
+					px = 6;
+					py = 6;
+				}else if (dir == upDir){
+					dy = -1;
+					px = 5;
+					py = 0;
+				}
+				
+				System.out.println(angle);
+				
+				BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, dx, dy);
+				Game.bulletShootes.add(bulletShoot);
+				
 			}
 		}
 		
