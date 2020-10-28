@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import graficos.Spritsheet;
 import graficos.UI;
 import world.World;
 
-public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
+public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	
 	private static final long serialVersionUID = 1L;
 	public static JFrame frame;
@@ -49,8 +50,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public Game() {
 		
 		rand = new Random();
-		addKeyListener(this);
-		addMouseListener(this);
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
 		ui = new UI();
@@ -63,7 +62,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		entities.add(player);
 		world =  new World("/map.png");
 		
-		
+		addKeyListener(this);
+		addMouseMotionListener(this);
+		addMouseListener(this);
+
 	}
 	
 	public static void main(String args[]) {
@@ -227,13 +229,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -242,4 +242,21 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		player.moveMx = (e.getX() / 3);
+		player.moveMy = (e.getY() / 3);
+		
+	}
+	
+
+	
+	
 }
