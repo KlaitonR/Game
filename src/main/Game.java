@@ -1,9 +1,13 @@
 package main;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -47,7 +51,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static UI ui;
 	
+	public static String gameState = "NORMAL";
+	private boolean showMessageGameOver = true;
+	private int framesGameOver = 0;
+	
 	private int CUR_LEVEL = 1, MAX_LVL  = 2;
+	private boolean restartGame;
 	
 	public Game() {
 		
@@ -78,10 +87,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void initFrame() {
 		frame = new JFrame("Game #1");
 		frame.add(this);
+		java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
+		Cursor c = toolkit.createCustomCursor(image , new Point(frame.getX() + 10, frame.getY() + 15), "C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
+		frame.setCursor (c);
 		frame.setResizable(false);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setCursor(new Cursor(Cursor.getSystemCustomCursor("C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png")));
 		frame.setVisible(true);
 	}
 	
@@ -102,28 +116,52 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public void tick() {
 		
-		for(int i = 0; i<entities.size(); i++) {
-			Entity e = entities.get(i);
-			e.tick();
-		}
-		
-		for(int i = 0; i<bulletShootes.size(); i++) {
-			bulletShootes.get(i).tick();
-		}
-		
-		//Niveis
-		if (enemies.size() == 0) {
-			CUR_LEVEL++;
-			if(CUR_LEVEL > MAX_LVL) {
-				CUR_LEVEL = 1;
+		if(gameState.equals("NORMAL")) {
+			
+			restartGame = false;
+			
+			for(int i = 0; i<entities.size(); i++) {
+				Entity e = entities.get(i);
+				e.tick();
 			}
 			
+			for(int i = 0; i<bulletShootes.size(); i++) {
+				bulletShootes.get(i).tick();
+			}
+			
+			//Niveis
+			if (enemies.size() == 0) {
+				CUR_LEVEL++;
+				if(CUR_LEVEL > MAX_LVL) {
+					CUR_LEVEL = 1;
+				}
+				
+				String newWorld = "level" + CUR_LEVEL + ".png";
+				player.level = newWorld;
+				World.restarGame(newWorld);
+			}
+			
+		}else if (gameState.equals("GAME OVER")) {
+			framesGameOver++;
+			if(framesGameOver == 30) {
+				framesGameOver = 0;
+				if(showMessageGameOver)
+					showMessageGameOver = false;
+				else
+					showMessageGameOver =  true;
+			}
+		}
+		
+		if(restartGame) {
+			restartGame = false;
+			gameState =  "NORMAL";
+			// CUR_LEVEL = 1;
 			String newWorld = "level" + CUR_LEVEL + ".png";
+			player.level = newWorld;
 			World.restarGame(newWorld);
 		}
 		
 	}
-	
 	
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
@@ -155,6 +193,24 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		g.setFont(new Font("arial", Font.BOLD, 20));
 		g.setColor(Color.yellow);
 		g.drawString("Munição: " + player.ammo, 600, 20);
+		g.setColor(Color.darkGray);
+		g.drawString("Level " + CUR_LEVEL, 10, 470);
+		
+		if(gameState.equals("GAME OVER")) {
+			
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setColor(new Color(0,0,0,150));
+			g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+			g.setFont(new Font("arial", Font.BOLD, 40));
+			g.setColor(Color.white);
+			g.drawString("GAME OVER", (WIDTH*SCALE)/2 - 105, (HEIGHT*SCALE)/2 + 20);
+			g.setFont(new Font("arial", Font.BOLD, 20));
+			g.setColor(Color.white);
+			if(showMessageGameOver)
+				g.drawString("Pressione ENTER para reiniciar", (WIDTH*SCALE)/2 - 130, (HEIGHT*SCALE)/2 + 45 );
+			
+		}
+		
 		bs.show();
 	}
 
@@ -185,6 +241,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 			
 		}
+
 		stop();
 	}
 
@@ -226,6 +283,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			player.down = false;
 		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) 
+			restartGame =  true;
 	}
 
 	@Override

@@ -2,9 +2,6 @@ package entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import graficos.Spritsheet;
 import main.Game;
 import world.Camera;
 import world.World;
@@ -49,6 +46,8 @@ public class Player extends Entity{
 	private boolean hasGun;
 	public boolean shoot;
 	public boolean mouseShoot;
+	
+	public String level;
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -187,15 +186,8 @@ public class Player extends Entity{
 			checkCollisionGun();
 		
 		if(life <= 0) { // Game over
-			
-			Game.entities =  new ArrayList<Entity>();
-			Game.enemies =  new ArrayList<Enemy>();
-			Game.spritesheet =  new Spritsheet("/spritesheet.png");
-			Game.player  = new Player(0, 0, 16, 16, Game.spritesheet.getSprite(32, 0, 16, 16));
-			Game.entities.add(Game.player);
-			Game.world =  new World("/map.png");
-			return;
-			
+			life = 0;
+			Game.gameState = "GAME OVER";
 		}
 		
 		if(isDamage) {

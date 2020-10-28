@@ -4,9 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
-
 import entities.Bullet;
 import entities.Enemy;
 import entities.Entity;
@@ -70,6 +68,12 @@ public class World {
 						
 						Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
 		
+					}else if (pixelAtual == 0xFFB200FF){ //Rochas
+						tiles[xx + (yy*WIDTH)] = new RockTile(xx*16, yy*16, Tile.TILE_ROCK);
+						
+					}else if(pixelAtual == 0xFFFF00DC) {
+						tiles[xx + (yy*WIDTH)] = new BushTile(xx*16, yy*16, Tile.TILE_BUSH);
+						
 					}
 				}
 			}
@@ -96,9 +100,14 @@ public class World {
 		return !((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x2 + (y2*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x3 + (y3*World.WIDTH)] instanceof WallTile) ||
-				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile));
+				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile)) &&
+				!((tiles[x1 + (y1*World.WIDTH)] instanceof BushTile) ||
+				(tiles[x2 + (y2*World.WIDTH)] instanceof BushTile) ||
+				(tiles[x3 + (y3*World.WIDTH)] instanceof BushTile) ||
+				(tiles[x4 + (y4*World.WIDTH)] instanceof BushTile));
 		
 	}
+
 	
 	public static void restarGame(String level) {
 		
@@ -125,6 +134,7 @@ public class World {
 				if(xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT) 
 					continue;
 				Tile tile = tiles[xx + (yy*WIDTH)];
+				
 				tile.render(g);
 			}
 		}
