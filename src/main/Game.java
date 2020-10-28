@@ -47,6 +47,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static UI ui;
 	
+	private int CUR_LEVEL = 1, MAX_LVL  = 2;
+	
 	public Game() {
 		
 		rand = new Random();
@@ -60,7 +62,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		spritesheet =  new Spritsheet("/spritesheet.png");
 		player  = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
-		world =  new World("/map.png");
+		world =  new World("/level1.png");
 		
 		addKeyListener(this);
 		addMouseMotionListener(this);
@@ -108,7 +110,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for(int i = 0; i<bulletShootes.size(); i++) {
 			bulletShootes.get(i).tick();
 		}
+		
+		//Niveis
+		if (enemies.size() == 0) {
+			CUR_LEVEL++;
+			if(CUR_LEVEL > MAX_LVL) {
+				CUR_LEVEL = 1;
+			}
+			
+			String newWorld = "level" + CUR_LEVEL + ".png";
+			World.restarGame(newWorld);
+		}
+		
 	}
+	
 	
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();

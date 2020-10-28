@@ -3,6 +3,7 @@ package entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 import graficos.Spritsheet;
 import main.Game;
 import world.Camera;
