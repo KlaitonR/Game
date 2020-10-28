@@ -14,7 +14,7 @@ import main.Game;
 
 public class World {
 	
-	static private Tile[] tiles;
+	static public Tile[] tiles;
 	public static int WIDTH, HEIGHT;
 	public static int TILE_SIZE = 16;
 	

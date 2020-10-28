@@ -146,21 +146,23 @@ public class Player extends Entity{
 		
 		if(rigth && World.isFree((int)(x+speed), this.getY())) {
 			moved =  true;
-//			dir = rightDir; //Rotação de sprites com teclado
+			//dir = rightDir; //Rotação de sprites com teclado
 			x+=speed;
+			
 		}else if (left && World.isFree((int)(x-speed), this.getY())) {
 			moved =  true;
-//			dir = leftDir; //Rotação de sprites com teclado
+			//dir = leftDir; //Rotação de sprites com teclado
 			x-=speed;
 		}
 			
 		if(up && World.isFree(this.getX(),(int)(y-speed))) {
 			moved =  true;
-//			dir = upDir; //Rotação de sprites com teclado 
+			//dir = upDir; //Rotação de sprites com teclado 
 			y-=speed;
+
 		}else if (down && World.isFree(this.getX(), (int)(y+speed))) {
 			moved =  true;
-//			dir = downDir; //Rotação de sprites com teclado
+			//dir = downDir; //Rotação de sprites com teclado
 			y+=speed;
 		}
 		
@@ -246,19 +248,19 @@ public class Player extends Entity{
 //				}
 //			}
 //		}
-	
+		
 		//Rotacionar sprite
 		double angle = Math.atan2(moveMy - (this.getY()+8 - Camera.y), moveMx - (this.getX()+8 - Camera.x));
 		double direction = Math.toDegrees(angle);
 		System.out.println(direction);
 		
-		if(direction <= 60 && direction > -60)  //direita
+		if(direction <= 35 && direction > -35)  //direita
 			dir = rightDir;
-		else if(direction <= -50 && direction > -130) //cima
+		else if(direction <= -35 && direction > -145) //cima
 			dir = upDir;
-		else if (direction <= -130 || direction > 130)  //esquerda
+		else if (direction <= -145 || direction > 145)  //esquerda
 			dir = leftDir;
-		else if (direction <= 130 && direction > 50)  //baixo
+		else if (direction <= 145 && direction > 50)  //baixo
 			dir = downDir;
 		
 		if(mouseShoot) {

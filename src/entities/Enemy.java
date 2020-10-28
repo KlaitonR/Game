@@ -22,6 +22,8 @@ public class Enemy extends Entity{
 	public int dir = rightDir;
 	private boolean moved = false;
 	private int frames = 0, maxFrames = 20, index = 0, maxIndex = 3;
+	
+	private int life = 10;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
@@ -115,6 +117,28 @@ public class Enemy extends Entity{
 			index = 0;
 			frames = 0;
 		}
+		
+		collidingBullet();
+		
+		if(life <= 0) 
+			destroySelf();
+		
+	}
+	
+	public void destroySelf() {
+		Game.entities.remove(this);
+	}
+	
+	public void collidingBullet() {
+		
+		for(int i=0; i < Game.bulletShootes.size(); i++) {
+			if(Entity.isColidding(this, Game.bulletShootes.get(i))) {
+				Game.bulletShootes.remove(i);
+				life --;
+				return;
+			}
+		}
+		
 	}
 	
 	public void render(Graphics g) {

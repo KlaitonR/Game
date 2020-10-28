@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import main.Game;
 import world.Camera;
+import world.Tile;
+import world.World;
 
 public class Entity {
 	
@@ -47,6 +49,15 @@ public class Entity {
 		Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskx, e2.getY() + e2.masky, e2.maskw, e2.maskh);
 		
 		return e1Mask.intersects(e2Mask);
+		
+	}
+	
+	public static boolean isColiddingTile(Entity e, Tile t) {
+		
+		Rectangle eMask = new Rectangle(e.getX() + e.getMaskx(), e.getY() + e.getMasky(), e.getMaskw(), e.getMaskh());
+		Rectangle tMask = new Rectangle(t.getX(), t.getY(), World.TILE_SIZE, World.TILE_SIZE);
+		
+		return eMask.intersects(tMask);
 		
 	}
 	
@@ -95,4 +106,36 @@ public class Entity {
 		this.height = height;
 	}
 
+	public int getMaskx() {
+		return maskx;
+	}
+
+	public void setMaskx(int maskx) {
+		this.maskx = maskx;
+	}
+
+	public int getMasky() {
+		return masky;
+	}
+
+	public void setMasky(int masky) {
+		this.masky = masky;
+	}
+
+	public int getMaskw() {
+		return maskw;
+	}
+
+	public void setMaskw(int maskw) {
+		this.maskw = maskw;
+	}
+
+	public int getMaskh() {
+		return maskh;
+	}
+
+	public void setMaskh(int maskh) {
+		this.maskh = maskh;
+	}
+	
 }
