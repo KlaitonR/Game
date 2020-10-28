@@ -18,12 +18,19 @@ public class Enemy extends Entity{
 	private BufferedImage [] leftEnemy;
 	private BufferedImage [] upEnemy;
 	private BufferedImage [] downEnemy; 
+	private BufferedImage [] rightEnemyDamage;
+	private BufferedImage [] leftEnemyDamage;
+	private BufferedImage [] upEnemyDamage;
+	private BufferedImage [] downEnemyDamage;
+	
 	public int rightDir = 0, leftDir = 1, upDir = 2, downDir = 3;
 	public int dir = rightDir;
 	private boolean moved = false;
 	private int frames = 0, maxFrames = 20, index = 0, maxIndex = 3;
 	
 	private int life = 10;
+	boolean isDamage;
+	private int damageFrames;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
@@ -33,11 +40,22 @@ public class Enemy extends Entity{
 		upEnemy = new BufferedImage[4];
 		downEnemy = new BufferedImage[4];
 		
+		rightEnemyDamage = new BufferedImage[4];
+		leftEnemyDamage = new BufferedImage[4];
+		upEnemyDamage = new BufferedImage[4];
+		downEnemyDamage = new BufferedImage[4];
+		
 		for(int i = 0; i<4; i++) {
 			rightEnemy[i] = Game.spritesheet.getSprite(96 + (i*16), 0, 16, 16);
 			leftEnemy[i] = Game.spritesheet.getSprite(96 + (i*16), 16, 16, 16);
 			upEnemy[i] = Game.spritesheet.getSprite(96 + (i*16), 32, 16, 16);
 			downEnemy[i] = Game.spritesheet.getSprite(96 + (i*16), 48, 16, 16);
+			
+			rightEnemyDamage[i] = Game.spritesheet.getSprite(96 + (i*16), 64, 16, 16);
+			leftEnemyDamage[i] = Game.spritesheet.getSprite(96 + (i*16), 80, 16, 16);
+			upEnemyDamage[i] = Game.spritesheet.getSprite(96 + (i*16), 96, 16, 16);
+			downEnemyDamage[i] = Game.spritesheet.getSprite(96 + (i*16), 112, 16, 16);
+			
 		}
 	}
 	
@@ -123,6 +141,14 @@ public class Enemy extends Entity{
 		if(life <= 0) 
 			destroySelf();
 		
+		if(isDamage) {
+			damageFrames++;
+			if(this.damageFrames == 10) {
+				damageFrames = 0; 
+				isDamage = false;
+			}
+		}
+		
 	}
 	
 	public void destroySelf() {
@@ -131,10 +157,13 @@ public class Enemy extends Entity{
 	
 	public void collidingBullet() {
 		
+		isDamage = false;
+		
 		for(int i=0; i < Game.bulletShootes.size(); i++) {
 			if(Entity.isColidding(this, Game.bulletShootes.get(i))) {
 				Game.bulletShootes.remove(i);
 				life --;
+				isDamage = true;
 				return;
 			}
 		}
@@ -144,14 +173,28 @@ public class Enemy extends Entity{
 	public void render(Graphics g) {
 		super.render(g);
 		
-		if(dir == rightDir)
-			g.drawImage(rightEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-		else if (dir == leftDir)
-			g.drawImage(leftEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-		else if(dir == upDir)
-			g.drawImage(upEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-		else if(dir == downDir)
-			g.drawImage(downEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+		if(isDamage) {
+			
+			if(dir == rightDir)
+				g.drawImage(rightEnemyDamage[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			else if (dir == leftDir)
+				g.drawImage(leftEnemyDamage[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			else if(dir == upDir)
+				g.drawImage(upEnemyDamage[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			else if(dir == downDir)
+				g.drawImage(downEnemyDamage[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			
+		}else {
+		
+			if(dir == rightDir)
+				g.drawImage(rightEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			else if (dir == leftDir)
+				g.drawImage(leftEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			else if(dir == upDir)
+				g.drawImage(upEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			else if(dir == downDir)
+				g.drawImage(downEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+		}
 	
 //		g.setColor(Color.black);
 //		g.fillRect(this.getX() - Camera.x + maskx, this.getY() - Camera.y + masky, maskw, maskh);
