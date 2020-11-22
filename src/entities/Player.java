@@ -144,26 +144,29 @@ public class Player extends Entity{
 		
 		moved = false;
 		
-		if(rigth && World.isFree((int)(x+speed), this.getY())) {
+		if(rigth && World.isFree((int)(x+speed), this.getY()) && World.isFreeBush((int)(x+speed), this.getY())) {
 			moved =  true;
 			//dir = rightDir; //Rotação de sprites com teclado
 			x+=speed;
 			
-		}else if (left && World.isFree((int)(x-speed), this.getY())) {
+			
+		}else if (left && World.isFree((int)(x-speed), this.getY()) && World.isFreeBush((int)(x-speed), this.getY())) {
 			moved =  true;
 			//dir = leftDir; //Rotação de sprites com teclado
 			x-=speed;
+		
 		}
 			
-		if(up && World.isFree(this.getX(),(int)(y-speed))) {
+		if(up && World.isFree(this.getX(),(int)(y-speed)) && World.isFreeBush(this.getX(), (int)(y-speed))) {
 			moved =  true;
 			//dir = upDir; //Rotação de sprites com teclado 
 			y-=speed;
 
-		}else if (down && World.isFree(this.getX(), (int)(y+speed))) {
+		}else if (down && World.isFree(this.getX(), (int)(y+speed)) && World.isFreeBush(this.getX(), (int)(y+speed))) {
 			moved =  true;
 			//dir = downDir; //Rotação de sprites com teclado
 			y+=speed;
+			
 		}
 		
 		if(moved) {

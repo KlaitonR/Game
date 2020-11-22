@@ -100,13 +100,43 @@ public class World {
 		return !((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x2 + (y2*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x3 + (y3*World.WIDTH)] instanceof WallTile) ||
-				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile)) &&
-				!((tiles[x1 + (y1*World.WIDTH)] instanceof BushTile) ||
+				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile));
+				
+		
+	}
+	
+public static boolean isFreeBush(int xNext, int yNext) {
+	
+	int x1 = (xNext / TILE_SIZE);
+	int y1 = (yNext / TILE_SIZE);
+	
+	int x2 = ((xNext + TILE_SIZE - 4) / TILE_SIZE);
+	int y2 = (yNext / TILE_SIZE);
+	
+	int x3 = (xNext / TILE_SIZE );
+	int y3 = ((yNext + TILE_SIZE - 4) / TILE_SIZE);
+	
+	int x4 = ((xNext + TILE_SIZE - 4) / TILE_SIZE);
+	int y4 = ((yNext + TILE_SIZE - 4) / TILE_SIZE);
+		
+//		int x1 = xNext / 13;
+//		int y1 = yNext / 13;
+//		
+//		int x2 = (xNext + 13 -1) / 13;
+//		int y2 = yNext / 13;
+//		
+//		int x3 = xNext / 13;
+//		int y3 = (yNext + 13 -1) / 13;
+//		
+//		int x4 = (xNext + 13 - 1) / 13;
+//		int y4 = (yNext + 13 -1) / 13;
+//		
+		return !((tiles[x1 + (y1*World.WIDTH)] instanceof BushTile) ||
 				(tiles[x2 + (y2*World.WIDTH)] instanceof BushTile) ||
 				(tiles[x3 + (y3*World.WIDTH)] instanceof BushTile) ||
 				(tiles[x4 + (y4*World.WIDTH)] instanceof BushTile));
-		
 	}
+
 
 	
 	public static void restarGame(String level) {
@@ -133,8 +163,7 @@ public class World {
 			for(int yy = yStart; yy <= yFinal; yy++) {
 				if(xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT) 
 					continue;
-				Tile tile = tiles[xx + (yy*WIDTH)];
-				
+				Tile tile = tiles[xx + (yy*WIDTH)];				
 				tile.render(g);
 			}
 		}
