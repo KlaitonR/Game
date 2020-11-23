@@ -1,4 +1,5 @@
 package main;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -61,6 +62,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean restartGame;
 	
 	public Game() {
+		
+		Sound.musicBackground.loop();
 		
 		rand = new Random();
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
@@ -362,8 +365,5 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		player.moveMy = (e.getY() / 3);
 		
 	}
-	
 
-	
-	
 }

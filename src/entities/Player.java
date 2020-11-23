@@ -248,7 +248,7 @@ public class Player extends Entity{
 		//Rotacionar sprite
 		double angle = Math.atan2(moveMy - (this.getY()+8 - Camera.y), moveMx - (this.getX()+8 - Camera.x));
 		double direction = Math.toDegrees(angle);
-		System.out.println(direction);
+		//System.out.println(direction);
 		
 		if(direction <= 35 && direction > -35)  //direita
 			dir = rightDir;
