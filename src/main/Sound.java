@@ -3,12 +3,17 @@ package main;
 import java.applet.Applet;
 import java.applet.AudioClip;
 
+@SuppressWarnings("deprecation")
 public class Sound {
 	
 	private AudioClip clip;
 	
 	public static final Sound musicBackground = new Sound("/music.wav");
 	public static final Sound hurtEffect = new Sound("/hurt.wav");
+	public static final Sound passosGrama = new Sound("/passosGrama.wav");
+	public static final Sound shootRifle = new Sound("/shootRifle.wav");
+	public static final Sound ReloadRifle = new Sound("/reloadRifle.wav");
+	public static final Sound missAmo = new Sound("/missAmo.wav");
 	
 	private Sound(String name) {
 		try {
@@ -32,6 +37,19 @@ public class Sound {
 		}
 	}
 	
+	public void stop() {
+		try {
+			new Thread() {
+				public void run() {
+					clip.stop();;
+				}
+			}.start();
+			
+		}catch (Throwable e) {
+			System.out.println("Erro ao pausar arquivo de som");
+		}
+	}
+	
 	public void loop () {
 		try {
 			new Thread() {
@@ -44,5 +62,5 @@ public class Sound {
 			System.out.println("Erro ao carregar arquivo de som");
 		}
 	}	
-	
+
 }

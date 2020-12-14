@@ -97,21 +97,21 @@ public class Enemy extends Entity{
 		
 		if(!isColiddingWithPlayer()) {
 			
-			if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY()) && !isColidding((int)(x+speed), this.getY())) {
+			if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
 				moved = true;
 				x += speed;
 				dir = rightDir;
-			}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY()) && !isColidding((int)(x-speed), this.getY())){
+			}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
 				moved =  true;
 				x -= speed;
 				dir = leftDir;
 			}
 			
-			if((int)y < Game.player.getY() && World.isFree(this.getX(), (int)(y+speed)) && !isColidding(this.getX(), (int)(y+speed))) {
+			if((int)y < Game.player.getY() && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
 				moved = true;
 				y += speed;
 				dir = downDir;
-			}else if ((int)y > Game.player.getY() && World.isFree(this.getX(), (int)(y-speed)) && !isColidding(this.getX(), (int)(y-speed))){
+			}else if ((int)y > Game.player.getY() && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))){
 				moved = true;
 				y -= speed;
 				dir = upDir;

@@ -12,7 +12,7 @@ public class Tile {
 	static public BufferedImage TILE_ROCK = Game.spritesheet.getSprite(16, 48, 16, 16);
 	
 	protected BufferedImage sprite;
-	protected int x,y;
+	protected int x,y,z;
 	
 	public Tile(int x, int y, BufferedImage sprite) {
 		this.x = x;

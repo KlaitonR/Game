@@ -62,9 +62,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean restartGame;
 	
 	public Game() {
-		
+	
 		Sound.musicBackground.loop();
-		
+	
 		rand = new Random();
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
@@ -288,6 +288,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if(e.getKeyCode() == KeyEvent.VK_X) {
 			player.shoot = true;
 		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.jump = true;
+		}
+		
+		
 		
 	}
 
