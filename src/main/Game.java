@@ -54,6 +54,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static UI ui;
 	
+	public boolean saveGame;
+	
 	public static String gameState = "MENU";
 	private boolean showMessageGameOver = true;
 	private int framesGameOver = 0;
@@ -123,6 +125,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public void tick() {
 		
+		if(this.saveGame) {
+			this.saveGame = false;
+			String[] opt1 = {"level", "vida"};
+			int[] opt2 = {this.CUR_LEVEL, (int)player.life};
+			Menu.saveGame(opt1,opt2,10);
+			System.out.println("Jogo salvo com sucesso!");
+			
+		}
+		
 		if(gameState.equals("NORMAL")) {
 			
 			restartGame = false;
@@ -169,8 +180,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		} else if(gameState.equals("MENU")) {
 			menu.tick();
 		}
-	
-		
 	}
 	
 	public void render() {
@@ -293,7 +302,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.jump = true;
 		}
 		
-		
+		if(e.getKeyCode() == KeyEvent.VK_P) {
+			if(gameState.equals("NORMAL")) {
+				this.saveGame =  true;
+			}
+		}
 		
 	}
 
@@ -322,7 +335,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 			if(gameState.equals("NORMAL")) {
 				gameState = "MENU";
-				menu.pause =  true;
+				Menu.pause =  true;
 			}else if(gameState.equals("MENU")) {
 				gameState = "NORMAL";			}
 		}
