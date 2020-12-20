@@ -9,7 +9,6 @@ import entities.Bullet;
 import entities.Enemy;
 import entities.Entity;
 import entities.LifePack;
-import entities.Player;
 import entities.Wapon;
 import graficos.Spritsheet;
 import main.Game;
@@ -104,9 +103,9 @@ public class World {
 			return true;
 		}
 		
-		if(zPlayer > 0) {
-			return true;
-		}
+//		if(zPlayer > 0) {
+//			return true;
+//		}
 		
 		return false;
 				
@@ -151,7 +150,8 @@ public static boolean isFreeBush(int xNext, int yNext) {
 		Game.entities =  new ArrayList<Entity>();
 		Game.enemies =  new ArrayList<Enemy>();
 		Game.spritesheet =  new Spritsheet("/spritesheet.png");
-		Game.player  = new Player(0, 0, 16, 16, Game.spritesheet.getSprite(32, 0, 16, 16));
+		//Game.player  = new Player(0, 0, 16, 16, Game.spritesheet.getSprite(32, 0, 16, 16));
+		Game.player.life = 100;
 		Game.entities.add(Game.player);
 		//Game.world =  new World("/map.png");
 		Game.world = new World("/"+ level);

@@ -100,7 +100,7 @@ public class Menu {
 			String[] spl2 = spl[i].split(":");
 			switch(spl2[0]){
 				
-				case "level":
+				case "levelRoom":
 					World.restarGame("level" + spl2[1] + ".png");
 					Game.gameState = "NORMAL";
 					pause = false;
@@ -109,6 +109,13 @@ public class Menu {
 				case "vida":
 					Game.player.life = Integer.parseInt(spl2[1]);
 					break;
+					
+				case "levelPlayer":
+					Game.player.levelPlayer = Integer.parseInt(spl2[1]);
+					break;
+				
+				case "exp":
+					Game.player.exp = Integer.parseInt(spl2[1]);
 			}
 		}
 	}

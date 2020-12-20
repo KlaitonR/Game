@@ -17,14 +17,14 @@ public class Player extends Entity{
 	
 	public double speed = 1.4;
 	public double life = 100, maxLife = 100;
-	public int ammo = 0;
+	public int ammo = 1000;
 	public double mx, my, moveMx = 0, moveMy = 0;
 	
 	public boolean jump;
 	public boolean isJumping;
 	public int z = 0;
 	public int jumpFrames = 25, jumpCur =0;
-	public int jumpSp = 2;
+	public int jumpSp = 1;
 	public boolean jumpUp, jumpDown;
 	
 	private BufferedImage [] rightPlayer;
@@ -47,16 +47,41 @@ public class Player extends Entity{
 	private BufferedImage [] upPlayerDamageWithGun;
 	private BufferedImage [] downPlayerDamageWithGun;
 	
+	private BufferedImage rightPlayerJumping;
+	private BufferedImage leftPlayerJumping;
+	private BufferedImage upPlayerJumping;
+	private BufferedImage downPlayerJumping; 
+	
+	private BufferedImage rightPlayerDamageJumping;
+	private BufferedImage leftPlayerDamageJumping;
+	private BufferedImage upPlayerDamageJumping;
+	private BufferedImage downPlayerDamageJumping;
+	
+	private BufferedImage rightPlayerGunJumping;
+	private BufferedImage leftPlayerGunJumping;
+	private BufferedImage upPlayerGunJumping;
+	private BufferedImage downPlayerGunJumping; 
+	
+	private BufferedImage rightPlayerGunDamageJumping;
+	private BufferedImage leftPlayerGunDamageJumping;
+	private BufferedImage upPlayerGunDamageJumping;
+	private BufferedImage downPlayerGunDamageJumping;
+	
 	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
 	private boolean moved = false;
 	public boolean isDamage;
 	private int damageFrames;
 	
-	private boolean hasGun;
+	private boolean hasGun = true;
 	public boolean shoot;
 	public boolean mouseShoot;
 	
-	public String level;
+	public String levelRoom;
+	public int levelPlayer;
+	
+	public double exp;
+	public int maxLevel = 4;
+	public double [] maxExp = {100, 500, 1000, 5000, 10000};
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -69,7 +94,7 @@ public class Player extends Entity{
 		rightPlayerDamage = new BufferedImage[4];
 		leftPlayerDamage = new BufferedImage[4];
 		upPlayerDamage = new BufferedImage[4];
-		downPlayerDamage = new BufferedImage[4];
+		downPlayerDamage = new BufferedImage[4]; 
 		
 		rightPlayerWithGun = new BufferedImage[4];
 		leftPlayerWithGun = new BufferedImage[4];
@@ -102,6 +127,27 @@ public class Player extends Entity{
 			upPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 224, 16, 16);
 			downPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 240, 16, 16);
 		}
+		
+		rightPlayerJumping = Game.spritesheet.getSprite(96, 128, 16, 16);
+		leftPlayerJumping  = Game.spritesheet.getSprite(112, 128, 16, 16);
+		upPlayerJumping = Game.spritesheet.getSprite(128, 128, 16, 16);
+		downPlayerJumping = Game.spritesheet.getSprite(144, 128, 16, 16);
+		
+		rightPlayerDamageJumping = Game.spritesheet.getSprite(96, 144, 16, 16);
+		leftPlayerDamageJumping  = Game.spritesheet.getSprite(112, 144, 16, 16);
+		upPlayerDamageJumping = Game.spritesheet.getSprite(128, 144, 16, 16);
+		downPlayerDamageJumping = Game.spritesheet.getSprite(144, 144, 16, 16);
+		
+		rightPlayerGunJumping = Game.spritesheet.getSprite(48, 128, 16, 16);
+		leftPlayerGunJumping  = Game.spritesheet.getSprite(48,  144, 16, 16);
+		upPlayerGunJumping = Game.spritesheet.getSprite(48,  160, 16, 16);
+		downPlayerGunJumping = Game.spritesheet.getSprite(48, 176, 16, 16);
+		
+		rightPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 192, 16, 16);
+		leftPlayerGunDamageJumping  = Game.spritesheet.getSprite(48, 208, 16, 16);
+		upPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 224, 16, 16);
+		downPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 240, 16, 16);
+		
 	}
 	
 	public void checkCollisionLifePack() {
@@ -147,6 +193,17 @@ public class Player extends Entity{
 					Game.entities.remove(atual);
 					Sound.ReloadRifle.play();
 				}
+			}
+		}
+	}
+	
+	public void checkKillEnemy() {
+		
+		for(int i=0; i<maxExp.length; i++) {
+			
+			if(exp <= maxExp[i]) {
+				levelPlayer = i;
+				break;
 			}
 		}
 	}
@@ -223,6 +280,7 @@ public class Player extends Entity{
 		
 		checkCollisionLifePack();
 		checkCollisionAmmo();
+		checkKillEnemy();
 		
 		if(!hasGun)
 			checkCollisionGun();
@@ -346,70 +404,143 @@ public class Player extends Entity{
 	@Override
 	public void render(Graphics g) {
 	
-		if(!isDamage) {
-				
-			if(dir == rightDir) {
+		if(!isJumping) {
+			
+			if(!isDamage) {
 					
-				if(hasGun) {
-					g.drawImage(rightPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}else {
-					g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+				if(dir == rightDir) {
+					
+					if(hasGun) {
+						g.drawImage(rightPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if (dir == leftDir) {
+						
+					if(hasGun) {
+						g.drawImage(leftPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if(dir == upDir) {
+						
+					if(hasGun) {
+						g.drawImage(upPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+					
+				}else if(dir == downDir) {
+						
+					if(hasGun) {
+						g.drawImage(downPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
 				}
 					
-			}else if (dir == leftDir) {
+			}else {
 					
-				if(hasGun) {
-					g.drawImage(leftPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}else {
-					g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}
-					
-			}else if(dir == upDir) {
-					
-				if(hasGun) {
-					g.drawImage(upPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}else {
-					g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}
-				
-			}else if(dir == downDir) {
-					
-				if(hasGun) {
-					g.drawImage(downPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}else {
-					g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+				if(dir == rightDir) {
+						
+					if(hasGun) {
+						g.drawImage(rightPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(rightPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if (dir == leftDir) { 
+						
+					if(hasGun) {
+						g.drawImage(leftPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(leftPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if(dir == upDir) {
+					g.drawImage(upPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					if(hasGun) {
+						g.drawImage(upPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+				}else if(dir == downDir) {
+						
+					if(hasGun) {
+						g.drawImage(downPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(downPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
 				}
 			}
+			
+		}else { // Se estiver pulando
+			
+			if(!isDamage) {
 				
-		}else {
-				
-			if(dir == rightDir) {
+				if(dir == rightDir) {
 					
-				if(hasGun) {
-					g.drawImage(rightPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}else {
-					g.drawImage(rightPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					if(hasGun) {
+						g.drawImage(rightPlayerGunJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(rightPlayerJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if (dir == leftDir) {
+						
+					if(hasGun) {
+						g.drawImage(leftPlayerGunJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(leftPlayerJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if(dir == upDir) {
+						
+					if(hasGun) {
+						g.drawImage(upPlayerGunJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(upPlayerJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+					
+				}else if(dir == downDir) {
+						
+					if(hasGun) {
+						g.drawImage(downPlayerGunJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(downPlayerJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
 				}
 					
-			}else if (dir == leftDir) { 
+			}else {
 					
-				if(hasGun) {
-					g.drawImage(leftPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}else {
-					g.drawImage(leftPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}
-					
-			}else if(dir == upDir) {
-				g.drawImage(upPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				if(hasGun) {
-					g.drawImage(upPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}
-			}else if(dir == downDir) {
-					
-				if(hasGun) {
-					g.drawImage(downPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				}else {
-					g.drawImage(downPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+				if(dir == rightDir) {
+						
+					if(hasGun) {
+						g.drawImage(rightPlayerGunDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(rightPlayerDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if (dir == leftDir) { 
+						
+					if(hasGun) {
+						g.drawImage(leftPlayerGunDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(leftPlayerDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+						
+				}else if(dir == upDir) {
+					g.drawImage(upPlayerGunDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					if(hasGun) {
+						g.drawImage(upPlayerDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
+				}else if(dir == downDir) {
+						
+					if(hasGun) {
+						g.drawImage(downPlayerGunDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
+						g.drawImage(downPlayerDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}
 				}
 			}
 		}

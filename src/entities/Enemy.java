@@ -32,6 +32,8 @@ public class Enemy extends Entity{
 	private int life = 10;
 	boolean isDamage;
 	private int damageFrames;
+	
+	private double exp;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
@@ -140,22 +142,32 @@ public class Enemy extends Entity{
 		
 		collidingBullet();
 		
-		if(life <= 0) 
+		if(life <= 0)
 			destroySelf();
+		
 		
 		if(isDamage) {
 			damageFrames++;
-			if(this.damageFrames == 10) {
+			if(this.damageFrames == 100) {
 				damageFrames = 0; 
 				isDamage = false;
 			}
 		}
-		
 	}
 	
 	public void destroySelf() {
 		Game.entities.remove(this);
 		Game.enemies.remove(this);
+		this.exp = 999;
+
+		double dif;
+		dif = Game.player.maxExp[Game.player.maxLevel] - Game.player.exp;
+		
+		if(dif >= this.exp && dif > 0) {
+			Game.player.exp += this.exp;
+		}else {
+			Game.player.exp += dif;
+		}
 	}
 	
 	public void collidingBullet() {

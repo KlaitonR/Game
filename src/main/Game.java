@@ -54,6 +54,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static UI ui;
 	
+//	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
+//	public Font newfont;
+	
 	public boolean saveGame;
 	
 	public static String gameState = "MENU";
@@ -82,6 +85,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		world =  new World("/level1.png");
 		
 		menu = new Menu();
+		
+//		try {
+//			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(70f);
+//		}catch (FontFormatException f) {
+//			f.printStackTrace();
+//		}catch(IOException e){
+//			e.printStackTrace();
+//		}
 		
 		addKeyListener(this);
 		addMouseMotionListener(this);
@@ -127,8 +138,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		if(this.saveGame) {
 			this.saveGame = false;
-			String[] opt1 = {"level", "vida"};
-			int[] opt2 = {this.CUR_LEVEL, (int)player.life};
+			String[] opt1 = {"levelRoom", "vida", "levelPlayer", "exp"};
+			int[] opt2 = {this.CUR_LEVEL, (int)player.life, (int)player.levelPlayer, (int)player.exp};
 			Menu.saveGame(opt1,opt2,10);
 			System.out.println("Jogo salvo com sucesso!");
 			
@@ -146,8 +157,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			for(int i = 0; i<bulletShootes.size(); i++) {
 				bulletShootes.get(i).tick();
 			}
-			
-			//Niveis
+
+			//Up Niveis
 			if (enemies.size() == 0) {
 				CUR_LEVEL++;
 				if(CUR_LEVEL > MAX_LVL) {
@@ -155,7 +166,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				}
 				
 				String newWorld = "level" + CUR_LEVEL + ".png";
-				player.level = newWorld;
+				player.levelRoom = newWorld;
 				World.restarGame(newWorld);
 			}
 			
@@ -174,7 +185,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				gameState =  "NORMAL";
 				// CUR_LEVEL = 1;
 				String newWorld = "level" + CUR_LEVEL + ".png";
-				player.level = newWorld;
+				player.levelRoom = newWorld;
 				World.restarGame(newWorld);
 			}
 		} else if(gameState.equals("MENU")) {
@@ -212,6 +223,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		g.setFont(new Font("arial", Font.BOLD, 20));
 		g.setColor(Color.yellow);
 		g.drawString("Munição: " + player.ammo, 600, 20);
+//		g.setFont(newfont);
+//		g.setColor(Color.red);
+//		g.drawString("teste", 90, 90);
 		g.setColor(Color.darkGray);
 		g.drawString("Level " + CUR_LEVEL, 10, 470);
 		
