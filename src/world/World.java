@@ -103,7 +103,7 @@ public class World {
 			return true;
 		}
 		
-//		if(zPlayer > 0) {
+//		if(zPlayer > 0) { // pular por cima das paredes
 //			return true;
 //		}
 		

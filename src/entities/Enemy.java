@@ -14,6 +14,7 @@ public class Enemy extends Entity{
 	private double speed = Game.rand.nextDouble();
 	
 	private int maskx = 4, masky = 0, maskw = 9, maskh = 16;
+	private int maskTragetx = -40, maskTargety = -40, maskTargetw = 80, maskTargeth = 80;
 	
 	private BufferedImage [] rightEnemy;
 	private BufferedImage [] leftEnemy;
@@ -34,6 +35,9 @@ public class Enemy extends Entity{
 	private int damageFrames;
 	
 	private double exp;
+	
+	boolean dirRight = true;
+	boolean dirLeft = false;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
@@ -70,6 +74,13 @@ public class Enemy extends Entity{
 		return enemyCurrent.intersects(player);
 	}
 	
+	public boolean isTargetPlayer() {
+		Rectangle enemyCurrent = new Rectangle(this.getX() + maskTragetx, this.getY() + maskTargety, maskTargetw, maskTargeth);
+		Rectangle player = new Rectangle(Game.player.getX() + Game.player.maskx, Game.player.getY()+ Game.player.masky, Game.player.maskw, Game.player.maskh);
+
+		return enemyCurrent.intersects(player);
+	}
+	
 	public boolean isColidding(int xNext, int yNext) {
 		
 		Rectangle enemyCurrent = new Rectangle(xNext + maskx, yNext + masky, maskw, maskh);
@@ -99,24 +110,61 @@ public class Enemy extends Entity{
 		
 		if(!isColiddingWithPlayer()) {
 			
-			if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
-				moved = true;
-				x += speed;
-				dir = rightDir;
-			}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
-				moved =  true;
-				x -= speed;
-				dir = leftDir;
-			}
+			if(!isTargetPlayer()) {
+				
+				if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
+					moved = true;
+					x += speed;
+					dir =  rightDir;
+					
+				}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
+					moved =  true;
+					x -= speed;
+					dir = leftDir;
+				}
+				
+				
+				if(dirRight == true && !World.isFree((int)(x+speed), this.getY(), this.z)) {
+					dirRight = false;
+					dirLeft = true;
+				}
+				
+				if(dirLeft == true && !World.isFree((int)(x-speed), this.getY(), this.z)) {
+					dirRight = true;
+					dirLeft = false;
+				}
+				
+				if(isColidding((int)(x+speed), this.getY())) {
+					dirRight = false;
+					dirLeft = true;
+				}
+				
+				if(isColidding((int)(x-speed), this.getY())) {
+					dirRight = true;
+					dirLeft = false;
+				}
+				
+			}else {
 			
-			if((int)y < Game.player.getY() && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
-				moved = true;
-				y += speed;
-				dir = downDir;
-			}else if ((int)y > Game.player.getY() && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))){
-				moved = true;
-				y -= speed;
-				dir = upDir;
+				if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
+					moved = true;
+					x += speed;
+					dir =  rightDir;
+				}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
+					moved =  true;
+					x -= speed;
+					dir = leftDir;
+				}
+				
+				if((int)y < Game.player.getY() && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
+					moved = true;
+					y += speed;
+					dir = downDir;
+				}else if ((int)y > Game.player.getY() && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))){
+					moved = true;
+					y -= speed;
+					dir = upDir;
+				}
 			}
 		}else {
 			
@@ -144,7 +192,6 @@ public class Enemy extends Entity{
 		
 		if(life <= 0)
 			destroySelf();
-		
 		
 		if(isDamage) {
 			damageFrames++;
@@ -188,6 +235,9 @@ public class Enemy extends Entity{
 	public void render(Graphics g) {
 		super.render(g);
 		
+//		g.setColor(Color.black);
+//		g.fillRect(this.getX() - Camera.x + maskTragetx, this.getY() - Camera.y + maskTargety, maskTargetw, maskTargeth);
+		
 		if(isDamage) {
 			
 			if(dir == rightDir)
@@ -210,9 +260,7 @@ public class Enemy extends Entity{
 			else if(dir == downDir)
 				g.drawImage(downEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 		}
-	
-//		g.setColor(Color.black);
-//		g.fillRect(this.getX() - Camera.x + maskx, this.getY() - Camera.y + masky, maskw, maskh);
+
 //		
 //		g.setColor(Color.black);
 //		g.fillRect(Game.player.getX() - Camera.x + Game.player.maskx, Game.player.getY() - Camera.y + Game.player.masky, Game.player.maskw, Game.player.maskh);

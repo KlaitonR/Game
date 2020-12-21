@@ -1,4 +1,0 @@
-levelRoom:<
-vida:C>
-levelPlayer:>
-exp:;::::
