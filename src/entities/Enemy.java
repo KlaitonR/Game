@@ -38,6 +38,8 @@ public class Enemy extends Entity{
 	
 	boolean dirRight = true;
 	boolean dirLeft = false;
+	boolean dirUp = false;
+	boolean dirDown = true;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
@@ -115,7 +117,7 @@ public class Enemy extends Entity{
 				if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
 					moved = true;
 					x += speed;
-					dir =  rightDir;
+					dir = rightDir;
 					
 				}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
 					moved =  true;
@@ -123,7 +125,19 @@ public class Enemy extends Entity{
 					dir = leftDir;
 				}
 				
+				if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
+					moved = true;
+					y += speed;
+					dir = downDir;
+				}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
+					moved = true;
+					y -= speed;
+					dir = upDir;
+				}
 				
+				//Mudar de direção ao colidir
+				
+				//Para esquerda e para direitra
 				if(dirRight == true && !World.isFree((int)(x+speed), this.getY(), this.z)) {
 					dirRight = false;
 					dirLeft = true;
@@ -142,6 +156,28 @@ public class Enemy extends Entity{
 				if(isColidding((int)(x-speed), this.getY())) {
 					dirRight = true;
 					dirLeft = false;
+				}
+				
+				//Para baixo e para cima
+				
+				if(dirDown == true && !World.isFree(this.getX(), (int)(y+speed), this.z)) {
+					dirDown = false;
+					dirUp = true;
+				}
+				
+				if(dirUp == true && !World.isFree(this.getX(), (int)(y-speed), this.z)) {
+					dirDown = true;
+					dirUp = false;
+				}
+				
+				if(isColidding(this.getX(), (int)(y+speed))) {
+					dirDown = false;
+					dirUp = true;
+				}
+				
+				if(isColidding(this.getX(), (int)(y-speed))) {
+					dirDown = true;
+					dirUp = false;
 				}
 				
 			}else {
