@@ -359,10 +359,10 @@ public class Player extends Entity{
 		if(mouseShoot) {
 			
 			mouseShoot = false;
-			Sound.missAmo.play();
+			//Sound.missAmo.play();
 			
 			if(hasGun && ammo > 0) {
-				Sound.missAmo.stop();
+				//Sound.missAmo.stop();
 				Sound.shootRifle.play();
 				ammo--;
 				

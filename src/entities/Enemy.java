@@ -33,6 +33,7 @@ public class Enemy extends Entity{
 	public double life = 10, maxLife = 10;
 	boolean isDamage;
 	private int damageFrames;
+	public boolean target = false;
 	
 	private double exp;
 	
@@ -40,6 +41,8 @@ public class Enemy extends Entity{
 	boolean dirLeft = false;
 	boolean dirUp = false;
 	boolean dirDown = true;
+	
+	boolean ps = true;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
@@ -79,7 +82,7 @@ public class Enemy extends Entity{
 	public boolean isTargetPlayer() {
 		Rectangle enemyCurrent = new Rectangle(this.getX() + maskTragetx, this.getY() + maskTargety, maskTargetw, maskTargeth);
 		Rectangle player = new Rectangle(Game.player.getX() + Game.player.maskx, Game.player.getY()+ Game.player.masky, Game.player.maskw, Game.player.maskh);
-
+		
 		return enemyCurrent.intersects(player);
 	}
 	
@@ -112,27 +115,51 @@ public class Enemy extends Entity{
 		
 		if(!isColiddingWithPlayer()) {
 			
-			if(!isTargetPlayer()) {
+			if(!isTargetPlayer() && !target) { //se o player não entra na área do target, ou nçao causar dano (ANDA ALEATORIAMENTE)
 				
-				if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
-					moved = true;
-					x += speed;
-					dir = rightDir;
+				if(ps == true) { // Não anda na diagonal
+				
+					if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
+						moved = true;
+						x += speed;
+						dir = rightDir;
+						
+					}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
+						moved =  true;
+						x -= speed;
+						dir = leftDir;
+					}
 					
-				}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
-					moved =  true;
-					x -= speed;
-					dir = leftDir;
-				}
-				
-				if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
-					moved = true;
-					y += speed;
-					dir = downDir;
-				}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
-					moved = true;
-					y -= speed;
-					dir = upDir;
+					if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
+						moved = true;
+						y += speed;
+						dir = downDir;
+					}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
+						moved = true;
+						y -= speed;
+						dir = upDir;
+					}
+
+				}else { //anda na diagonal
+					
+					if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
+						moved = true;
+						x += speed;
+						dir = rightDir;
+						
+					}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
+						moved =  true;
+						x -= speed;
+						dir = leftDir;
+					} else if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
+						moved = true;
+						y += speed;
+						dir = downDir;
+					}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
+						moved = true;
+						y -= speed;
+						dir = upDir;
+					}
 				}
 				
 				//Mudar de direção ao colidir
@@ -141,21 +168,25 @@ public class Enemy extends Entity{
 				if(dirRight == true && !World.isFree((int)(x+speed), this.getY(), this.z)) {
 					dirRight = false;
 					dirLeft = true;
+					ps = false;
 				}
 				
 				if(dirLeft == true && !World.isFree((int)(x-speed), this.getY(), this.z)) {
 					dirRight = true;
 					dirLeft = false;
+					ps = true;
 				}
 				
 				if(isColidding((int)(x+speed), this.getY())) {
 					dirRight = false;
 					dirLeft = true;
+					ps = false;
 				}
 				
 				if(isColidding((int)(x-speed), this.getY())) {
 					dirRight = true;
 					dirLeft = false;
+					ps = true;
 				}
 				
 				//Para baixo e para cima
@@ -180,7 +211,7 @@ public class Enemy extends Entity{
 					dirUp = false;
 				}
 				
-			}else {
+			}else { //Se entrar na área de target ou causar dano (SEGUE O PLAYER)
 			
 				if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
 					moved = true;
@@ -202,7 +233,7 @@ public class Enemy extends Entity{
 					dir = upDir;
 				}
 			}
-		}else {
+		}else { // Se colidir com o player (CAUSA DANO)
 			
 			if(Game.rand.nextInt(100) < 10) {
 				Sound.hurtEffect.play();
@@ -230,6 +261,17 @@ public class Enemy extends Entity{
 			destroySelf();
 		
 		if(isDamage) {
+			
+			Enemy e; 
+			
+			//Se o player causar dano no enemy, pega target
+			for(int i = 0; i < Game.enemies.size();i++) {
+				e = Game.enemies.get(i);
+				if(e == this) {
+					e.target = true;
+				}
+			}
+			
 			damageFrames++;
 			if(this.damageFrames == 100) {
 				damageFrames = 0; 
