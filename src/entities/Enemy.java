@@ -30,7 +30,7 @@ public class Enemy extends Entity{
 	private boolean moved = false;
 	private int frames = 0, maxFrames = 20, index = 0, maxIndex = 3;
 	
-	private int life = 10;
+	public double life = 10, maxLife = 10;
 	boolean isDamage;
 	private int damageFrames;
 	
@@ -265,9 +265,8 @@ public class Enemy extends Entity{
 				return;
 			}
 		}
-		
 	}
-	
+
 	public void render(Graphics g) {
 		super.render(g);
 		
@@ -296,7 +295,6 @@ public class Enemy extends Entity{
 			else if(dir == downDir)
 				g.drawImage(downEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 		}
-
 //		
 //		g.setColor(Color.black);
 //		g.fillRect(Game.player.getX() - Camera.x + Game.player.maskx, Game.player.getY() - Camera.y + Game.player.masky, Game.player.maskw, Game.player.maskh);

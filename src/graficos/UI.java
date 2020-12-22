@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import main.Game;
+import world.Camera;
 
 public class UI {
 	
@@ -34,7 +35,15 @@ public class UI {
 			g.fillRect(8, 17,(int)(((Game.player.exp + dif)/Game.player.maxExp[Game.player.levelPlayer])*70), 8);
 		}
 		
-		
+		for(int i = 0; i < Game.enemies.size(); i++) {
+			g.setColor(Color.black); 
+			g.fillRect((int)Game.enemies.get(i).getX() + 2 - Camera.x, (int)Game.enemies.get(i).getY() - 5 - Camera.y, 12, 3);
+			g.setColor(Color.red);
+			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, 10, 1);
+			g.setColor(Color.green);
+			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, (int)((Game.enemies.get(i).life/Game.enemies.get(i).maxLife)*10), 1);
+		}
+
 		g.setColor(Color.white);
 		g.setFont(new Font("arial", Font.BOLD, 8));
 		g.drawString("EXP   " + (int)Game.player.exp + "/" + (int)Game.player.maxExp[Game.player.levelPlayer], 10, 24);
@@ -42,6 +51,10 @@ public class UI {
 		g.setColor(Color.orange);
 		g.setFont(new Font("arial", Font.BOLD, 8));
 		g.drawString("Nível do jogador: " + (int)(Game.player.levelPlayer + 1), 7, 35);
+		
+		g.setColor(Color.white);
+		g.setFont(new Font("arial", Font.BOLD, 8));
+		g.drawString((int)Game.player.life + "/" + (int)Game.player.maxLife, 30, 11);
 		
 	}
 }
