@@ -322,10 +322,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 		}
 		
+		if(e.getKeyCode() == KeyEvent.VK_K){
+			player.lifePack = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_F){
+			player.dropItem = true;
+		}
+		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			player.rigth = false;
 		}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
@@ -351,7 +360,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				gameState = "MENU";
 				Menu.pause =  true;
 			}else if(gameState.equals("MENU")) {
-				gameState = "NORMAL";			}
+				gameState = "NORMAL";			
+			}
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_K){
+			player.lifePack = false;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_F){
+			player.dropItem = false;
 		}
 		
 	}

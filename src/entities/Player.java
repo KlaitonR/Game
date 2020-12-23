@@ -3,6 +3,8 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import main.Game;
 import main.Sound;
 import world.Camera;
@@ -72,9 +74,11 @@ public class Player extends Entity{
 	public boolean isDamage;
 	private int damageFrames;
 	
-	private boolean hasGun = true;
+	public boolean hasGun = true;
+	public boolean dropItem;
 	public boolean shoot;
 	public boolean mouseShoot;
+	public boolean lifePack;
 	
 	public String levelRoom;
 	public int levelPlayer;
@@ -82,7 +86,9 @@ public class Player extends Entity{
 	public double exp;
 	public int maxLevel = 4;
 	public double [] maxExp = {100, 500, 1000, 5000, 10000};
-
+	
+	private ArrayList<String> inventario = new ArrayList<>();
+	
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
 		
@@ -157,10 +163,20 @@ public class Player extends Entity{
 			
 			if(atual instanceof LifePack) {
 				if(Entity.isColidding(this, atual)) {
+					inventario.add("lifePack");
+					Game.entities.remove(atual);
 					
-					if(life <= 90) {
-						life += 10;
-						Game.entities.remove(atual);
+					if(lifePack == true) {
+
+						for(int j=0; j<inventario.size();j++) {
+							if(inventario.get(j).equals("lifePack")) {
+								if(life <= 90) {
+									life += 10;
+									inventario.remove(j);
+									lifePack = false;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -189,7 +205,8 @@ public class Player extends Entity{
 			
 			if(atual instanceof Wapon) {
 				if(Entity.isColidding(this, atual)) {
-					hasGun =  true;
+					hasGun = true;
+					inventario.add("gun");
 					Game.entities.remove(atual);
 					Sound.ReloadRifle.play();
 				}
@@ -208,7 +225,26 @@ public class Player extends Entity{
 		}
 	}
 	
+	public void checkDropItem() {
+		
+		if(dropItem == true) {
+			if(hasGun == true) {
+				hasGun = false;
+				//Game.entities.add(new Wapon(this.getX()*16, this.getY()*16, 16, 16, Entity.WEAPON_EN));
+			}
+			
+			if(lifePack == true) {
+				lifePack = false;
+			}
+		}
+	}
+	
 	public void tick() {
+		
+		checkCollisionLifePack();
+		checkCollisionAmmo();
+		checkKillEnemy();
+		checkDropItem();
 		
 		if(jump) {
 			if(isJumping == false) {
@@ -277,10 +313,6 @@ public class Player extends Entity{
 			index = 0;
 			frames = 0;
 		}
-		
-		checkCollisionLifePack();
-		checkCollisionAmmo();
-		checkKillEnemy();
 		
 		if(!hasGun)
 			checkCollisionGun();
@@ -549,5 +581,37 @@ public class Player extends Entity{
 			g.setColor(Color.black);
 			g.fillOval(this.getX() - Camera.x + 4, this.getY() - Camera.y + 12, 8, 8);
 		}
+		
+		BufferedImage [] inv = new BufferedImage[5];
+		
+		for(int i=0; i<inv.length; i++) {
+			if(inv[i] == null) {
+				for(int j=0; j<inventario.size(); j++) {
+					if(inventario.get(j).equals("gun")) {
+						inv[i] = Game.spritesheet.getSprite(16, 16, 16, 16);
+					}else if (inventario.get(j).equals("lifePack")) {
+						inv[i] = Game.spritesheet.getSprite(0, 16, 16, 16);
+					}
+				}
+				break;
+			}
+		}
+		
+		if(hasGun) {
+			for(int i=0; i < inv.length; i++) {
+				if(inv[i] != null) {
+					g.drawImage(inv[i], 52 + (i*30), 137, null);
+				}
+			}
+		}
+		
+		if(lifePack) {
+			for(int i=0; i < inv.length; i++) {
+				if(inv[i] != null) {
+					g.drawImage(inv[i], 52 + (i*30), 137, null);
+				}
+			}
+		}
+		
 	}	
 }

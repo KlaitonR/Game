@@ -72,7 +72,6 @@ public class World {
 						
 					}else if(pixelAtual == 0xFFFF00DC) { // Arbusto
 						tiles[xx + (yy*WIDTH)] = new BushTile(xx*16, yy*16, Tile.TILE_BUSH);
-						
 					}
 				}
 			}
@@ -99,7 +98,11 @@ public class World {
 		if (!((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x2 + (y2*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x3 + (y3*World.WIDTH)] instanceof WallTile) ||
-				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile))) {
+				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile)) 
+//				&&
+//				!((tiles[x1 + (y1*World.WIDTH)] instanceof BushTile))
+				) {
+			
 			return true;
 		}
 		

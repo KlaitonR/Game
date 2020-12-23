@@ -3,6 +3,8 @@ package graficos;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 import main.Game;
 import world.Camera;
 
@@ -55,6 +57,33 @@ public class UI {
 		g.setColor(Color.white);
 		g.setFont(new Font("arial", Font.BOLD, 8));
 		g.drawString((int)Game.player.life + "/" + (int)Game.player.maxLife, 30, 11);
+		
+		// Inventario do Player
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(new Color(0,0,0,150));
+		g2.fillRect(45, 135, 150, 20);
+		
+		g.setColor(Color.black); 
+		g.fillRect(45, 135, 1, 20);
+		g.setColor(Color.black); 
+		g.fillRect(194, 135, 1, 20);
+		g.setColor(Color.black); 
+		g.fillRect(45, 154, 150, 1);
+		g.setColor(Color.black); 
+		g.fillRect(45, 135, 150, 1);
+		
+		for(int i=0; i<5; i++) {
+			g.setColor(Color.black); 
+			g.fillRect(45 + (i*30), 135, 1, 20);
+		}
+		
+//		BufferedImage inv[];
+//		
+//		inv = new BufferedImage[5];
+
+//		inv[0] = Game.spritesheet.getSprite(16, 16, 16, 16);
+//		g.drawImage(inv[0], 52, 137, null);
+	
 		
 	}
 }
