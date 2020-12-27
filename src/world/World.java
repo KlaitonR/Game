@@ -67,11 +67,11 @@ public class World {
 						
 						Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
 		
-					}else if (pixelAtual == 0xFFB200FF){ //Rochas
-						tiles[xx + (yy*WIDTH)] = new RockTile(xx*16, yy*16, Tile.TILE_ROCK);
-						
-					}else if(pixelAtual == 0xFFFF00DC) { // Arbusto
-						tiles[xx + (yy*WIDTH)] = new BushTile(xx*16, yy*16, Tile.TILE_BUSH);
+//					}else if (pixelAtual == 0xFFB200FF){ //Rochas
+//						tiles[xx + (yy*WIDTH)] = new RockTile(xx*16, yy*16, Tile.TILE_ROCK);
+//						
+//					}else if(pixelAtual == 0xFFFF00DC) { // Arbusto
+//						tiles[xx + (yy*WIDTH)] = new BushTile(xx*16, yy*16, Tile.TILE_BUSH);
 					}
 				}
 			}

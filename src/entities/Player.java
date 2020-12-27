@@ -3,8 +3,6 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
 import main.Game;
 import main.Sound;
 import world.Camera;
@@ -18,8 +16,6 @@ public class Player extends Entity{
 	public int maskx = 3, masky = 0, maskw = 10, maskh = 14;
 	
 	public double speed = 1.4;
-	public double life = 100, maxLife = 100;
-	public int ammo = 1000;
 	public double mx, my, moveMx = 0, moveMy = 0;
 	
 	public boolean jump;
@@ -28,6 +24,33 @@ public class Player extends Entity{
 	public int jumpFrames = 25, jumpCur =0;
 	public int jumpSp = 1;
 	public boolean jumpUp, jumpDown;
+	
+	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
+	private boolean moved;
+	public boolean isDamage;
+	private int damageFrames;
+	
+	public boolean hasGun;
+	public boolean shoot;
+	public boolean mouseShoot;
+	public double life = 100, maxLife = 100;
+	public int ammo = 1000;
+	
+	public boolean dropItem;
+	public boolean getItem;
+	//public String handItem;
+	//public int handIndexItem;
+	public boolean scrollItem;
+	public boolean useItem;
+	
+	public String levelRoom;
+	public int levelPlayer;
+	
+	public double exp;
+	public int maxLevel = 4;
+	public double [] maxExp = {100, 500, 1000, 5000, 10000};
+	
+	private String inventario[];
 	
 	private BufferedImage [] rightPlayer;
 	private BufferedImage [] leftPlayer;
@@ -69,25 +92,7 @@ public class Player extends Entity{
 	private BufferedImage upPlayerGunDamageJumping;
 	private BufferedImage downPlayerGunDamageJumping;
 	
-	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
-	private boolean moved = false;
-	public boolean isDamage;
-	private int damageFrames;
-	
-	public boolean hasGun = true;
-	public boolean dropItem;
-	public boolean shoot;
-	public boolean mouseShoot;
-	public boolean lifePack;
-	
-	public String levelRoom;
-	public int levelPlayer;
-	
-	public double exp;
-	public int maxLevel = 4;
-	public double [] maxExp = {100, 500, 1000, 5000, 10000};
-	
-	private ArrayList<String> inventario = new ArrayList<>();
+	public BufferedImage [] inv = new BufferedImage[5];
 	
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -154,33 +159,28 @@ public class Player extends Entity{
 		upPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 224, 16, 16);
 		downPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 240, 16, 16);
 		
+		inventario = new String[5];
+
 	}
 	
 	public void checkCollisionLifePack() {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
-			
-			if(atual instanceof LifePack) {
-				if(Entity.isColidding(this, atual)) {
-					inventario.add("lifePack");
-					Game.entities.remove(atual);
-					
-					if(lifePack == true) {
-
-						for(int j=0; j<inventario.size();j++) {
-							if(inventario.get(j).equals("lifePack")) {
-								if(life <= 90) {
-									life += 10;
-									inventario.remove(j);
-									lifePack = false;
-								}
-							}
-						}
+			int index = checkPositionGetInv();
+			if(getItem == true && index >= 0 && index <= inventario.length) {
+				if(atual instanceof LifePack) {
+					if(Entity.isColidding(this, atual)) {
+						inventario[index] =  "lifePack";
+						inv[index] = Game.spritesheet.getSprite(0, 16, 16, 16);
+//						handItem = inventario.get(index);
+//						handIndexItem = index;
+						Game.entities.remove(atual);
 					}
 				}
 			}
 		}
+		
 	}
 	
 	public void checkCollisionAmmo() {
@@ -196,48 +196,156 @@ public class Player extends Entity{
 				}
 			}
 		}
+		
 	}
 	
 	public void checkCollisionGun() {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
-			
-			if(atual instanceof Wapon) {
-				if(Entity.isColidding(this, atual)) {
-					hasGun = true;
-					inventario.add("gun");
-					Game.entities.remove(atual);
-					Sound.ReloadRifle.play();
+			int index = checkPositionGetInv();
+			if(getItem == true && index >= 0 && index <= inventario.length) {
+				if(atual instanceof Wapon) {
+					if(Entity.isColidding(this, atual)) {
+						hasGun = true;
+						inventario[index] = "gun";
+						inv[index] = Game.spritesheet.getSprite(16, 16, 16, 16);
+//						handItem = inventario.get(index);
+//						handIndexItem = index;
+						Game.entities.remove(atual);
+						Sound.ReloadRifle.play();
+					}
 				}
 			}
 		}
+		
 	}
 	
 	public void checkKillEnemy() {
 		
 		for(int i=0; i<maxExp.length; i++) {
-			
 			if(exp <= maxExp[i]) {
 				levelPlayer = i;
 				break;
 			}
 		}
+		
 	}
+	
+	public int checkPositionGetInv() {
+			
+		int index = -1;
+			
+		for(int i=0; i<inv.length; i++) {
+			if(inv[i] == null) {
+				index =  i;
+				break;
+			}
+		}
+
+		return index;
+
+	}
+	
+	public int checkPositionDropInv() {
+		
+		int index = -1;
+			
+		for(int i=0; i<inv.length; i++) {
+			if(inv[i] != null) {
+				index =  i;
+				break;
+			}
+		}
+
+		return index;
+
+	}
+	
+//	public void checkHandItem() {
+//		
+//		if(handItem == null || handItem.equals("LifePack")) {
+//			hasGun = false;
+//		}else if(handItem.equals("gun")){
+//			hasGun = true;
+//		}
+//		
+//	}
 	
 	public void checkDropItem() {
 		
 		if(dropItem == true) {
-			if(hasGun == true) {
-				hasGun = false;
-				//Game.entities.add(new Wapon(this.getX()*16, this.getY()*16, 16, 16, Entity.WEAPON_EN));
-			}
+			dropItem = false;
+			int index = checkPositionDropInv();
+				
+//				if(handItem.equals("gun") && handItem.equals(inventario.get(i))) {
+				if(index >= 0 && index <= inventario.length && inventario[index] == "gun") {
+					hasGun = false;
+					
+//					if(i-1 >= 0) {
+//						handItem = inventario.get(i-1);
+//						handIndexItem = i-1;
+//					}else {
+//						handItem = inventario.get(inventario.size() - 1);
+//						handIndexItem = inventario.size() - 1;
+//					}
 			
-			if(lifePack == true) {
-				lifePack = false;
+					inventario[index] = null;
+					inv[index] = null;
+//					handItem = inventario.get(inventario.size()-1);
+					Game.entities.add(new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN));
+					}
+//				}
+				
+				if(index >= 0 && index <= inventario.length && inventario[index] == "lifePack") {
+					inventario[index] = null;
+					inv[index] = null;
+					Game.entities.add(new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN));
+				}
+	
 			}
 		}
-	}
+	
+	
+//	public void checkUseItem() {
+//		
+//		if(useItem == true) {
+//			useItem = false;
+//			
+//			for(int i=0; i<inventario.size();i++) {
+//				if(inventario.get(i).equals("lifePack")) {
+//				
+//					double dif;
+//					if(life <= 90) {
+//						life += 10;
+//					}else if (life < 100){
+//						dif = 100 - life;
+//						life += dif;
+//					}
+//					
+//					inventario.remove(i);
+//					inv[i] = null;
+//					break;
+//				}
+//			}
+//		}
+//		
+//	}
+	
+//	public void handItem() {
+//		
+//		if(inventario.size() == 1) {
+//			if(inventario.get(0).equals("gun")) {
+//				hasGun = true;
+//			}
+//		}
+//	}
+//	
+//	public void scrollInv() {
+//		
+//		if()
+//		
+//	}
 	
 	public void tick() {
 		
@@ -245,6 +353,8 @@ public class Player extends Entity{
 		checkCollisionAmmo();
 		checkKillEnemy();
 		checkDropItem();
+//		checkHandItem();
+//		checkUseItem();
 		
 		if(jump) {
 			if(isJumping == false) {
@@ -580,37 +690,6 @@ public class Player extends Entity{
 		if(isJumping) {
 			g.setColor(Color.black);
 			g.fillOval(this.getX() - Camera.x + 4, this.getY() - Camera.y + 12, 8, 8);
-		}
-		
-		BufferedImage [] inv = new BufferedImage[5];
-		
-		for(int i=0; i<inv.length; i++) {
-			if(inv[i] == null) {
-				for(int j=0; j<inventario.size(); j++) {
-					if(inventario.get(j).equals("gun")) {
-						inv[i] = Game.spritesheet.getSprite(16, 16, 16, 16);
-					}else if (inventario.get(j).equals("lifePack")) {
-						inv[i] = Game.spritesheet.getSprite(0, 16, 16, 16);
-					}
-				}
-				break;
-			}
-		}
-		
-		if(hasGun) {
-			for(int i=0; i < inv.length; i++) {
-				if(inv[i] != null) {
-					g.drawImage(inv[i], 52 + (i*30), 137, null);
-				}
-			}
-		}
-		
-		if(lifePack) {
-			for(int i=0; i < inv.length; i++) {
-				if(inv[i] != null) {
-					g.drawImage(inv[i], 52 + (i*30), 137, null);
-				}
-			}
 		}
 		
 	}	

@@ -256,7 +256,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		double amoutOfTicks =60.0;
 		double ns = 1000000000/ amoutOfTicks;
 		double delta = 0;
-		int frames = 0;
+//		int frames = 0;
 		double timer = System.currentTimeMillis();
 		requestFocus();
 		while(isRunning) {
@@ -266,13 +266,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			if(delta >= 1) {
 				tick();
 				render();
-				frames++;
+//				frames++;
 				delta--;
 			}
 			
 			if(System.currentTimeMillis() - timer >= 1000) {
-				System.out.println("FPS: " + frames);
-				frames = 0;
+//				System.out.println("FPS: " + frames);
+//				frames = 0;
 				timer += 1000;
 			}
 			
@@ -322,12 +322,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 		}
 		
-		if(e.getKeyCode() == KeyEvent.VK_K){
-			player.lifePack = true;
+		if(e.getKeyCode() == KeyEvent.VK_E) {
+			player.useItem = true;
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_F){
 			player.dropItem = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_G){
+			player.getItem = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_Q){
+			player.scrollItem = true;
 		}
 		
 	}
@@ -364,12 +372,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 		}
 		
-		if(e.getKeyCode() == KeyEvent.VK_K){
-			player.lifePack = false;
+		if(e.getKeyCode() == KeyEvent.VK_E) { 
+			player.useItem = false;
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_F){
 			player.dropItem = false;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_G){
+			player.getItem = false;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_Q){
+			player.scrollItem = false;
 		}
 		
 	}

@@ -12,6 +12,16 @@ public class UI {
 	
 	public void render(Graphics g) {
 		
+		//Life do Enemy
+		for(int i = 0; i < Game.enemies.size(); i++) {
+			g.setColor(Color.black); 
+			g.fillRect((int)Game.enemies.get(i).getX() + 2 - Camera.x, (int)Game.enemies.get(i).getY() - 5 - Camera.y, 12, 3);
+			g.setColor(Color.red);
+			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, 10, 1);
+			g.setColor(Color.green);
+			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, (int)((Game.enemies.get(i).life/Game.enemies.get(i).maxLife)*10), 1);
+		}
+		
 		g.setColor(Color.black); 
 		g.fillRect(7, 3, 72, 10);
 		g.setColor(Color.red);
@@ -36,15 +46,6 @@ public class UI {
 		}else {
 			g.fillRect(8, 17,(int)(((Game.player.exp + dif)/Game.player.maxExp[Game.player.levelPlayer])*70), 8);
 		}
-		
-		for(int i = 0; i < Game.enemies.size(); i++) {
-			g.setColor(Color.black); 
-			g.fillRect((int)Game.enemies.get(i).getX() + 2 - Camera.x, (int)Game.enemies.get(i).getY() - 5 - Camera.y, 12, 3);
-			g.setColor(Color.red);
-			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, 10, 1);
-			g.setColor(Color.green);
-			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, (int)((Game.enemies.get(i).life/Game.enemies.get(i).maxLife)*10), 1);
-		}
 
 		g.setColor(Color.white);
 		g.setFont(new Font("arial", Font.BOLD, 8));
@@ -63,27 +64,24 @@ public class UI {
 		g2.setColor(new Color(0,0,0,150));
 		g2.fillRect(45, 135, 150, 20);
 		
-		g.setColor(Color.black); 
+		g.setColor(Color.darkGray); 
 		g.fillRect(45, 135, 1, 20);
-		g.setColor(Color.black); 
+		g.setColor(Color.darkGray); 
 		g.fillRect(194, 135, 1, 20);
-		g.setColor(Color.black); 
+		g.setColor(Color.darkGray); 
 		g.fillRect(45, 154, 150, 1);
-		g.setColor(Color.black); 
+		g.setColor(Color.darkGray); 
 		g.fillRect(45, 135, 150, 1);
 		
 		for(int i=0; i<5; i++) {
-			g.setColor(Color.black); 
+			g.setColor(Color.darkGray); 
 			g.fillRect(45 + (i*30), 135, 1, 20);
 		}
 		
-//		BufferedImage inv[];
-//		
-//		inv = new BufferedImage[5];
+		//Apenas renderizando oque foi colocado no buffer
+		for(int i=0; i < Game.player.inv.length; i++) {
+			g.drawImage(Game.player.inv[i], 52 + (i*30), 137, null);
+		}
 
-//		inv[0] = Game.spritesheet.getSprite(16, 16, 16, 16);
-//		g.drawImage(inv[0], 52, 137, null);
-	
-		
 	}
 }
