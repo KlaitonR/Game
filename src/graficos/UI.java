@@ -64,23 +64,33 @@ public class UI {
 		g2.setColor(new Color(0,0,0,150));
 		g2.fillRect(45, 135, 150, 20);
 		
-		g.setColor(Color.darkGray); 
+		g.setColor(Color.black); 
 		g.fillRect(45, 135, 1, 20);
-		g.setColor(Color.darkGray); 
+		g.setColor(Color.black); 
 		g.fillRect(194, 135, 1, 20);
-		g.setColor(Color.darkGray); 
+		g.setColor(Color.black); 
 		g.fillRect(45, 154, 150, 1);
-		g.setColor(Color.darkGray); 
+		g.setColor(Color.black); 
 		g.fillRect(45, 135, 150, 1);
 		
 		for(int i=0; i<5; i++) {
-			g.setColor(Color.darkGray); 
+			g.setColor(Color.black); 
 			g.fillRect(45 + (i*30), 135, 1, 20);
 		}
 		
 		//Apenas renderizando oque foi colocado no buffer
 		for(int i=0; i < Game.player.inv.length; i++) {
+			
 			g.drawImage(Game.player.inv[i], 52 + (i*30), 137, null);
+			
+			if(Game.player.handIndexItem == i && Game.player.handItem != null) { //Indica qual item está na mão do Player
+				g2.setColor(new Color(255,255,255,150));
+				g2.fillRect(46 + (i*30), 136, 1, 18);
+				g2.fillRect(74 + (i*30), 136, 1, 18);
+				g2.fillRect(47 + (i*30), 153, 27, 1); 
+				g2.fillRect(47 + (i*30), 136, 27, 1);
+			}
+			
 		}
 
 	}

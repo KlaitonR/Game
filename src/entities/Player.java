@@ -38,8 +38,8 @@ public class Player extends Entity{
 	
 	public boolean dropItem;
 	public boolean getItem;
-	//public String handItem;
-	//public int handIndexItem;
+	public String handItem;
+	public int handIndexItem;
 	public boolean scrollItem;
 	public boolean useItem;
 	
@@ -50,7 +50,7 @@ public class Player extends Entity{
 	public int maxLevel = 4;
 	public double [] maxExp = {100, 500, 1000, 5000, 10000};
 	
-	private String inventario[];
+	public String inventario[];
 	
 	private BufferedImage [] rightPlayer;
 	private BufferedImage [] leftPlayer;
@@ -173,8 +173,8 @@ public class Player extends Entity{
 					if(Entity.isColidding(this, atual)) {
 						inventario[index] =  "lifePack";
 						inv[index] = Game.spritesheet.getSprite(0, 16, 16, 16);
-//						handItem = inventario.get(index);
-//						handIndexItem = index;
+						handItem = inventario[index];
+						handIndexItem = index;
 						Game.entities.remove(atual);
 					}
 				}
@@ -210,8 +210,8 @@ public class Player extends Entity{
 						hasGun = true;
 						inventario[index] = "gun";
 						inv[index] = Game.spritesheet.getSprite(16, 16, 16, 16);
-//						handItem = inventario.get(index);
-//						handIndexItem = index;
+						handItem = inventario[index];
+						handIndexItem = index;
 						Game.entities.remove(atual);
 						Sound.ReloadRifle.play();
 					}
@@ -305,7 +305,6 @@ public class Player extends Entity{
 	
 			}
 		}
-	
 	
 	public void checkUseItem() {
 		
