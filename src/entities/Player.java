@@ -307,30 +307,51 @@ public class Player extends Entity{
 		}
 	
 	
-//	public void checkUseItem() {
-//		
-//		if(useItem == true) {
-//			useItem = false;
-//			
-//			for(int i=0; i<inventario.size();i++) {
-//				if(inventario.get(i).equals("lifePack")) {
-//				
-//					double dif;
-//					if(life <= 90) {
-//						life += 10;
-//					}else if (life < 100){
-//						dif = 100 - life;
-//						life += dif;
-//					}
-//					
-//					inventario.remove(i);
-//					inv[i] = null;
-//					break;
-//				}
-//			}
-//		}
-//		
-//	}
+	public void checkUseItem() {
+		
+		if(useItem == true) {
+			int index = checkPositionDropInv() ;
+			useItem = false;
+			if(index != -1) {
+				
+				if(inventario[index] == "lifePack") {
+					
+					useLifePack(index);
+					
+					}else {
+						
+						for(int i=index; i<inventario.length;i++) {
+							if(inventario[i] == "lifePack") {
+								index = i;
+								break;
+							}
+						}
+						
+						if(inventario[index] == "lifePack") {
+							useLifePack(index);
+						}
+						
+					}
+			}
+		}
+	}
+	
+	public void useLifePack(int index) {
+
+		double dif;
+		
+		if(life <= 90) {
+			life += 10;
+			inventario[index] = null;
+			inv[index] = null;
+		}else if (life < 100){
+			dif = 100 - life;
+			life += dif;
+			inventario[index] = null;
+			inv[index] = null;
+		}
+			
+	}
 	
 //	public void handItem() {
 //		
@@ -354,7 +375,7 @@ public class Player extends Entity{
 		checkKillEnemy();
 		checkDropItem();
 //		checkHandItem();
-//		checkUseItem();
+		checkUseItem();
 		
 		if(jump) {
 			if(isJumping == false) {
