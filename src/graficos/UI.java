@@ -83,7 +83,7 @@ public class UI {
 			
 			g.drawImage(Game.player.inv[i], 52 + (i*30), 137, null);
 			
-			if(Game.player.handIndexItem == i && Game.player.handItem != null) { //Indica qual item está na mão do Player
+			if(Game.player.handIndexItem == i) { //Indica qual item está na mão do Player
 				g2.setColor(new Color(255,255,255,150));
 				g2.fillRect(46 + (i*30), 136, 1, 18);
 				g2.fillRect(74 + (i*30), 136, 1, 18);

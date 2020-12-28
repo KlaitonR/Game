@@ -38,10 +38,10 @@ public class Player extends Entity{
 	
 	public boolean dropItem;
 	public boolean getItem;
+	public boolean useItem;
 	public String handItem;
 	public int handIndexItem;
 	public boolean scrollItem;
-	public boolean useItem;
 	
 	public String levelRoom;
 	public int levelPlayer;
@@ -168,13 +168,14 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem == true && index >= 0 && index <= inventario.length) {
+			if(getItem && index >= 0 && index <= inventario.length) {
 				if(atual instanceof LifePack) {
 					if(Entity.isColidding(this, atual)) {
 						inventario[index] =  "lifePack";
 						inv[index] = Game.spritesheet.getSprite(0, 16, 16, 16);
 						handItem = inventario[index];
 						handIndexItem = index;
+//						checkItem(handItem);
 						Game.entities.remove(atual);
 					}
 				}
@@ -204,14 +205,15 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem == true && index >= 0 && index <= inventario.length) {
+			if(getItem && index >= 0 && index <= inventario.length) {
 				if(atual instanceof Wapon) {
 					if(Entity.isColidding(this, atual)) {
-						hasGun = true;
+//						hasGun = true;
 						inventario[index] = "gun";
 						inv[index] = Game.spritesheet.getSprite(16, 16, 16, 16);
 						handItem = inventario[index];
 						handIndexItem = index;
+//						checkItem(handItem);
 						Game.entities.remove(atual);
 						Sound.ReloadRifle.play();
 					}
@@ -238,7 +240,7 @@ public class Player extends Entity{
 			
 		for(int i=0; i<inv.length; i++) {
 			if(inv[i] == null) {
-				index =  i;
+				index = i;
 				break;
 			}
 		}
@@ -247,90 +249,110 @@ public class Player extends Entity{
 
 	}
 	
-	public int checkPositionDropInv() {
-		
-		int index = -1;
-			
-		for(int i=0; i<inv.length; i++) {
-			if(inv[i] != null) {
-				index =  i;
-				break;
-			}
-		}
-
-		return index;
-
-	}
-	
-//	public void checkHandItem() {
+//	public int checkPositionDropInv() {
 //		
-//		if(handItem == null || handItem.equals("LifePack")) {
-//			hasGun = false;
-//		}else if(handItem.equals("gun")){
-//			hasGun = true;
+//		int index = -1;
+//			
+//		for(int i=0; i<inv.length; i++) {
+//			if(inv[i] != null) {
+//				index =  i;
+//				break;
+//			}
 //		}
-//		
+//
+//		return index;
+//
 //	}
 	
 	public void checkDropItem() {
 		
-		if(dropItem == true) {
+		if(dropItem) {
 			dropItem = false;
-			int index = checkPositionDropInv();
-				
-//				if(handItem.equals("gun") && handItem.equals(inventario.get(i))) {
-				if(index >= 0 && index <= inventario.length && inventario[index] == "gun") {
-					hasGun = false;
-					
-//					if(i-1 >= 0) {
-//						handItem = inventario.get(i-1);
-//						handIndexItem = i-1;
-//					}else {
-//						handItem = inventario.get(inventario.size() - 1);
-//						handIndexItem = inventario.size() - 1;
-//					}
+			int hi = handIndexItem; //Estas variaveis evitam que os valores sejam alocados nas posiõs erradas do vetor
+			String h = handItem;    //após o processamento o checkScrollItem, no qual modifica o atributo handIndexItem do Player
 			
-					inventario[index] = null;
-					inv[index] = null;
-//					handItem = inventario.get(inventario.size()-1);
+			if(handItem != null){
+				checkScrollItem(hi); // Método que modificará os atributos do Player
+				if(inventario[hi] == "gun" && h == "gun") {
+//					hasGun = false;
+					inventario[hi] = null;
+					inv[hi] = null;
 					Game.entities.add(new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN));
-					}
-//				}
-				
-				if(index >= 0 && index <= inventario.length && inventario[index] == "lifePack") {
-					inventario[index] = null;
-					inv[index] = null;
+					
+				}else if(inventario[hi] == "lifePack" && h  == "lifePack") {
+					inventario[hi] = null;
+					inv[hi] = null;
 					Game.entities.add(new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN));
 				}
-	
 			}
 		}
+	}
+	
+	public void checkScrollItem(int handIndexItem) {
+		
+		if(handIndexItem-1 >= 0) {
+
+			int index = handIndexItem-1;
+			
+			while(index >= 0 && inventario[index] == null) {
+				index--;
+			}
+				
+			if(index<0)
+				index++;
+		
+			if(inventario[index] != null) {
+				handItem = inventario[index];
+				this.handIndexItem = index;
+//				checkItem(handItem);
+			}
+		
+		}else {
+			
+			int index = inventario.length-1;
+			do {
+				index--;
+			}while(index > 0 && inventario[index] == null);
+			
+			if(inventario[index] != null) {
+				handItem = inventario[index];	
+				this.handIndexItem = index;
+//				checkItem(handItem);
+			}else {
+				handItem = null;
+				this.handIndexItem = 0;
+//				checkItem(handItem);
+			}
+		}
+		
+	}
 	
 	public void checkUseItem() {
 		
-		if(useItem == true) {
-			int index = checkPositionDropInv() ;
+		if(useItem) {
+			
+			int hi = handIndexItem;
+			String h = handItem;
 			useItem = false;
-			if(index != -1) {
 				
-				if(inventario[index] == "lifePack") {
+			if(inventario[hi] == "lifePack" && h == "lifePack") {
+				checkScrollItem(hi);
+				useLifePack(hi);
 					
-					useLifePack(index);
-					
-					}else {
+			}else {
 						
-						for(int i=index; i<inventario.length;i++) {
-							if(inventario[i] == "lifePack") {
-								index = i;
-								break;
-							}
-						}
+				while (handItem == "lifePack") {
+					checkScrollItem(handIndexItem);
+				}
 						
-						if(inventario[index] == "lifePack") {
-							useLifePack(index);
-						}
+				hi = handIndexItem;
+				h = handItem;
 						
-					}
+				if(inventario[hi] == "lifePack" && h == "lifePack") {
+					checkScrollItem(hi);
+					useLifePack(hi);
+				}
+						
 			}
 		}
 	}
@@ -352,29 +374,46 @@ public class Player extends Entity{
 			
 	}
 	
-//	public void handItem() {
-//		
-//		if(inventario.size() == 1) {
-//			if(inventario.get(0).equals("gun")) {
-//				hasGun = true;
-//			}
-//		}
-//	}
-//	
-//	public void scrollInv() {
-//		
-//		if()
-//		
-//	}
+	public void checkScrollItem() {
+		
+		if(scrollItem) {
+			scrollItem = false;
+			
+			if(handIndexItem - 1 >=0) {
+				handIndexItem--;
+				handItem = inventario[handIndexItem];
+//				checkItem(handItem);
+				
+			}else {
+				handIndexItem = inventario.length - 1;
+				handItem = inventario[handIndexItem];
+//				checkItem(handItem);
+			}
+			
+		}
+		
+	}
+	
+	public void checkItem() {
+		
+		if(handItem == "gun" && inventario[handIndexItem] == "gun") {
+			hasGun = true;
+		}else {
+			hasGun = false;
+		}
+		
+	}
 	
 	public void tick() {
 		
 		checkCollisionLifePack();
 		checkCollisionAmmo();
 		checkKillEnemy();
+		
 		checkDropItem();
-//		checkHandItem();
 		checkUseItem();
+		checkScrollItem();
+		checkItem();
 		
 		if(jump) {
 			if(isJumping == false) {
