@@ -54,6 +54,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static UI ui;
 	
+	double mx, my;
+	
 //	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
 //	public Font newfont;
 	
@@ -247,6 +249,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			menu.render(g);
 		}
 		
+		//Rotacionar objetos
+//		Graphics2D g2 = (Graphics2D) g;
+//		double angleMouse = Math.atan2((200+25) - my, (200+25) - mx);
+//		g2.rotate(angleMouse, 200+25, 200+25);
+//		g.setColor(Color.red);
+//		g.fillRect(200, 200, 50, 50);
+		
 		bs.show();
 	}
 
@@ -428,8 +437,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		
 		player.moveMx = (e.getX() / 3);
 		player.moveMy = (e.getY() / 3);
+		
+		mx = e.getX();
+		my = e.getY();
 		
 	}
 

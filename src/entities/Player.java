@@ -175,7 +175,6 @@ public class Player extends Entity{
 						inv[index] = Game.spritesheet.getSprite(0, 16, 16, 16);
 						handItem = inventario[index];
 						handIndexItem = index;
-//						checkItem(handItem);
 						Game.entities.remove(atual);
 					}
 				}
@@ -208,12 +207,10 @@ public class Player extends Entity{
 			if(getItem && index >= 0 && index <= inventario.length) {
 				if(atual instanceof Wapon) {
 					if(Entity.isColidding(this, atual)) {
-//						hasGun = true;
 						inventario[index] = "gun";
 						inv[index] = Game.spritesheet.getSprite(16, 16, 16, 16);
 						handItem = inventario[index];
 						handIndexItem = index;
-//						checkItem(handItem);
 						Game.entities.remove(atual);
 						Sound.ReloadRifle.play();
 					}
@@ -274,7 +271,6 @@ public class Player extends Entity{
 			if(handItem != null){
 				checkScrollItem(hi); // Método que modificará os atributos do Player
 				if(inventario[hi] == "gun" && h == "gun") {
-//					hasGun = false;
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN));
@@ -304,7 +300,6 @@ public class Player extends Entity{
 			if(inventario[index] != null) {
 				handItem = inventario[index];
 				this.handIndexItem = index;
-//				checkItem(handItem);
 			}
 		
 		}else {
@@ -317,11 +312,9 @@ public class Player extends Entity{
 			if(inventario[index] != null) {
 				handItem = inventario[index];	
 				this.handIndexItem = index;
-//				checkItem(handItem);
 			}else {
 				handItem = null;
 				this.handIndexItem = 0;
-//				checkItem(handItem);
 			}
 		}
 		
@@ -336,7 +329,6 @@ public class Player extends Entity{
 			useItem = false;
 				
 			if(inventario[hi] == "lifePack" && h == "lifePack") {
-				checkScrollItem(hi);
 				useLifePack(hi);
 					
 			}else {
@@ -349,7 +341,6 @@ public class Player extends Entity{
 				h = handItem;
 						
 				if(inventario[hi] == "lifePack" && h == "lifePack") {
-					checkScrollItem(hi);
 					useLifePack(hi);
 				}
 						
@@ -362,10 +353,12 @@ public class Player extends Entity{
 		double dif;
 		
 		if(life <= 90) {
+			checkScrollItem(index);
 			life += 10;
 			inventario[index] = null;
 			inv[index] = null;
 		}else if (life < 100){
+			checkScrollItem(index);
 			dif = 100 - life;
 			life += dif;
 			inventario[index] = null;
@@ -382,12 +375,10 @@ public class Player extends Entity{
 			if(handIndexItem - 1 >=0) {
 				handIndexItem--;
 				handItem = inventario[handIndexItem];
-//				checkItem(handItem);
 				
 			}else {
 				handIndexItem = inventario.length - 1;
 				handItem = inventario[handIndexItem];
-//				checkItem(handItem);
 			}
 			
 		}
