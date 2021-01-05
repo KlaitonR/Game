@@ -17,8 +17,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import entities.BulletShoot;
 import entities.Enemy;
@@ -55,7 +58,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public Menu menu;
 	
 	public int [] pixels;
-	public int xx, yy;
+	//public int xx, yy;
+	
+	public BufferedImage lightmap;
+	public int [] lightMapPixels;
 	
 	public static UI ui;
 	
@@ -83,11 +89,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		spritButton =  new Spritsheet("/button.png");
 		ui = new UI(spritButton);
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		try {
+			lightmap = ImageIO.read(getClass().getResource("/lightmap.png"));
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		lightMapPixels =  new int [lightmap.getWidth() * lightmap.getHeight()];
+		lightmap.getRGB(0, 0, lightmap.getWidth(), lightmap.getHeight(), lightMapPixels, 0 , lightmap.getWidth());
 		pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 		entities =  new ArrayList<Entity>();
 		enemies =  new ArrayList<Enemy>();
 		bulletShootes = new  ArrayList<BulletShoot>();
-		
 		spritesheet =  new Spritsheet("/spritesheet.png");
 		player  = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
@@ -155,7 +167,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		if(gameState.equals("NORMAL")) {
 			
-			xx++;
+			//xx++;
 			restartGame = false;
 			
 			for(int i = 0; i<entities.size(); i++) {
@@ -202,17 +214,29 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 	}
 	
-	public void drawRectangleExemple(int xoff, int yoff) {
-		for (int xx = 0; xx<32; xx++) {
-			for(int yy = 0; yy<32; yy++) {
+//	public void drawRectangleExemple(int xoff, int yoff) {
+//		for (int xx = 0; xx<32; xx++) {
+//			for(int yy = 0; yy<32; yy++) {
+//				
+//				int xOff = xx + xoff;
+//				int yOff = yy + yoff;
+//				
+//				if(xOff < 0 || yOff < 0 || xOff >= WIDTH || yOff >= HEIGHT)
+//					continue;
+//				
+//				pixels[xOff + (yOff*WIDTH)] = 0xFF0000;
+//			}
+//		}
+//	}
+	
+	public void applayLight() {
+		for (int xx = 0; xx< Game.WIDTH; xx++) {
+			for(int yy = 0; yy < Game.HEIGHT; yy++) {
 				
-				int xOff = xx + xoff;
-				int yOff = yy + yoff;
+				if(lightMapPixels[xx + (yy * Game.WIDTH)] == 0xFFFFFFFF) {
+					pixels[xx+ (yy*Game.WIDTH)] = 0;
+				}
 				
-				if(xOff < 0 || yOff < 0 || xOff >= WIDTH || yOff >= HEIGHT)
-					continue;
-				
-				pixels[xOff + (yOff*WIDTH)] = 0xFF0000;
 			}
 		}
 	}
@@ -240,12 +264,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			bulletShootes.get(i).render(g);
 		}
 		
+		applayLight();
+		
 		ui.render(g);
 		
 		g.dispose();
 		g = bs.getDrawGraphics();
 		
-		drawRectangleExemple(xx, yy);
+		//drawRectangleExemple(xx, yy);
 		
 		g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
 		g.setFont(new Font("arial", Font.BOLD, 20));
