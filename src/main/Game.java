@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
@@ -53,6 +54,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public Menu menu;
 	
+	public int [] pixels;
+	public int xx, yy;
+	
 	public static UI ui;
 	
 	double mx, my;
@@ -79,6 +83,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		spritButton =  new Spritsheet("/button.png");
 		ui = new UI(spritButton);
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 		entities =  new ArrayList<Entity>();
 		enemies =  new ArrayList<Enemy>();
 		bulletShootes = new  ArrayList<BulletShoot>();
@@ -146,11 +151,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			int[] opt2 = {this.CUR_LEVEL, (int)player.life, (int)player.levelPlayer, (int)player.exp};
 			Menu.saveGame(opt1,opt2,10);
 			System.out.println("Jogo salvo com sucesso!");
-			
 		}
 		
 		if(gameState.equals("NORMAL")) {
 			
+			xx++;
 			restartGame = false;
 			
 			for(int i = 0; i<entities.size(); i++) {
@@ -197,7 +202,23 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 	}
 	
+	public void drawRectangleExemple(int xoff, int yoff) {
+		for (int xx = 0; xx<32; xx++) {
+			for(int yy = 0; yy<32; yy++) {
+				
+				int xOff = xx + xoff;
+				int yOff = yy + yoff;
+				
+				if(xOff < 0 || yOff < 0 || xOff >= WIDTH || yOff >= HEIGHT)
+					continue;
+				
+				pixels[xOff + (yOff*WIDTH)] = 0xFF0000;
+			}
+		}
+	}
+	
 	public void render() {
+		
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
 			this.createBufferStrategy(3);
@@ -223,6 +244,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		g.dispose();
 		g = bs.getDrawGraphics();
+		
+		drawRectangleExemple(xx, yy);
+		
 		g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
 		g.setFont(new Font("arial", Font.BOLD, 20));
 		g.setColor(Color.yellow);
