@@ -113,11 +113,16 @@ public class Enemy extends Entity{
 		else if(speed>0.8)
 			speed -= 0.25;
 		
+		
+		if(this.calculateDistance(this.getX(), this.getY(), Game.player.getX(), Game.player.getY()) < 200) { // se a distancia for menor que 200, persegue o player
+			
+		}
+		
 		if(!isColiddingWithPlayer()) {
 			
 			if(!isTargetPlayer() && !target) { //se o player não entra na área do target, ou nçao causar dano (ANDA ALEATORIAMENTE)
 				
-				if(ps == true) { // Não anda na diagonal
+				if(ps) { // Não anda na diagonal
 				
 					if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
 						moved = true;

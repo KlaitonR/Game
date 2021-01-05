@@ -23,6 +23,9 @@ public class Entity {
 	public static BufferedImage WEAPON_EN = Game.spritesheet.getSprite(16, 16, 16, 16);
 	public static BufferedImage BULLET_EN = Game.spritesheet.getSprite(0, 32, 16, 16);
 	public static BufferedImage ENEMY_EN = Game.spritesheet.getSprite(6*16, 16, 16, 16);
+	public static BufferedImage TREE_EN = Game.spritesheet.getSprite(0, 48, 16, 16);
+	public static BufferedImage FIREWOOD_EN = Game.spritesheet.getSprite(0, 64, 16, 16);
+	public static BufferedImage AXE_EN = Game.spritesheet.getSprite(0, 96, 16, 16);
 	
 	public Entity (double x, double y, int width, int height, BufferedImage sprite) {
 		this.x = x;
@@ -64,6 +67,10 @@ public class Entity {
 		
 		return eMask.intersects(tMask);
 		
+	}
+	
+	public double calculateDistance(int x1, int y1, int x2, int y2) {
+		return Math.sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1 - y2));
 	}
 	
 	public void render(Graphics g) {

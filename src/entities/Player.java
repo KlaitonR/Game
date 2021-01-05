@@ -13,7 +13,7 @@ public class Player extends Entity{
 	public boolean rigth, left, down, up;
 	public int rightDir = 0, leftDir = 1, upDir = 2, downDir = 3;
 	public int dir = rightDir;
-	public int maskx = 3, masky = 0, maskw = 10, maskh = 14;
+	public int maskx = 3, masky = 0, maskw = 10, maskh = 16;
 	
 	public double speed = 1.4;
 	public double mx, my, moveMx = 0, moveMy = 0;
@@ -29,8 +29,10 @@ public class Player extends Entity{
 	private boolean moved;
 	public boolean isDamage;
 	private int damageFrames;
+//	private boolean isCollidingTree;
 	
 	public boolean hasGun;
+	public boolean hasAxe;
 	public boolean shoot;
 	public boolean mouseShoot;
 	public double life = 100, maxLife = 100;
@@ -41,8 +43,11 @@ public class Player extends Entity{
 	public boolean useItem;
 	public String handItem;
 	public int handIndexItem;
-	public boolean scrollItem;
+	public boolean scrollItemLef;
+	public boolean scrollItemDir;
 	
+	public boolean openLvls;
+	public boolean offLvls = true;
 	public String levelRoom;
 	public int levelPlayer;
 	
@@ -71,6 +76,16 @@ public class Player extends Entity{
 	private BufferedImage [] leftPlayerDamageWithGun;
 	private BufferedImage [] upPlayerDamageWithGun;
 	private BufferedImage [] downPlayerDamageWithGun;
+	
+	private BufferedImage [] rightPlayerWithAxe;
+	private BufferedImage [] leftPlayerWithAxe;
+	private BufferedImage [] upPlayerWithAxe;
+	private BufferedImage [] downPlayerWithAxe; 
+	
+	private BufferedImage [] rightPlayerDamageWithAxe;
+	private BufferedImage [] leftPlayerDamageWithAxe;
+	private BufferedImage [] upPlayerDamageWithAxe;
+	private BufferedImage [] downPlayerDamageWithAxe;
 	
 	private BufferedImage rightPlayerJumping;
 	private BufferedImage leftPlayerJumping;
@@ -117,6 +132,16 @@ public class Player extends Entity{
 		upPlayerDamageWithGun = new BufferedImage[4];
 		downPlayerDamageWithGun = new BufferedImage[4];
 		
+		rightPlayerWithAxe = new BufferedImage[4];
+		leftPlayerWithAxe = new BufferedImage[4];
+		upPlayerWithAxe = new BufferedImage[4];
+		downPlayerWithAxe = new BufferedImage[4];
+		
+		rightPlayerDamageWithAxe = new BufferedImage[4];
+		leftPlayerDamageWithAxe = new BufferedImage[4];
+		upPlayerDamageWithAxe = new BufferedImage[4];
+		downPlayerDamageWithAxe = new BufferedImage[4];
+		
 		for(int i = 0; i<4; i++) {
 			rightPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 0, 16, 16);
 			leftPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 16, 16, 16);
@@ -137,6 +162,17 @@ public class Player extends Entity{
 			leftPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 208, 16, 16);
 			upPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 224, 16, 16);
 			downPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 240, 16, 16);
+			
+			rightPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 0, 16, 16);
+			leftPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 16, 16, 16);
+			upPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 32, 16, 16);
+			downPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 48, 16, 16);
+			
+			rightPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 64, 16, 16);
+			leftPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 80, 16, 16);
+			upPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 96, 16, 16);
+			downPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 112, 16, 16);
+			
 		}
 		
 		rightPlayerJumping = Game.spritesheet.getSprite(96, 128, 16, 16);
@@ -220,6 +256,61 @@ public class Player extends Entity{
 		
 	}
 	
+	public void checkCollisionAxe() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			int index = checkPositionGetInv();
+			if(getItem && index >= 0 && index <= inventario.length) {
+				if(atual instanceof Axe) {
+					if(Entity.isColidding(this, atual)) {
+						inventario[index] = "machado";
+						inv[index] = Game.spritesheet.getSprite(0, 96, 16, 16);
+						handItem = inventario[index];
+						handIndexItem = index;
+						Game.entities.remove(atual);
+					}
+				}
+			}
+		}
+		
+	}
+	
+	public void checkCollisionFirewood() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			int index = checkPositionGetInv();
+			if(getItem && index >= 0 && index <= inventario.length) {
+				if(atual instanceof Firewood) {
+					if(Entity.isColidding(this, atual)) {
+						inventario[index] = "lenha";
+						inv[index] = Game.spritesheet.getSprite(0, 64, 16, 16);
+						handItem = inventario[index];
+						handIndexItem = index;
+						Game.entities.remove(atual);
+					}
+				}
+			}
+		}
+		
+	}
+	
+	public void checkCollisionTree(){
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			
+			if(atual instanceof Tree) {
+				if(Entity.isColidding(this, atual)) {
+//					isCollidingTree = true;
+					if(useItem && handItem == "machado")
+						((Tree) atual).life--;
+				}
+			}
+		}
+	}
+	
 	public void checkKillEnemy() {
 		
 		for(int i=0; i<maxExp.length; i++) {
@@ -279,6 +370,16 @@ public class Player extends Entity{
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN));
+					
+				}else if(inventario[hi] == "machado" && h  == "machado") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Game.entities.add(new Axe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.AXE_EN));
+					
+				}else if(inventario[hi] == "lenha" && h  == "lenha") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Game.entities.add(new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_EN));
 				}
 			}
 		}
@@ -369,8 +470,8 @@ public class Player extends Entity{
 	
 	public void checkScrollItem() {
 		
-		if(scrollItem) {
-			scrollItem = false;
+		if(scrollItemLef) {
+			scrollItemLef = false;
 			
 			if(handIndexItem - 1 >=0) {
 				handIndexItem--;
@@ -378,6 +479,18 @@ public class Player extends Entity{
 				
 			}else {
 				handIndexItem = inventario.length - 1;
+				handItem = inventario[handIndexItem];
+			}
+			
+		}else if(scrollItemDir) {
+			scrollItemDir =  false;
+			
+			if(handIndexItem < inventario.length - 1) {
+				handIndexItem++;
+				handItem = inventario[handIndexItem];
+				
+			}else {
+				handIndexItem = 0;
 				handItem = inventario[handIndexItem];
 			}
 			
@@ -393,18 +506,33 @@ public class Player extends Entity{
 			hasGun = false;
 		}
 		
+		if(handItem == "machado" && inventario[handIndexItem] == "machado") {
+			hasAxe = true;
+		}else {
+			hasAxe = false;
+		}
+		
 	}
 	
 	public void tick() {
 		
 		checkCollisionLifePack();
 		checkCollisionAmmo();
+		checkCollisionTree();
+		checkCollisionFirewood();
 		checkKillEnemy();
+		
 		
 		checkDropItem();
 		checkUseItem();
 		checkScrollItem();
 		checkItem();
+		
+		if(!hasGun)
+			checkCollisionGun();
+		
+		if(!hasAxe)
+			checkCollisionAxe();
 		
 		if(jump) {
 			if(isJumping == false) {
@@ -434,25 +562,25 @@ public class Player extends Entity{
 		
 		moved = false;
 		
-		if(rigth && World.isFree((int)(x+speed), this.getY(), this.z) && World.isFreeBush((int)(x+speed), this.getY())) {
+		if(rigth && World.isFree((int)(x+speed), this.getY(), this.z)) {
 			moved =  true;
 			//dir = rightDir; //Rotação de sprites com teclado
 			x+=speed;
 			
 			
-		}else if (left && World.isFree((int)(x-speed), this.getY(), this.z) && World.isFreeBush((int)(x-speed), this.getY())) {
+		}else if (left && World.isFree((int)(x-speed), this.getY(), this.z)) {
 			moved =  true;
 			//dir = leftDir; //Rotação de sprites com teclado
 			x-=speed;
 		
 		}
 			
-		if(up && World.isFree(this.getX(),(int)(y-speed), this.z) && World.isFreeBush(this.getX(), (int)(y-speed))) {
+		if(up && World.isFree(this.getX(),(int)(y-speed), this.z)) {
 			moved =  true;
 			//dir = upDir; //Rotação de sprites com teclado 
 			y-=speed;
 
-		}else if (down && World.isFree(this.getX(), (int)(y+speed), this.z) && World.isFreeBush(this.getX(), (int)(y+speed))) {
+		}else if (down && World.isFree(this.getX(), (int)(y+speed), this.z)) {
 			moved =  true;
 			//dir = downDir; //Rotação de sprites com teclado
 			y+=speed;
@@ -473,9 +601,6 @@ public class Player extends Entity{
 			index = 0;
 			frames = 0;
 		}
-		
-		if(!hasGun)
-			checkCollisionGun();
 		
 		if(life <= 0) { // Game over
 			life = 0;
@@ -604,6 +729,8 @@ public class Player extends Entity{
 					
 					if(hasGun) {
 						g.drawImage(rightPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(rightPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -612,6 +739,8 @@ public class Player extends Entity{
 						
 					if(hasGun) {
 						g.drawImage(leftPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(leftPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -620,6 +749,8 @@ public class Player extends Entity{
 						
 					if(hasGun) {
 						g.drawImage(upPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(upPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -628,6 +759,8 @@ public class Player extends Entity{
 						
 					if(hasGun) {
 						g.drawImage(downPlayerWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(downPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -639,6 +772,8 @@ public class Player extends Entity{
 						
 					if(hasGun) {
 						g.drawImage(rightPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(rightPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(rightPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -647,19 +782,28 @@ public class Player extends Entity{
 						
 					if(hasGun) {
 						g.drawImage(leftPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(rightPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(leftPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
 						
 				}else if(dir == upDir) {
-					g.drawImage(upPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+				
 					if(hasGun) {
+						g.drawImage(upPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(upPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else {
 						g.drawImage(upPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
+					
 				}else if(dir == downDir) {
 						
 					if(hasGun) {
 						g.drawImage(downPlayerDamageWithGun[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if(hasAxe){
+						g.drawImage(downPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(downPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -727,7 +871,7 @@ public class Player extends Entity{
 						g.drawImage(upPlayerDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
 				}else if(dir == downDir) {
-						
+					
 					if(hasGun) {
 						g.drawImage(downPlayerGunDamageJumping, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
@@ -741,6 +885,12 @@ public class Player extends Entity{
 			g.setColor(Color.black);
 			g.fillOval(this.getX() - Camera.x + 4, this.getY() - Camera.y + 12, 8, 8);
 		}
+		
+//		g.setColor(Color.black);
+//		g.fillRect(this.getX() - Camera.x + maskx, this.getY() - Camera.y + masky, maskw, maskh);
+		
+//		g.setColor(Color.black);
+//		g.fillRect((int)mx, (int)my, 100 ,10);
 		
 	}	
 }

@@ -43,6 +43,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	static public java.util.List<Enemy> enemies;
 	static public java.util.List<BulletShoot> bulletShootes;
 	static public Spritsheet spritesheet;
+	static public Spritsheet spritButton;
 	
 	public static World world;
 	
@@ -75,7 +76,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		rand = new Random();
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
-		ui = new UI();
+		spritButton =  new Spritsheet("/button.png");
+		ui = new UI(spritButton);
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities =  new ArrayList<Entity>();
 		enemies =  new ArrayList<Enemy>();
@@ -331,7 +333,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 		}
 		
-		if(e.getKeyCode() == KeyEvent.VK_E) {
+		if(e.getKeyCode() == KeyEvent.VK_R) {
 			player.useItem = true;
 		}
 		
@@ -344,7 +346,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_Q){
-			player.scrollItem = true;
+			player.scrollItemLef = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_E) {
+			player.scrollItemDir = true;
 		}
 		
 	}
@@ -381,7 +387,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 		}
 		
-		if(e.getKeyCode() == KeyEvent.VK_E) { 
+		if(e.getKeyCode() == KeyEvent.VK_R) { 
 			player.useItem = false;
 		}
 		
@@ -394,7 +400,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_Q){
-			player.scrollItem = false;
+			player.scrollItemLef = false;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_E) { 
+			player.scrollItemDir = false;
 		}
 		
 	}
@@ -410,6 +420,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		player.mouseShoot =  true;
 		player.mx = (e.getX() / 3);
 		player.my = (e.getY() / 3);
+		
+		if(!Game.player.openLvls && (e.getX()/ 3) >= 2 && (e.getX()/ 3) <= 78 && (e.getY()/ 3) >= 40 && (e.getY()/ 3) <= 45) {
+			player.openLvls = true;
+			player.offLvls = false;
+			player.mouseShoot =  false;
+			
+		}else if(!Game.player.offLvls && (e.getX()/ 3) >= 2 && (e.getX()/ 3) <= 78 && (e.getY()/ 3) >= 40 && (e.getY()/ 3) <= 49) {
+			player.offLvls = true;
+			player.openLvls = false;
+			player.mouseShoot =  false;
+		}
 		
 	}
 

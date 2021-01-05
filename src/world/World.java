@@ -5,10 +5,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+
+import entities.Axe;
 import entities.Bullet;
 import entities.Enemy;
 import entities.Entity;
 import entities.LifePack;
+import entities.Tree;
 import entities.Wapon;
 import graficos.Spritsheet;
 import main.Game;
@@ -67,11 +70,14 @@ public class World {
 						
 						Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
 		
-//					}else if (pixelAtual == 0xFFB200FF){ //Rochas
-//						tiles[xx + (yy*WIDTH)] = new RockTile(xx*16, yy*16, Tile.TILE_ROCK);
-//						
-//					}else if(pixelAtual == 0xFFFF00DC) { // Arbusto
-//						tiles[xx + (yy*WIDTH)] = new BushTile(xx*16, yy*16, Tile.TILE_BUSH);
+					}else if (pixelAtual == 0xFFB200FF){ //Portas
+						tiles[xx + (yy*WIDTH)] = new DoorTile(xx*16, yy*16, Tile.TILE_DOOR);
+						
+					}else if(pixelAtual == 0xFFFF00DC) { // Arvore
+						Game.entities.add(new Tree(xx*16, yy*16, 16, 16, Entity.TREE_EN));
+					}
+					else if(pixelAtual == 0xFF7F3300) { // Machado
+						Game.entities.add(new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN));
 					}
 				}
 			}
@@ -98,11 +104,7 @@ public class World {
 		if (!((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x2 + (y2*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x3 + (y3*World.WIDTH)] instanceof WallTile) ||
-				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile)) 
-//				&&
-//				!((tiles[x1 + (y1*World.WIDTH)] instanceof BushTile))
-				) {
-			
+				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile))){
 			return true;
 		}
 		
@@ -113,40 +115,6 @@ public class World {
 		return false;
 				
 	}
-	
-public static boolean isFreeBush(int xNext, int yNext) {
-	
-	int x1 = (xNext / TILE_SIZE);
-	int y1 = (yNext / TILE_SIZE);
-	
-	int x2 = ((xNext + TILE_SIZE - 4) / TILE_SIZE);
-	int y2 = (yNext / TILE_SIZE);
-	
-	int x3 = (xNext / TILE_SIZE );
-	int y3 = ((yNext + TILE_SIZE - 4) / TILE_SIZE);
-	
-	int x4 = ((xNext + TILE_SIZE - 4) / TILE_SIZE);
-	int y4 = ((yNext + TILE_SIZE - 4) / TILE_SIZE);
-		
-//		int x1 = xNext / 13;
-//		int y1 = yNext / 13;
-//		
-//		int x2 = (xNext + 13 -1) / 13;
-//		int y2 = yNext / 13;
-//		
-//		int x3 = xNext / 13;
-//		int y3 = (yNext + 13 -1) / 13;
-//		
-//		int x4 = (xNext + 13 - 1) / 13;
-//		int y4 = (yNext + 13 -1) / 13;
-//		
-		return !((tiles[x1 + (y1*World.WIDTH)] instanceof BushTile) ||
-				(tiles[x2 + (y2*World.WIDTH)] instanceof BushTile) ||
-				(tiles[x3 + (y3*World.WIDTH)] instanceof BushTile) ||
-				(tiles[x4 + (y4*World.WIDTH)] instanceof BushTile));
-	}
-
-
 	
 	public static void restarGame(String level) {
 		
@@ -177,5 +145,8 @@ public static boolean isFreeBush(int xNext, int yNext) {
 				tile.render(g);
 			}
 		}
+		
+		
+		
 	}
 }
