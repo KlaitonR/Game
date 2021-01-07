@@ -1,20 +1,24 @@
 package entities;
 
-//import java.awt.Color;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Random;
+
 import main.Game;
 import main.Sound;
+//import main.Sound;
+import world.AStar;
 import world.Camera;
-import world.World;
+import world.Vector2i;
+//import world.World;
 
 public class Enemy extends Entity{
 	
 	private double speed = Game.rand.nextDouble();
 	
-	private int maskx = 4, masky = 0, maskw = 9, maskh = 16;
-	private int maskTragetx = -40, maskTargety = -40, maskTargetw = 80, maskTargeth = 80;
+//	private int maskTragetx = -40, maskTargety = -40, maskTargetw = 80, maskTargeth = 80;
 	
 	private BufferedImage [] rightEnemy;
 	private BufferedImage [] leftEnemy;
@@ -47,6 +51,8 @@ public class Enemy extends Entity{
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
 		
+		 super.maskx = 4; super.masky = 0; super.mwidth = 9; super.mheigth = 16;
+		
 		rightEnemy = new BufferedImage[4];
 		leftEnemy = new BufferedImage[4];
 		upEnemy = new BufferedImage[4];
@@ -73,36 +79,18 @@ public class Enemy extends Entity{
 	
 	public boolean isColiddingWithPlayer() {
 		
-		Rectangle enemyCurrent = new Rectangle(this.getX() + maskx, this.getY() + masky, maskw, maskh);
+		Rectangle enemyCurrent = new Rectangle(this.getX() + maskx, this.getY() + masky, mwidth, mheigth);
 		Rectangle player = new Rectangle(Game.player.getX() + Game.player.maskx, Game.player.getY()+ Game.player.masky, Game.player.maskw, Game.player.maskh);
 
 		return enemyCurrent.intersects(player);
 	}
 	
-	public boolean isTargetPlayer() {
-		Rectangle enemyCurrent = new Rectangle(this.getX() + maskTragetx, this.getY() + maskTargety, maskTargetw, maskTargeth);
-		Rectangle player = new Rectangle(Game.player.getX() + Game.player.maskx, Game.player.getY()+ Game.player.masky, Game.player.maskw, Game.player.maskh);
-		
-		return enemyCurrent.intersects(player);
-	}
-	
-	public boolean isColidding(int xNext, int yNext) {
-		
-		Rectangle enemyCurrent = new Rectangle(xNext + maskx, yNext + masky, maskw, maskh);
-		
-		for(int i =0; i < Game.enemies.size(); i++) {
-			Enemy e = Game.enemies.get(i);
-			if(e==this && (e instanceof Enemy))
-				continue;
-			
-			Rectangle targetEnemy= new Rectangle(e.getX() + maskx,e.getY() + masky, maskw, maskh);
-			if(enemyCurrent.intersects(targetEnemy)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+//	public boolean isTargetPlayer() {
+//		Rectangle enemyCurrent = new Rectangle(this.getX() + maskTragetx, this.getY() + maskTargety, maskTargetw, maskTargeth);
+//		Rectangle player = new Rectangle(Game.player.getX() + Game.player.maskx, Game.player.getY()+ Game.player.masky, Game.player.maskw, Game.player.maskh);
+//		
+//		return enemyCurrent.intersects(player);
+//	}
 	
 	public void tick() {
 		
@@ -113,139 +101,161 @@ public class Enemy extends Entity{
 		else if(speed>0.8)
 			speed -= 0.25;
 		
+//		if(this.calculateDistance(this.getX(), this.getY(), Game.player.getX(), Game.player.getY()) < 200) { // se a distancia for menor que 200, persegue o player
+//			
+//		}
 		
-		if(this.calculateDistance(this.getX(), this.getY(), Game.player.getX(), Game.player.getY()) < 200) { // se a distancia for menor que 200, persegue o player
-			
-		}
+//		if(!isColiddingWithPlayer()) {
+//			
+//			if(!isTargetPlayer() && !target) { //se o player não entra na área do target, ou nçao causar dano (ANDA ALEATORIAMENTE)
+//				
+//				if(ps) { // Não anda na diagonal
+//				
+//					if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
+//						moved = true;
+//						x += speed;
+//						dir = rightDir;
+//						
+//					}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
+//						moved =  true;
+//						x -= speed;
+//						dir = leftDir;
+//					}
+//					
+//					if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
+//						moved = true;
+//						y += speed;
+//						dir = downDir;
+//					}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
+//						moved = true;
+//						y -= speed;
+//						dir = upDir;
+//					}
+//
+//				}else { //anda na diagonal
+//					
+//					if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
+//						moved = true;
+//						x += speed;
+//						dir = rightDir;
+//						
+//					}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
+//						moved =  true;
+//						x -= speed;
+//						dir = leftDir;
+//					} else if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
+//						moved = true;
+//						y += speed;
+//						dir = downDir;
+//					}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
+//						moved = true;
+//						y -= speed;
+//						dir = upDir;
+//					}
+//				}
+//				
+//				//Mudar de direção ao colidir
+//				
+//				//Para esquerda e para direitra
+//				if(dirRight == true && !World.isFree((int)(x+speed), this.getY(), this.z)) {
+//					dirRight = false;
+//					dirLeft = true;
+//					ps = false;
+//				}
+//				
+//				if(dirLeft == true && !World.isFree((int)(x-speed), this.getY(), this.z)) {
+//					dirRight = true;
+//					dirLeft = false;
+//					ps = true;
+//				}
+//				
+//				if(isColidding((int)(x+speed), this.getY())) {
+//					dirRight = false;
+//					dirLeft = true;
+//					ps = false;
+//				}
+//				
+//				if(isColidding((int)(x-speed), this.getY())) {
+//					dirRight = true;
+//					dirLeft = false;
+//					ps = true;
+//				}
+//				
+//				//Para baixo e para cima
+//				
+//				if(dirDown == true && !World.isFree(this.getX(), (int)(y+speed), this.z)) {
+//					dirDown = false;
+//					dirUp = true;
+//				}
+//				
+//				if(dirUp == true && !World.isFree(this.getX(), (int)(y-speed), this.z)) {
+//					dirDown = true;
+//					dirUp = false;
+//				}
+//				
+//				if(isColidding(this.getX(), (int)(y+speed))) {
+//					dirDown = false;
+//					dirUp = true;
+//				}
+//				
+//				if(isColidding(this.getX(), (int)(y-speed))) {
+//					dirDown = true;
+//					dirUp = false;
+//				}
+//				
+//			}else { //Se entrar na área de target ou causar dano (SEGUE O PLAYER)
+//			
+//				if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
+//					moved = true;
+//					x += speed;
+//					dir =  rightDir;
+//				}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
+//					moved =  true;
+//					x -= speed;
+//					dir = leftDir;
+//				}
+//				
+//				if((int)y < Game.player.getY() && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
+//					moved = true;
+//					y += speed;
+//					dir = downDir;
+//				}else if ((int)y > Game.player.getY() && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))){
+//					moved = true;
+//					y -= speed;
+//					dir = upDir;
+//				}
+//			}
+//		}else { // Se colidir com o player (CAUSA DANO)
+//			
+//			if(Game.rand.nextInt(100) < 10) {
+//				Sound.hurtEffect.play();
+//				Game.player.life -= Game.rand.nextInt(3);
+//				Game.player.isDamage = true;
+//			}
+//		}
 		
 		if(!isColiddingWithPlayer()) {
-			
-			if(!isTargetPlayer() && !target) { //se o player não entra na área do target, ou nçao causar dano (ANDA ALEATORIAMENTE)
-				
-				if(ps) { // Não anda na diagonal
-				
-					if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
-						moved = true;
-						x += speed;
-						dir = rightDir;
-						
-					}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
-						moved =  true;
-						x -= speed;
-						dir = leftDir;
-					}
-					
-					if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
-						moved = true;
-						y += speed;
-						dir = downDir;
-					}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
-						moved = true;
-						y -= speed;
-						dir = upDir;
-					}
-
-				}else { //anda na diagonal
-					
-					if(dirRight == true && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
-						moved = true;
-						x += speed;
-						dir = rightDir;
-						
-					}else if(dirLeft == true && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
-						moved =  true;
-						x -= speed;
-						dir = leftDir;
-					} else if(dirDown == true && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
-						moved = true;
-						y += speed;
-						dir = downDir;
-					}else if (dirUp == true && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))) {
-						moved = true;
-						y -= speed;
-						dir = upDir;
-					}
-				}
-				
-				//Mudar de direção ao colidir
-				
-				//Para esquerda e para direitra
-				if(dirRight == true && !World.isFree((int)(x+speed), this.getY(), this.z)) {
-					dirRight = false;
-					dirLeft = true;
-					ps = false;
-				}
-				
-				if(dirLeft == true && !World.isFree((int)(x-speed), this.getY(), this.z)) {
-					dirRight = true;
-					dirLeft = false;
-					ps = true;
-				}
-				
-				if(isColidding((int)(x+speed), this.getY())) {
-					dirRight = false;
-					dirLeft = true;
-					ps = false;
-				}
-				
-				if(isColidding((int)(x-speed), this.getY())) {
-					dirRight = true;
-					dirLeft = false;
-					ps = true;
-				}
-				
-				//Para baixo e para cima
-				
-				if(dirDown == true && !World.isFree(this.getX(), (int)(y+speed), this.z)) {
-					dirDown = false;
-					dirUp = true;
-				}
-				
-				if(dirUp == true && !World.isFree(this.getX(), (int)(y-speed), this.z)) {
-					dirDown = true;
-					dirUp = false;
-				}
-				
-				if(isColidding(this.getX(), (int)(y+speed))) {
-					dirDown = false;
-					dirUp = true;
-				}
-				
-				if(isColidding(this.getX(), (int)(y-speed))) {
-					dirDown = true;
-					dirUp = false;
-				}
-				
-			}else { //Se entrar na área de target ou causar dano (SEGUE O PLAYER)
-			
-				if((int)x < Game.player.getX() && World.isFree((int)(x+speed), this.getY(), this.z) && !isColidding((int)(x+speed), this.getY())) {
-					moved = true;
-					x += speed;
-					dir =  rightDir;
-				}else if ((int)x > Game.player.getX() && World.isFree((int)(x-speed), this.getY(), this.z) && !isColidding((int)(x-speed), this.getY())){
-					moved =  true;
-					x -= speed;
-					dir = leftDir;
-				}
-				
-				if((int)y < Game.player.getY() && World.isFree(this.getX(), (int)(y+speed), this.z) && !isColidding(this.getX(), (int)(y+speed))) {
-					moved = true;
-					y += speed;
-					dir = downDir;
-				}else if ((int)y > Game.player.getY() && World.isFree(this.getX(), (int)(y-speed), this.z) && !isColidding(this.getX(), (int)(y-speed))){
-					moved = true;
-					y -= speed;
-					dir = upDir;
-				}
+			if(path == null || path.size() == 0) {
+				Vector2i start = new Vector2i((int)(x/16), (int)(y/16));
+				Vector2i end = new Vector2i((int)(Game.player.x/16), (int)(Game.player.y/16));
+				path = AStar.findPath(Game.world, start, end);
 			}
-		}else { // Se colidir com o player (CAUSA DANO)
-			
-			if(Game.rand.nextInt(100) < 10) {
+		}else {
+			if(new Random().nextInt(100) < 10) {
 				Sound.hurtEffect.play();
 				Game.player.life -= Game.rand.nextInt(3);
 				Game.player.isDamage = true;
 			}
 		}
+		
+		if(new Random().nextInt(100) < 60) 
+			followPath(path);	
+		
+//		if(new Random().nextInt(100) < 5) {
+//			Vector2i start = new Vector2i((int)(x/16), (int)(y/16));
+//			Vector2i end = new Vector2i((int)(Game.player.x/16), (int)(Game.player.y/16));
+//			path = AStar.findPath(Game.world, start, end);
+//		}
 		
 		if(moved) {
 			frames++;
@@ -342,9 +352,13 @@ public class Enemy extends Entity{
 			else if(dir == downDir)
 				g.drawImage(downEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 		}
-//		
-//		g.setColor(Color.black);
-//		g.fillRect(Game.player.getX() - Camera.x + Game.player.maskx, Game.player.getY() - Camera.y + Game.player.masky, Game.player.maskw, Game.player.maskh);
+		
+		g.setColor(Color.black);
+		g.fillRect(Game.player.getX() - Camera.x + Game.player.maskx, Game.player.getY() - Camera.y + Game.player.masky, Game.player.maskw, Game.player.maskh);
+		
+		g.setColor(Color.black);
+		g.fillRect(this.getX() - Camera.x + maskx, this.getY() - Camera.y + masky, mwidth, mheigth);
+		
 	}
 
 }

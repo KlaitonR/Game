@@ -4,9 +4,13 @@ package entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.List;
+
 import main.Game;
 import world.Camera;
+import world.Node;
 import world.Tile;
+import world.Vector2i;
 import world.World;
 
 public class Entity {
@@ -16,7 +20,10 @@ public class Entity {
 	protected int z;
 	protected int width;
 	protected int height;
-	protected int maskx, masky, maskw, maskh; 
+	
+//	public int maskx = 4, masky = 0, maskw = 9, maskh = 16;
+	
+	public int maskx, masky, mwidth, mheigth;
 	
 	private BufferedImage sprite;
 	public static BufferedImage LIFE_PACK_EN = Game.spritesheet.getSprite(0, 16, 16, 16);
@@ -27,6 +34,8 @@ public class Entity {
 	public static BufferedImage FIREWOOD_EN = Game.spritesheet.getSprite(0, 64, 16, 16);
 	public static BufferedImage AXE_EN = Game.spritesheet.getSprite(0, 96, 16, 16);
 	
+	protected List<Node> path;
+	
 	public Entity (double x, double y, int width, int height, BufferedImage sprite) {
 		this.x = x;
 		this.y = y;
@@ -36,21 +45,21 @@ public class Entity {
 		
 		this.maskx = 0;
 		this.masky = 0;
-		this.maskw = width;
-		this.maskh = height;
+		this.mwidth = width;
+		this.mheigth = height;
 	}
 	
 	public void setMask(int maskx, int masky, int maskw, int maskh) {
 		this.maskx = maskx;
 		this.masky = masky;
-		this.maskw = maskw;
-		this.maskh = maskh;
+		this.mwidth = maskw;
+		this.mheigth = maskh;
 	}
 	
 	public static boolean isColidding(Entity e1, Entity e2) {
 		
-		Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskx, e1.getY() + e1.masky, e1.maskw, e1.maskh);
-		Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskx, e2.getY() + e2.masky, e2.maskw, e2.maskh);
+		Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskx, e1.getY() + e1.masky, e1.mwidth, e1.mheigth);
+		Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskx, e2.getY() + e2.masky, e2.mwidth, e2.mheigth);
 		
 		if(e1Mask.intersects(e2Mask) && e1.z == e2.z) {
 			return true;
@@ -69,6 +78,24 @@ public class Entity {
 		
 	}
 	
+	public boolean isColidding(int xNext, int yNext) {
+		
+		Rectangle enemyCurrent = new Rectangle(xNext + maskx, yNext + masky, mwidth, mheigth);
+		
+		for(int i =0; i < Game.enemies.size(); i++) {
+			Enemy e = Game.enemies.get(i);
+			if(e==this && (e instanceof Enemy))
+				continue;
+			
+			Rectangle targetEnemy= new Rectangle(e.getX() + maskx,e.getY() + masky, mwidth, mheigth);
+			if(enemyCurrent.intersects(targetEnemy)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public double calculateDistance(int x1, int y1, int x2, int y2) {
 		return Math.sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1 - y2));
 	}
@@ -83,6 +110,34 @@ public class Entity {
 	}
 	
 	public void tick() {
+		
+	}
+	
+	public void followPath(List<Node> path) {
+		
+		if(path != null) {
+			if(path.size() > 0) {
+				Vector2i target = path.get(path.size() - 1).tile;
+//				xprev = x;
+//				yprev = y;
+				if(x < target.x * 16 && !isColidding(this.getX() + 1, this.getY())) {
+					x++;
+				}else if(x > target.x * 16 && !isColidding(this.getX() - 1, this.getY())) {
+					x--;
+				}
+				
+				if(y < target.y * 16 && !isColidding(this.getX(), this.getY() + 1)) {
+					y++;
+				}else if (y > target.y * 16 && !isColidding(this.getX(), this.getY() -1)) {
+					y--;
+				}
+				
+				if(x == target.x * 16 && y == target.y * 16) {
+					path.remove(path.size() -1);
+				}
+				
+			}
+		}
 		
 	}
 
@@ -135,19 +190,19 @@ public class Entity {
 	}
 
 	public int getMaskw() {
-		return maskw;
+		return mwidth;
 	}
 
 	public void setMaskw(int maskw) {
-		this.maskw = maskw;
+		this.mwidth = maskw;
 	}
 
 	public int getMaskh() {
-		return maskh;
+		return mheigth;
 	}
 
 	public void setMaskh(int maskh) {
-		this.maskh = maskh;
+		this.mheigth = maskh;
 	}
 	
 }
