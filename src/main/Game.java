@@ -79,6 +79,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private int CUR_LEVEL = 1, MAX_LVL  = 2;
 	private boolean restartGame;
 	
+	private long init, end, dif;
+	private int hour = 12, minute = 0, second, darken;
+	private boolean dusk, dawn;
+	private int controlDarken;
+	
 	public Game() {
 	
 		Sound.musicBackground.loop();
@@ -157,6 +162,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public void tick() {
 		
+		init = System.currentTimeMillis();
+		
 		if(this.saveGame) {
 			this.saveGame = false;
 			String[] opt1 = {"levelRoom", "vida", "levelPlayer", "exp"};
@@ -213,6 +220,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.updateCamera();
 			menu.tick();
 		}
+		
+		end = System.currentTimeMillis(); 
+		
 	}
 	
 //	public void drawRectangleExemple(int xoff, int yoff) {
@@ -308,6 +318,92 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		g2.rotate(angleMouse, 200+25, 200+25);
 //		g.setColor(Color.red);
 //		g.fillRect(200, 200, 50, 50);
+		
+		if(Game.gameState.equals("NORMAL")) {
+			
+			g.setFont(new Font("arial", Font.BOLD, 20));
+			g.setColor(Color.white);
+			
+			if(hour < 10 && minute < 10) 
+				g.drawString("Hora: 0" + hour + ":0" + minute,  20,  85 );
+			if(hour >= 10 && minute < 10) 
+				g.drawString("Hora: " + hour + ":0" + minute,  20,  85 );
+			if(hour < 10 && minute >= 10) 
+				g.drawString("Hora: 0" + hour + ":" + minute,  20,  85 );
+			if(hour >= 10 && minute >= 10) 
+				g.drawString("Hora: " + hour + ":" + minute,  20,  85 );
+			
+			dif = end - init;
+			System.out.println(dif);
+			
+			if(dif >= 1) {
+				
+				second++;
+				
+				if(second == 10) {
+					minute++;
+					second = 0;
+				}
+				
+				if(minute == 59) {
+					minute = 0;
+					hour++;
+				}
+				
+				if(hour == 23) {
+					hour = 0;
+				}
+				
+				if(hour >= 18 || hour < 5) {
+					controlDarken ++;
+					if(controlDarken == 3) {
+						darken++;
+						controlDarken = 0;
+					}
+					dusk = true;
+					dawn = false;
+					
+				}else if(hour >= 5 && hour <= 7){
+					controlDarken ++;
+					if(controlDarken == 3) {
+						darken ++;
+					controlDarken = 0;
+					}
+					dawn = true;
+					dusk = false;
+					
+				}else{
+					dawn = false;
+					dusk = false;
+				}
+				
+			}
+			
+			Graphics2D g2 = (Graphics2D) g;
+			
+			if(hour >= 18 && dusk) { // se estiver anoitecendo 
+				if (darken < 235) {
+					g2.setColor(new Color(0,0,0, darken));
+				}else {
+					g2.setColor(new Color(0,0,0,235));
+				}
+				g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+			
+			}
+			
+			if(dawn) { // se estiver amanhecendo 
+				if(235 - darken >= 0) {
+					g2.setColor(new Color(0,0,0, 235 - darken));
+				}else {
+					g2.setColor(new Color(0,0,0,0));
+				}
+		
+				
+				g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+		
+			}
+			
+		}
 		
 		bs.show();
 	}

@@ -79,6 +79,12 @@ public class World {
 					else if(pixelAtual == 0xFF7F3300) { // Machado
 						Game.entities.add(new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN));
 					}
+					else if(pixelAtual == 0xFF0094FF) { // Água
+						tiles[xx + (yy*WIDTH)] = new WaterTile(xx*16, yy*16, Tile.TILE_WATER);
+					}
+					else if(pixelAtual == 0xFF4C1E00) { // Terra
+						tiles[xx + (yy*WIDTH)] = new EarthTile(xx*16, yy*16, Tile.TILE_EARTH);
+					}
 				}
 			}
 			
@@ -104,7 +110,11 @@ public class World {
 		if (!((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x2 + (y2*World.WIDTH)] instanceof WallTile) ||
 				(tiles[x3 + (y3*World.WIDTH)] instanceof WallTile) ||
-				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile))){
+				(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile)) &&
+				!((tiles[x1 + (y1*World.WIDTH)] instanceof WaterTile) ||
+				(tiles[x2 + (y2*World.WIDTH)] instanceof WaterTile) ||
+				(tiles[x3 + (y3*World.WIDTH)] instanceof WaterTile) ||
+				(tiles[x4 + (y4*World.WIDTH)] instanceof WaterTile)) ){
 			return true;
 		}
 		

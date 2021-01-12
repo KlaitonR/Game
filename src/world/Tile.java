@@ -10,6 +10,8 @@ public class Tile {
 	static public BufferedImage TILE_WALL = Game.spritesheet.getSprite(16, 0, 16, 16);
 	static public BufferedImage TILE_TREE = Game.spritesheet.getSprite(0, 48, 16, 16);
 	static public BufferedImage TILE_DOOR = Game.spritesheet.getSprite(16, 48, 16, 16);
+	static public BufferedImage TILE_WATER = Game.spritesheet.getSprite(0, 80, 16, 16);
+	static public BufferedImage TILE_EARTH = Game.spritesheet.getSprite(16, 80, 16, 16);
 	
 	protected BufferedImage sprite;
 	protected int x,y,z;

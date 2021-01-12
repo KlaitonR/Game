@@ -522,7 +522,6 @@ public class Player extends Entity{
 		checkCollisionFirewood();
 		checkKillEnemy();
 		
-		
 		checkDropItem();
 		checkUseItem();
 		checkScrollItem();

@@ -21,8 +21,6 @@ public class Entity {
 	protected int width;
 	protected int height;
 	
-//	public int maskx = 4, masky = 0, maskw = 9, maskh = 16;
-	
 	public int maskx, masky, mwidth, mheigth;
 	
 	private BufferedImage sprite;
@@ -118,8 +116,6 @@ public class Entity {
 		if(path != null) {
 			if(path.size() > 0) {
 				Vector2i target = path.get(path.size() - 1).tile;
-//				xprev = x;
-//				yprev = y;
 				if(x < target.x * 16 && !isColidding(this.getX() + 1, this.getY())) {
 					x++;
 				}else if(x > target.x * 16 && !isColidding(this.getX() - 1, this.getY())) {
