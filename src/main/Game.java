@@ -19,8 +19,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import entities.BulletShoot;
@@ -80,7 +80,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean restartGame;
 	
 	private long init, end, dif;
-	private int hour = 12, minute = 0, second, darken;
+	public static int hour = 18, minute = 0, second, darken;
 	private boolean dusk, dawn;
 	private int controlDarken;
 	
@@ -240,17 +240,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		}
 //	}
 	
-//	public void applayLight() {
-//		for (int xx = 0; xx< Game.WIDTH; xx++) {
-//			for(int yy = 0; yy < Game.HEIGHT; yy++) {
-//				
-//				if(lightMapPixels[xx + (yy * Game.WIDTH)] == 0xFFFFFFFF) {
-//					pixels[xx+ (yy*Game.WIDTH)] = 0;
-//				}
-//				
-//			}
-//		}
-//	}
+	public void applayLight() {
+		for (int xx = 0; xx< Game.WIDTH; xx++) {
+			for(int yy = 0; yy < Game.HEIGHT; yy++) {
+				
+				if(lightMapPixels[xx + (yy * Game.WIDTH)] == 0xFFFFFFFF) {
+					pixels[xx+ (yy*Game.WIDTH)] = 0;
+				}
+				
+			}
+		}
+	}
 	
 	public void render() {
 		
@@ -266,6 +266,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		world.render(g);
 		
+		Collections.sort(entities, Entity.nodeSorter);
+		
 		for(int i = 0; i<entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.render(g);
@@ -275,7 +277,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			bulletShootes.get(i).render(g);
 		}
 		
-//		applayLight();
+		if(Game.player.useLighter)
+			applayLight();
 		
 		ui.render(g);
 		
@@ -321,20 +324,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		if(Game.gameState.equals("NORMAL")) {
 			
-			g.setFont(new Font("arial", Font.BOLD, 20));
-			g.setColor(Color.white);
-			
-			if(hour < 10 && minute < 10) 
-				g.drawString("Hora: 0" + hour + ":0" + minute,  20,  85 );
-			if(hour >= 10 && minute < 10) 
-				g.drawString("Hora: " + hour + ":0" + minute,  20,  85 );
-			if(hour < 10 && minute >= 10) 
-				g.drawString("Hora: 0" + hour + ":" + minute,  20,  85 );
-			if(hour >= 10 && minute >= 10) 
-				g.drawString("Hora: " + hour + ":" + minute,  20,  85 );
-			
 			dif = end - init;
-			System.out.println(dif);
+			//System.out.println(dif);
 			
 			if(dif >= 1) {
 				
@@ -381,7 +372,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 			Graphics2D g2 = (Graphics2D) g;
 			
-			if(hour >= 18 && dusk) { // se estiver anoitecendo 
+			if(dusk && !player.useLighter) { // se estiver anoitecendo 
 				if (darken < 235) {
 					g2.setColor(new Color(0,0,0, darken));
 				}else {
@@ -391,7 +382,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 			}
 			
-			if(dawn) { // se estiver amanhecendo 
+			if(dawn && !player.useLighter) { // se estiver amanhecendo 
 				if(235 - darken >= 0) {
 					g2.setColor(new Color(0,0,0, 235 - darken));
 				}else {

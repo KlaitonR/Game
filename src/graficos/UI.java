@@ -8,9 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-
 import main.Game;
-import world.Camera;
+import main.Menu;
 
 public class UI {
 	
@@ -36,14 +35,18 @@ public class UI {
 	
 	public void render(Graphics g) {
 		
-		//Life do Enemy
-		for(int i = 0; i < Game.enemies.size(); i++) {
-			g.setColor(Color.black); 
-			g.fillRect((int)Game.enemies.get(i).getX() + 2 - Camera.x, (int)Game.enemies.get(i).getY() - 5 - Camera.y, 12, 3);
-			g.setColor(Color.red);
-			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, 10, 1);
-			g.setColor(Color.green);
-			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, (int)((Game.enemies.get(i).life/Game.enemies.get(i).maxLife)*10), 1);
+		if(Game.gameState.equals("NORMAL") || Menu.pause) {
+			g.setFont(new Font("arial", Font.BOLD, 9));
+			g.setColor(Color.white);
+			
+			if(Game.hour < 10 && Game.minute < 10) 
+				g.drawString("Hora: 0" + Game.hour + ":0" + Game.minute,  20,  30 );
+			if(Game.hour >= 10 && Game.minute < 10) 
+				g.drawString("Hora: " + Game.hour + ":0" + Game.minute,  20,  30 );
+			if(Game.hour < 10 && Game.minute >= 10) 
+				g.drawString("Hora: 0" + Game.hour + ":" + Game.minute,  20,  30 );
+			if(Game.hour >= 10 && Game.minute >= 10) 
+				g.drawString("Hora: " + Game.hour + ":" + Game.minute,  20,  30 );
 		}
 		
 		g.setColor(Color.black); 

@@ -4,6 +4,7 @@ package entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.List;
 
 import main.Game;
@@ -31,8 +32,11 @@ public class Entity {
 	public static BufferedImage TREE_EN = Game.spritesheet.getSprite(0, 48, 16, 16);
 	public static BufferedImage FIREWOOD_EN = Game.spritesheet.getSprite(0, 64, 16, 16);
 	public static BufferedImage AXE_EN = Game.spritesheet.getSprite(0, 96, 16, 16);
+	public static BufferedImage LIGHTER_EN = Game.spritesheet.getSprite(0, 128, 16, 16);
 	
 	protected List<Node> path;
+	
+	public int depth;
 	
 	public Entity (double x, double y, int width, int height, BufferedImage sprite) {
 		this.x = x;
@@ -53,6 +57,19 @@ public class Entity {
 		this.mwidth = maskw;
 		this.mheigth = maskh;
 	}
+	
+	public static Comparator<Entity> nodeSorter = new Comparator<Entity>(){
+		
+		@Override
+		public int compare(Entity n0, Entity n1) {
+			if(n1.depth < n0.depth)
+				return +1;
+			if(n1.depth > n0.depth)
+				return -1;
+			return 0;
+		}
+		
+	};
 	
 	public static boolean isColidding(Entity e1, Entity e2) {
 		

@@ -14,6 +14,8 @@ public class Sound {
 	public static final Sound shootRifle = new Sound("/shootRifle.wav");
 	public static final Sound ReloadRifle = new Sound("/reloadRifle.wav");
 	public static final Sound missAmo = new Sound("/missAmo.wav");
+	public static final Sound dropItem = new Sound("/dropItem.wav");
+	public static final Sound lighter = new Sound("/lighter.wav");
 	
 	private Sound(String name) {
 		try {

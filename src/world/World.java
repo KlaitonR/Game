@@ -11,6 +11,7 @@ import entities.Bullet;
 import entities.Enemy;
 import entities.Entity;
 import entities.LifePack;
+import entities.Lighter;
 import entities.Tree;
 import entities.Wapon;
 import graficos.Spritsheet;
@@ -84,6 +85,10 @@ public class World {
 					}
 					else if(pixelAtual == 0xFF4C1E00) { // Terra
 						tiles[xx + (yy*WIDTH)] = new EarthTile(xx*16, yy*16, Tile.TILE_EARTH);
+						
+					}else if(pixelAtual == 0xFF808080) { //Isqueiro
+						Game.entities.add(new Lighter(xx*16, yy*16, 16, 16, Entity.LIGHTER_EN));
+					
 					}
 				}
 			}

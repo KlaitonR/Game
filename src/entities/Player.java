@@ -35,6 +35,7 @@ public class Player extends Entity{
 	public boolean hasAxe;
 	public boolean shoot;
 	public boolean mouseShoot;
+	public boolean useLighter;
 	public double life = 100, maxLife = 100;
 	public int ammo = 1000;
 	
@@ -219,6 +220,26 @@ public class Player extends Entity{
 		
 	}
 	
+	public void checkCollisionLighter() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			int index = checkPositionGetInv();
+			if(getItem && index >= 0 && index <= inventario.length) {
+				if(atual instanceof Lighter) {
+					if(Entity.isColidding(this, atual)) {
+						inventario[index] =  "isqueiro";
+						inv[index] = Game.spritesheet.getSprite(0, 128, 16, 16);
+						handItem = inventario[index];
+						handIndexItem = index;
+						Game.entities.remove(atual);
+					}
+				}
+			}
+		}
+		
+	}
+	
 	public void checkCollisionAmmo() {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
@@ -365,21 +386,31 @@ public class Player extends Entity{
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN));
+					Sound.dropItem.play();
 					
 				}else if(inventario[hi] == "lifePack" && h  == "lifePack") {
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN));
+					Sound.dropItem.play();
 					
 				}else if(inventario[hi] == "machado" && h  == "machado") {
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Axe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.AXE_EN));
+					Sound.dropItem.play();
 					
 				}else if(inventario[hi] == "lenha" && h  == "lenha") {
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_EN));
+					Sound.dropItem.play();
+				}else if(inventario[hi] == "isqueiro" && h  == "isqueiro") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Game.entities.add(new Lighter(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIGHTER_EN));
+					useLighter = false;
+					Sound.dropItem.play();
 				}
 			}
 		}
@@ -446,6 +477,14 @@ public class Player extends Entity{
 				}
 						
 			}
+			
+			if(inventario[hi] == "isqueiro" && h == "isqueiro" && !useLighter) {
+				useLighter = true;
+				Sound.lighter.play();
+			}else  if(inventario[hi] == "isqueiro" && useLighter){
+				useLighter = false;
+			}
+			
 		}
 	}
 	
@@ -516,10 +555,13 @@ public class Player extends Entity{
 	
 	public void tick() {
 		
+		depth = 1;
+		
 		checkCollisionLifePack();
 		checkCollisionAmmo();
 		checkCollisionTree();
 		checkCollisionFirewood();
+		checkCollisionLighter();
 		checkKillEnemy();
 		
 		checkDropItem();
