@@ -1,52 +1,52 @@
 package entities;
 
 import java.awt.Color;
-//import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import main.Game;
 import main.Sound;
 import world.Camera;
+import world.World;
 //import java.util.Random;
 //import world.AStar;
 //import world.Vector2i;
-import world.World;
 //import main.Sound;
+//import java.awt.Color;
 
-public class Enemy extends Entity{
+	public class Enemy extends Entity{
 	
-	private double speed = Game.rand.nextDouble();
-	
-	private int maskTragetx = -40, maskTargety = -40, maskTargetw = 80, maskTargeth = 80;
-	
-	private BufferedImage [] rightEnemy;
-	private BufferedImage [] leftEnemy;
-	private BufferedImage [] upEnemy;
-	private BufferedImage [] downEnemy; 
-	private BufferedImage [] rightEnemyDamage;
-	private BufferedImage [] leftEnemyDamage;
-	private BufferedImage [] upEnemyDamage;
-	private BufferedImage [] downEnemyDamage;
-	
-	public int rightDir = 0, leftDir = 1, upDir = 2, downDir = 3;
-	public int dir = rightDir;
-	private boolean moved = false;
-	private int frames = 0, maxFrames = 20, index = 0, maxIndex = 3;
-	
-	public double life = 10, maxLife = 10;
-	boolean isDamage;
-	private int damageFrames;
-	public boolean target = false;
-	
-	private double exp;
-	
-	boolean dirRight = true;
-	boolean dirLeft = false;
-	boolean dirUp = false;
-	boolean dirDown = true;
-	
-	boolean ps = true;
+		private double speed = Game.rand.nextDouble();
+		
+		private int maskTragetx = -40, maskTargety = -40, maskTargetw = 80, maskTargeth = 80;
+		
+		private BufferedImage [] rightEnemy;
+		private BufferedImage [] leftEnemy;
+		private BufferedImage [] upEnemy;
+		private BufferedImage [] downEnemy; 
+		private BufferedImage [] rightEnemyDamage;
+		private BufferedImage [] leftEnemyDamage;
+		private BufferedImage [] upEnemyDamage;
+		private BufferedImage [] downEnemyDamage;
+		
+		public int rightDir = 0, leftDir = 1, upDir = 2, downDir = 3;
+		public int dir = rightDir;
+		private boolean moved = false;
+		private int frames = 0, maxFrames = 20, index = 0, maxIndex = 3;
+		
+		public double life = 10, maxLife = 10;
+		boolean isDamage;
+		private int damageFrames;
+		public boolean target = false;
+		
+		private double exp;
+		
+		boolean dirRight = true;
+		boolean dirLeft = false;
+		boolean dirUp = false;
+		boolean dirDown = true;
+		
+		boolean ps = true;
 
 	public Enemy(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, null);
@@ -231,7 +231,8 @@ public class Enemy extends Entity{
 		}else { // Se colidir com o player (CAUSA DANO)
 			
 			if(Game.rand.nextInt(100) < 10) {
-				Sound.hurtEffect.play();
+				Sound.Clips.hurt.play();
+				Sound.Clips.music.loop();
 				Game.player.life -= Game.rand.nextInt(3);
 				Game.player.isDamage = true;
 			}
@@ -241,26 +242,40 @@ public class Enemy extends Entity{
 		//MOVIMENTAÇÃO DE PERSEGUIÇÃO COM ALGORITMO A*
 //		if(!isColiddingWithPlayer()) {
 //			if(path == null || path.size() == 0) {
-//				Vector2i start = new Vector2i((int)(x/16), (int)(y/16));
-//				Vector2i end = new Vector2i((int)(Game.player.x/16), (int)(Game.player.y/16));
+//				Vector2i start = new Vector2i(((int)(x/16)),((int)(y/16)));
+//				Vector2i end = new Vector2i(((int)(Game.player.x/16)),((int)(Game.player.y/16)));
 //				path = AStar.findPath(Game.world, start, end);
 //			}
 //		}else {
-//			if(new Random().nextInt(100) < 10) {
+//			if(new Random().nextInt(100) < 5) {
 //				Sound.hurtEffect.play();
-//				Game.player.life -= Game.rand.nextInt(3);
+//				Game.player.life-=Game.rand.nextInt(3);
 //				Game.player.isDamage = true;
 //			}
 //		}
-//		
-//		if(new Random().nextInt(100) < 60) 
-//			followPath(path);	
-//		
-//		if(new Random().nextInt(100) < 5) {
-//			Vector2i start = new Vector2i((int)(x/16), (int)(y/16));
-//			Vector2i end = new Vector2i((int)(Game.player.x/16), (int)(Game.player.y/16));
-//			path = AStar.findPath(Game.world, start, end);
-//		}
+//			if(new Random().nextInt(100) < 50)
+//				followPath(path);
+//			
+//			if(x % 16 == 0 && y % 16 == 0) {
+//				if(new Random().nextInt(100) < 10) {
+//					Vector2i start = new Vector2i(((int)(x/16)),((int)(y/16)));
+//					Vector2i end = new Vector2i(((int)(Game.player.x/16)),((int)(Game.player.y/16)));
+//					path = AStar.findPath(Game.world, start, end);
+//				}
+//			}
+//			
+//			if(this.x < Game.player.getX()) {
+//				dir = rightDir;
+//			}else if (this.x > Game.player.getX()){
+//				dir = leftDir;
+//			}
+//			
+//			if(this.y < Game.player.getY()) {
+//				dir = downDir;
+//			}else if (this.y > Game.player.getY()){
+//				dir = upDir;
+//			}
+			
 		
 		if(moved) {
 			frames++;
@@ -298,6 +313,7 @@ public class Enemy extends Entity{
 				isDamage = false;
 			}
 		}
+		
 	}
 	
 	public void destroySelf() {

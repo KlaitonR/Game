@@ -62,6 +62,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public BufferedImage lightmap;
 	public int [] lightMapPixels;
+	public static int [] minimapaPixels;
+	
+	public static BufferedImage minimapa;
 	
 	public static UI ui;
 	
@@ -80,14 +83,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean restartGame;
 	
 	private long init, end, dif;
-	public static int hour = 18, minute = 0, second, darken;
+	public static int hour = 17, minute = 0, second, darken;
 	private boolean dusk, dawn;
 	private int controlDarken;
 	
 	public Game() {
 	
-		Sound.musicBackground.loop();
-	
+		Sound.Clips.music.loop();
+		
 		rand = new Random();
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
@@ -109,6 +112,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		player  = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
 		world =  new World("/level1.png");
+		
+		minimapa = new BufferedImage(World.WIDTH, World.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		minimapaPixels = ((DataBufferInt)minimapa.getRaster().getDataBuffer()).getData();
 		
 		menu = new Menu();
 		
@@ -134,10 +140,22 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void initFrame() {
 		frame = new JFrame("Game #1");
 		frame.add(this);
+		//alterar Cursor
+//		Image image = toolkit.getImage("C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
+//		Cursor c = toolkit.createCustomCursor(image , new Point(frame.getX() + 10, frame.getY() + 15), "C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
 		java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage("C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
-		Cursor c = toolkit.createCustomCursor(image , new Point(frame.getX() + 10, frame.getY() + 15), "C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
+		Image image = toolkit.getImage(getClass().getResource("/mira.png"));
+		Cursor c = toolkit.createCustomCursor(image , new Point(0,0), "img");
 		frame.setCursor (c);
+		//Alterar icone da janela
+		Image icon = null;
+		try {
+			icon = ImageIO.read(getClass().getResource("/icon.png"));
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		frame.setIconImage(icon);
+		frame.setAlwaysOnTop(true);
 		frame.setResizable(false);
 		frame.pack();
 		frame.setLocationRelativeTo(null); 
@@ -297,6 +315,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		g.setColor(Color.darkGray);
 		g.drawString("Level " + CUR_LEVEL, 10, 470);
 		
+		if(gameState.equals("NORMAL") || Menu.pause) {
+			World.renderMiniMap();
+			g.drawImage(minimapa, 605, 30, World.WIDTH, World.HEIGHT, null);
+		}
+		
 		if(gameState.equals("GAME OVER")) {
 			
 			Graphics2D g2 = (Graphics2D) g;
@@ -325,7 +348,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if(Game.gameState.equals("NORMAL")) {
 			
 			dif = end - init;
-			//System.out.println(dif);
+			 //System.out.println(dif);
 			
 			if(dif >= 1) {
 				
@@ -369,6 +392,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				}
 				
 			}
+		}
+		
+		if(gameState.equals("NORMAL") || Menu.pause) {
 			
 			Graphics2D g2 = (Graphics2D) g;
 			
@@ -389,11 +415,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					g2.setColor(new Color(0,0,0,0));
 				}
 		
-				
 				g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
 		
 			}
-			
 		}
 		
 		bs.show();

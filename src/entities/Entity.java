@@ -22,6 +22,8 @@ public class Entity {
 	protected int width;
 	protected int height;
 	
+	public int psTiles, xTile, yTile;
+	
 	public int maskx, masky, mwidth, mheigth;
 	
 	private BufferedImage sprite;
@@ -129,29 +131,29 @@ public class Entity {
 	}
 	
 	public void followPath(List<Node> path) {
-		
 		if(path != null) {
 			if(path.size() > 0) {
 				Vector2i target = path.get(path.size() - 1).tile;
-				if(x < target.x * 16 && !isColidding(this.getX() + 1, this.getY())) {
+				//xprev = x;
+				//yprev = y;
+				if(x < target.x * 16) {
 					x++;
-				}else if(x > target.x * 16 && !isColidding(this.getX() - 1, this.getY())) {
+				}else if(x > target.x * 16) {
 					x--;
 				}
 				
-				if(y < target.y * 16 && !isColidding(this.getX(), this.getY() + 1)) {
+				if(y < target.y * 16) {
 					y++;
-				}else if (y > target.y * 16 && !isColidding(this.getX(), this.getY() -1)) {
+				}else if(y > target.y * 16) {
 					y--;
 				}
 				
 				if(x == target.x * 16 && y == target.y * 16) {
-					path.remove(path.size() -1);
+					path.remove(path.size() - 1);
 				}
 				
 			}
 		}
-		
 	}
 
 	public int getX() {

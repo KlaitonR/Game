@@ -249,7 +249,7 @@ public class Player extends Entity{
 				if(Entity.isColidding(this, atual)) {
 					ammo += 10;
 					Game.entities.remove(atual);
-					Sound.ReloadRifle.play();
+					Sound.Clips.missAmo.play();
 				}
 			}
 		}
@@ -269,7 +269,7 @@ public class Player extends Entity{
 						handItem = inventario[index];
 						handIndexItem = index;
 						Game.entities.remove(atual);
-						Sound.ReloadRifle.play();
+						Sound.Clips.reload.play();
 					}
 				}
 			}
@@ -386,31 +386,32 @@ public class Player extends Entity{
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN));
-					Sound.dropItem.play();
+					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "lifePack" && h  == "lifePack") {
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN));
-					Sound.dropItem.play();
+					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "machado" && h  == "machado") {
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Axe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.AXE_EN));
-					Sound.dropItem.play();
+					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "lenha" && h  == "lenha") {
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_EN));
-					Sound.dropItem.play();
+					Sound.Clips.dropItem.play();
+					
 				}else if(inventario[hi] == "isqueiro" && h  == "isqueiro") {
 					inventario[hi] = null;
 					inv[hi] = null;
 					Game.entities.add(new Lighter(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIGHTER_EN));
 					useLighter = false;
-					Sound.dropItem.play();
+					Sound.Clips.dropItem.play();
 				}
 			}
 		}
@@ -480,7 +481,7 @@ public class Player extends Entity{
 			
 			if(inventario[hi] == "isqueiro" && h == "isqueiro" && !useLighter) {
 				useLighter = true;
-				Sound.lighter.play();
+				Sound.Clips.lighter.play();
 			}else  if(inventario[hi] == "isqueiro" && useLighter){
 				useLighter = false;
 			}
@@ -629,7 +630,7 @@ public class Player extends Entity{
 		}
 		
 		if(moved) {
-			Sound.passosGrama.loop();
+//			Sound.passosGrama.loop();
 			frames++;
 			if(frames == maxFrames) {
 				frames = 0;
@@ -638,7 +639,7 @@ public class Player extends Entity{
 					index = 0;
 			}
 		}else{
-			Sound.passosGrama.stop();
+//			Sound.passosGrama.stop();
 			index = 0;
 			frames = 0;
 		}
@@ -721,7 +722,7 @@ public class Player extends Entity{
 			
 			if(hasGun && ammo > 0) {
 				//Sound.missAmo.stop();
-				Sound.shootRifle.play();
+//				Sound.shootRifle.play();
 				ammo--;
 				
 				double dx = Math.cos(angle);

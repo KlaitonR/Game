@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-
 import entities.Axe;
 import entities.Bullet;
 import entities.Enemy;
@@ -36,46 +35,44 @@ public class World {
 				for(int yy = 0; yy < map.getHeight(); yy++) {
 			
 					int pixelAtual = pixels[xx + (yy*map.getWidth())];
-					
 					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 					
 					if(pixelAtual == 0xFF000000) {
-						
 						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 						
 					}else if(pixelAtual == 0xFFFFFFFF) { //Parede
-						
 						tiles[xx + (yy*WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
 						
 					}else if(pixelAtual == 0xFF0000FF) { //Player
-						
 						Game.player.setX(xx*16);
 						Game.player.setY(yy*16);
 						
 					}else if(pixelAtual == 0xFFFF0000) { //Inimigo
-						
 						Enemy en = new Enemy(xx*16, yy*16, 16, 16, Entity.ENEMY_EN);
 						Game.entities.add(en);
 						Game.enemies.add(en);
 						
 					}else if(pixelAtual == 0xFFFF6A00) { //Arma
-						
 						Game.entities.add(new Wapon(xx*16, yy*16, 16, 16, Entity.WEAPON_EN));
 						
 					}else if(pixelAtual == 0xFF00FF00) { //Cura
-						
 						LifePack lifePack = new LifePack(xx*16, yy*16, 16, 16, Entity.LIFE_PACK_EN);
 						Game.entities.add(lifePack);
 		
 					}else if(pixelAtual == 0xFFFFFF00) { //Munição
-						
 						Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
 		
 					}else if (pixelAtual == 0xFFB200FF){ //Portas
 						tiles[xx + (yy*WIDTH)] = new DoorTile(xx*16, yy*16, Tile.TILE_DOOR);
 						
 					}else if(pixelAtual == 0xFFFF00DC) { // Arvore
-						Game.entities.add(new Tree(xx*16, yy*16, 16, 16, Entity.TREE_EN));
+						
+						Tree tree = new Tree(xx*16, yy*16, 16, 16, Entity.TREE_EN);
+						Game.entities.add(tree);
+						tree.psTiles = xx + (yy*WIDTH);
+						tree.xTile = xx;
+						tree.yTile = yy;
+						
 					}
 					else if(pixelAtual == 0xFF7F3300) { // Machado
 						Game.entities.add(new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN));
@@ -96,6 +93,78 @@ public class World {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
+//Método randomico de gerar mapa
+//
+//		Game.player.setX(0);
+//		Game.player.setY(0);
+//		
+//		WIDTH = 100;
+//		HEIGHT = 100;
+//		tiles = new Tile[WIDTH*HEIGHT];
+//		
+//		for(int xx =0; xx < WIDTH; xx++) {
+//			for(int yy = 0; yy < HEIGHT; yy++) {
+//				tiles[xx+yy*WIDTH] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
+//			}
+//		}
+//		
+//		int dir = 0;
+//		int xx = 0, yy = 0;
+//		
+//		for(int i=0; i<3000; i++) {
+//			
+//			tiles[xx+yy*WIDTH] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
+//			
+//			if(dir == 0) { //direita
+//				if(xx < WIDTH) {
+//					xx++;
+//				}
+//				
+//			}else if (dir == 1) { //esquerda
+//				if(xx > 0) {
+//					xx--;
+//				}
+//				
+//			}else if (dir == 2) { //baixo
+//				if(yy < HEIGHT) {
+//					yy++;
+//				}
+//				
+//			}else if (dir == 3) { //cima
+//				if(yy > 0) {
+//					yy--;
+//				}
+//			}
+//			
+//			if(Game.rand.nextInt(100) < 30) {
+//				dir = Game.rand.nextInt(4);
+//			}
+//			
+//		}
+		
+	}
+	
+	public static void renderMiniMap() {
+		
+		for(int i =0; i < Game.minimapaPixels.length; i++) {
+			Game.minimapaPixels[i] = 0;
+		}
+		
+		for(int xx = 0; xx< WIDTH; xx++) {
+			for(int yy =0; yy < HEIGHT; yy++) {
+				if(tiles[xx + (yy*WIDTH)] instanceof WallTile) {
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0xFF0000;
+				}
+			}
+		}
+		
+		int xPlayer = Game.player.getX()/16;
+		int yPlayer = Game.player.getY()/16;
+		
+		Game.minimapaPixels[xPlayer + (yPlayer*WIDTH)] = 0x0000FF;
+		
 	}
 	
 	public static boolean isFree(int xNext, int yNext, int zPlayer) {
