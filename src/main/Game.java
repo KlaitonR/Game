@@ -82,8 +82,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private int CUR_LEVEL = 1, MAX_LVL  = 2;
 	private boolean restartGame;
 	
-	private long init, end, dif;
-	public static int hour = 17, minute = 0, second, darken;
+	private double timer;
+	public static int hour = 6, minute = 50, second, darken;
 	private boolean dusk, dawn;
 	private int controlDarken;
 	
@@ -180,8 +180,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public void tick() {
 		
-		init = System.currentTimeMillis();
-		
 		if(this.saveGame) {
 			this.saveGame = false;
 			String[] opt1 = {"levelRoom", "vida", "levelPlayer", "exp"};
@@ -239,8 +237,49 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			menu.tick();
 		}
 		
-		end = System.currentTimeMillis(); 
-		
+		if(Game.gameState.equals("NORMAL")) {
+			
+			System.out.println(timer);
+			
+			if(timer >= 1)
+				second++;
+				
+			if(second == 60) {
+				minute++;
+				second = 0;
+			}
+				
+			if(minute == 59) {
+				minute = 0;
+				hour++;
+			}
+				
+			if(hour == 24)
+				hour = 0;
+				
+			if(hour >= 18 || hour < 5) {
+				controlDarken ++;
+				if(controlDarken == 15) {
+					darken++;
+					controlDarken = 0;
+				}
+				dusk = true;
+				dawn = false;
+					
+			}else if(hour >= 5 && hour <= 7){
+				controlDarken ++;
+				if(controlDarken == 15) {
+					darken ++;
+					controlDarken = 0;
+				}
+				dawn = true;
+				dusk = false;
+					
+			}else{
+				dawn = false;
+				dusk = false;
+			}	
+		}
 	}
 	
 //	public void drawRectangleExemple(int xoff, int yoff) {
@@ -345,55 +384,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		g.setColor(Color.red);
 //		g.fillRect(200, 200, 50, 50);
 		
-		if(Game.gameState.equals("NORMAL")) {
-			
-			dif = end - init;
-			 //System.out.println(dif);
-			
-			if(dif >= 1) {
-				
-				second++;
-				
-				if(second == 10) {
-					minute++;
-					second = 0;
-				}
-				
-				if(minute == 59) {
-					minute = 0;
-					hour++;
-				}
-				
-				if(hour == 23) {
-					hour = 0;
-				}
-				
-				if(hour >= 18 || hour < 5) {
-					controlDarken ++;
-					if(controlDarken == 3) {
-						darken++;
-						controlDarken = 0;
-					}
-					dusk = true;
-					dawn = false;
-					
-				}else if(hour >= 5 && hour <= 7){
-					controlDarken ++;
-					if(controlDarken == 3) {
-						darken ++;
-					controlDarken = 0;
-					}
-					dawn = true;
-					dusk = false;
-					
-				}else{
-					dawn = false;
-					dusk = false;
-				}
-				
-			}
-		}
-		
 		if(gameState.equals("NORMAL") || Menu.pause) {
 			
 			Graphics2D g2 = (Graphics2D) g;
@@ -447,6 +437,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //				System.out.println("FPS: " + frames);
 //				frames = 0;
 				timer += 1000;
+				this.timer = timer;
 			}
 			
 		}

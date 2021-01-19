@@ -479,7 +479,7 @@ public class Player extends Entity{
 						
 			}
 			
-			if(inventario[hi] == "isqueiro" && h == "isqueiro" && !useLighter) {
+			if(inventario[hi] == "isqueiro" && h == "isqueiro" && !useLighter && (Game.hour >= 18 || (Game.hour <= 7 && Game.hour >=0))) {
 				useLighter = true;
 				Sound.Clips.lighter.play();
 			}else  if(inventario[hi] == "isqueiro" && useLighter){
