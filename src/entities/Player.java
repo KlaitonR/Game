@@ -16,16 +16,16 @@ public class Player extends Entity{
 	public int maskx = 3, masky = 0, maskw = 10, maskh = 16;
 	
 	public double speed = 1.4;
-	public double mx, my, moveMx = 0, moveMy = 0;
+	public double moveMx, moveMy, mx, my;
 	
 	public boolean jump;
 	public boolean isJumping;
-	public int z = 0;
-	public int jumpFrames = 25, jumpCur =0;
+	public int z;
+	public int jumpFrames = 25, jumpCur;
 	public int jumpSp = 1;
 	public boolean jumpUp, jumpDown;
 	
-	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
+	private int frames, maxFrames = 5, index, maxIndex = 3;
 	private boolean moved;
 	public boolean isDamage;
 	private int damageFrames;
@@ -704,7 +704,8 @@ public class Player extends Entity{
 		//Rotacionar sprite
 		double angle = Math.atan2(moveMy - (this.getY()+8 - Camera.y), moveMx - (this.getX()+8 - Camera.x));
 		double direction = Math.toDegrees(angle);
-		//System.out.println(direction);
+		System.out.println(direction);
+		
 		
 		if(direction <= 35 && direction > -35)  //direita
 			dir = rightDir;
@@ -722,7 +723,7 @@ public class Player extends Entity{
 			
 			if(hasGun && ammo > 0) {
 				//Sound.missAmo.stop();
-//				Sound.shootRifle.play();
+				//Sound.shootRifle.play();
 				ammo--;
 				
 				double dx = Math.cos(angle);

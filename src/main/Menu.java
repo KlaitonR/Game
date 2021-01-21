@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -169,46 +170,46 @@ public class Menu {
 		if(pause) {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(new Color(0,0,0,200));
-			g2.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE);
+			g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 			g2.setColor(Color.RED);
-			g2.setFont(new Font("arial", Font.BOLD, 36));
-			g2.drawString("Game Clone", (Game.WIDTH*Game.SCALE) / 2 - 100, (Game.HEIGHT*Game.SCALE) / 2 - 170);
+			g2.setFont(new Font("arial", Font.BOLD, 70));
+			g2.drawString("Game Clone", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 200, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - 250);
 			
 			//opções de menu
 			g.setColor(Color.white);
 			g.setFont(new Font("arial", Font.BOLD, 24));
-			g2.drawString("Continuar", (Game.WIDTH*Game.SCALE) / 2 - 50, 200);
-			g2.drawString("Carregar Jogo", (Game.WIDTH*Game.SCALE) / 2 - 75, 240);
-			g2.drawString("Sair", (Game.WIDTH*Game.SCALE) / 2 - 20, 280);
+			g2.drawString("Continuar", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 300);
+			g2.drawString("Carregar Jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 75, 340);
+			g2.drawString("Sair", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 20, 380);
 			
 			if(options[currentOption].equals("Novo jogo")) 
-				g2.drawString(">", (Game.WIDTH*Game.SCALE) / 2 - 70, 200);
+				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 300);
 			else if(options[currentOption].equals("Carregar jogo"))
-				g2.drawString(">", (Game.WIDTH*Game.SCALE) / 2 - 95, 240);
+				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 95, 340);
 			else if(options[currentOption].equals("Sair"))
-				g2.drawString(">", (Game.WIDTH*Game.SCALE) / 2 - 40, 280);
+				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 40, 380);
 			
 		}else {
 			
 			g.setColor(Color.black);
-			g.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE);
+			g.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height);
 			g.setColor(Color.RED);
-			g.setFont(new Font("arial", Font.BOLD, 36));
-			g.drawString("Game Clone", (Game.WIDTH*Game.SCALE) / 2 - 100, (Game.HEIGHT*Game.SCALE) / 2 - 170);
+			g.setFont(new Font("arial", Font.BOLD, 70));
+			g.drawString("Game Clone", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 200, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - 250);
 			
 			//opções de menu
 			g.setColor(Color.white);
 			g.setFont(new Font("arial", Font.BOLD, 24));
-			g.drawString("Novo jogo", (Game.WIDTH*Game.SCALE) / 2 - 50, 200);
-			g.drawString("Carregar Jogo", (Game.WIDTH*Game.SCALE) / 2 - 75, 240);
-			g.drawString("Sair", (Game.WIDTH*Game.SCALE) / 2 - 20, 280);
+			g.drawString("Novo jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 300);
+			g.drawString("Carregar Jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 75, 340);
+			g.drawString("Sair", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 20, 380);
 			
 			if(options[currentOption].equals("Novo jogo")) 
-				g.drawString(">", (Game.WIDTH*Game.SCALE) / 2 - 70, 200);
+				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 300);
 			else if(options[currentOption].equals("Carregar jogo"))
-				g.drawString(">", (Game.WIDTH*Game.SCALE) / 2 - 95, 240);
+				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 95, 340);
 			else if(options[currentOption].equals("Sair"))
-				g.drawString(">", (Game.WIDTH*Game.SCALE) / 2 - 40, 280);
+				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 40, 380);
 		}
 		
 	}

@@ -149,13 +149,13 @@ public class World {
 	public static void renderMiniMap() {
 		
 		for(int i =0; i < Game.minimapaPixels.length; i++) {
-			Game.minimapaPixels[i] = 0;
+			Game.minimapaPixels[i] = 0xEFD551;
 		}
 		
 		for(int xx = 0; xx< WIDTH; xx++) {
-			for(int yy =0; yy < HEIGHT; yy++) {
+			for(int yy = 0; yy < HEIGHT; yy++) {
 				if(tiles[xx + (yy*WIDTH)] instanceof WallTile) {
-					Game.minimapaPixels[xx + (yy*WIDTH)] = 0xFF0000;
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x87782D;
 				}
 			}
 		}
@@ -163,7 +163,11 @@ public class World {
 		int xPlayer = Game.player.getX()/16;
 		int yPlayer = Game.player.getY()/16;
 		
-		Game.minimapaPixels[xPlayer + (yPlayer*WIDTH)] = 0x0000FF;
+		Game.minimapaPixels[xPlayer + (yPlayer*WIDTH)] = 0x00C2FF;
+		
+		for(int i = 0; i < Game.enemies.size(); i++) {
+			Game.minimapaPixels[(Game.enemies.get(i).getX()/16) + ((Game.enemies.get(i).getY()/16)*WIDTH)] = 0xFF0000;
+		}
 		
 	}
 	

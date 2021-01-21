@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -58,12 +59,21 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public Menu menu;
 	
 	public int [] pixels;
+	public int [] pixels2;
+	public int [] pixels3;
+	public int [] pixels4;
 	//public int xx, yy;
 	
-	public BufferedImage lightmap;
 	public int [] lightMapPixels;
-	public static int [] minimapaPixels;
+	public BufferedImage lightmap;
+	public int [] lightMapPixels2;
+	public BufferedImage lightmap2;
+	public int [] lightMapPixels3;
+	public BufferedImage lightmap3;
+	public int [] lightMapPixels4;
+	public BufferedImage lightmap4;
 	
+	public static int [] minimapaPixels;
 	public static BufferedImage minimapa;
 	
 	public static UI ui;
@@ -83,28 +93,53 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean restartGame;
 	
 	private double timer;
-	public static int hour = 6, minute = 50, second, darken;
+	public static int hour = 18, minute = 50, second, darken;
 	private boolean dusk, dawn;
 	private int controlDarken;
 	
 	public Game() {
 	
 		Sound.Clips.music.loop();
-		
 		rand = new Random();
-		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
+		
+		addKeyListener(this);
+		addMouseMotionListener(this);
+		addMouseListener(this);
+
+		setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+		
+//		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
 		spritButton =  new Spritsheet("/button.png");
 		ui = new UI(spritButton);
+		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		
 		try {
 			lightmap = ImageIO.read(getClass().getResource("/lightmap.png"));
+			lightmap2 = ImageIO.read(getClass().getResource("/lightmap2.png"));
+			lightmap3 = ImageIO.read(getClass().getResource("/lightmap3.png"));
+			lightmap4 = ImageIO.read(getClass().getResource("/lightmap4.png"));
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		lightMapPixels =  new int [lightmap.getWidth() * lightmap.getHeight()];
 		lightmap.getRGB(0, 0, lightmap.getWidth(), lightmap.getHeight(), lightMapPixels, 0 , lightmap.getWidth());
 		pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+		
+		lightMapPixels2 =  new int [lightmap2.getWidth() * lightmap2.getHeight()];
+		lightmap2.getRGB(0, 0, lightmap2.getWidth(), lightmap2.getHeight(), lightMapPixels2, 0 , lightmap2.getWidth());
+		pixels2 = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+		
+		lightMapPixels3 =  new int [lightmap3.getWidth() * lightmap3.getHeight()];
+		lightmap3.getRGB(0, 0, lightmap3.getWidth(), lightmap3.getHeight(), lightMapPixels3, 0 , lightmap3.getWidth());
+		pixels3 = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+		
+		lightMapPixels4 =  new int [lightmap4.getWidth() * lightmap4.getHeight()];
+		lightmap4.getRGB(0, 0, lightmap4.getWidth(), lightmap4.getHeight(), lightMapPixels4, 0 , lightmap4.getWidth());
+		pixels4 = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+		
 		entities =  new ArrayList<Entity>();
 		enemies =  new ArrayList<Enemy>();
 		bulletShootes = new  ArrayList<BulletShoot>();
@@ -125,11 +160,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		}catch(IOException e){
 //			e.printStackTrace();
 //		}
-		
-		addKeyListener(this);
-		addMouseMotionListener(this);
-		addMouseListener(this);
-
 	}
 	
 	public static void main(String args[]) {
@@ -140,6 +170,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void initFrame() {
 		frame = new JFrame("Game #1");
 		frame.add(this);
+		frame.setUndecorated(true);
 		//alterar Cursor
 //		Image image = toolkit.getImage("C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
 //		Cursor c = toolkit.createCustomCursor(image , new Point(frame.getX() + 10, frame.getY() + 15), "C:\\Users\\klait\\eclipse-workspace\\Game\\res\\mira.png");
@@ -239,7 +270,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		if(Game.gameState.equals("NORMAL")) {
 			
-			System.out.println(timer);
+//			System.out.println(timer);
 			
 			if(timer >= 1)
 				second++;
@@ -300,11 +331,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void applayLight() {
 		for (int xx = 0; xx< Game.WIDTH; xx++) {
 			for(int yy = 0; yy < Game.HEIGHT; yy++) {
-				
 				if(lightMapPixels[xx + (yy * Game.WIDTH)] == 0xFFFFFFFF) {
-					pixels[xx+ (yy*Game.WIDTH)] = 0;
+					int pixel = Pixel.getLightBlend(pixels[xx+yy*WIDTH], 0xBCBCBC, 0);
+					pixels[xx+ (yy*Game.WIDTH)] = pixel;
 				}
 				
+				if(lightMapPixels2[xx + (yy * Game.WIDTH)] == 0xFFFFFFFF) {
+					int pixel2 = Pixel.getLightBlend(pixels2[xx+yy*WIDTH], 0xBCBCBC, 0);
+					pixels2[xx+ (yy*Game.WIDTH)] = pixel2;
+				}
+				
+				if(lightMapPixels3[xx + (yy * Game.WIDTH)] == 0xFFFFFFFF) {
+					int pixel3 = Pixel.getLightBlend(pixels3[xx+yy*WIDTH], 0x808080, 0);
+					pixels3[xx+ (yy*Game.WIDTH)] = pixel3;
+				}
+				
+				if(lightMapPixels4[xx + (yy * Game.WIDTH)] == 0xFFFFFFFF) {
+					int pixel4 = Pixel.getLightBlend(pixels4[xx+yy*WIDTH], 0x808080, 0);
+					pixels4[xx+ (yy*Game.WIDTH)] = pixel4;
+				}
 			}
 		}
 	}
@@ -319,10 +364,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		Graphics g = image.getGraphics();
 		g.setColor(new Color(0,0,0));
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 		
 		world.render(g);
-		
 		Collections.sort(entities, Entity.nodeSorter);
 		
 		for(int i = 0; i<entities.size(); i++) {
@@ -339,50 +383,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		ui.render(g);
 		
-		g.dispose();
-		g = bs.getDrawGraphics();
-		
 		//drawRectangleExemple(xx, yy);
 		
-		g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
-		g.setFont(new Font("arial", Font.BOLD, 20));
+		g.dispose();
+		g = bs.getDrawGraphics();
+		g.drawImage(image, 0, 0,Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, null);
+		
+		g.setFont(new Font("arial", Font.BOLD, 30));
 		g.setColor(Color.yellow);
-		g.drawString("Munição: " + player.ammo, 580, 20);
+		g.drawString("Munição: " + player.ammo, 1100, 30);
 //		g.setFont(newfont);
 //		g.setColor(Color.red);
 //		g.drawString("teste", 90, 90);
 		g.setColor(Color.darkGray);
-		g.drawString("Level " + CUR_LEVEL, 10, 470);
+		g.drawString("Level " + CUR_LEVEL, 10, 745);
 		
 		if(gameState.equals("NORMAL") || Menu.pause) {
 			World.renderMiniMap();
-			g.drawImage(minimapa, 605, 30, World.WIDTH, World.HEIGHT, null);
+			g.drawImage(minimapa, 1070, 40, Toolkit.getDefaultToolkit().getScreenSize().width/5, Toolkit.getDefaultToolkit().getScreenSize().height/3, null);
 		}
-		
-		if(gameState.equals("GAME OVER")) {
-			
-			Graphics2D g2 = (Graphics2D) g;
-			
-			g2.setColor(new Color(0,0,0,150));
-			g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
-			g.setFont(new Font("arial", Font.BOLD, 40));
-			g.setColor(Color.white);
-			g.drawString("GAME OVER", (WIDTH*SCALE)/2 - 105, (HEIGHT*SCALE)/2 + 20);
-			g.setFont(new Font("arial", Font.BOLD, 20));
-			g.setColor(Color.white);
-			if(showMessageGameOver)
-				g.drawString("Pressione ENTER para reiniciar", (WIDTH*SCALE)/2 - 130, (HEIGHT*SCALE)/2 + 45 );
-			
-		}else if (gameState.equals("MENU")) {
-			menu.render(g);
-		}
-		
-		//Rotacionar objetos
-//		Graphics2D g2 = (Graphics2D) g;
-//		double angleMouse = Math.atan2((200+25) - my, (200+25) - mx);
-//		g2.rotate(angleMouse, 200+25, 200+25);
-//		g.setColor(Color.red);
-//		g.fillRect(200, 200, 50, 50);
 		
 		if(gameState.equals("NORMAL") || Menu.pause) {
 			
@@ -394,7 +413,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				}else {
 					g2.setColor(new Color(0,0,0,235));
 				}
-				g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+				g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 			
 			}
 			
@@ -405,10 +424,36 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					g2.setColor(new Color(0,0,0,0));
 				}
 		
-				g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+				g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 		
 			}
 		}
+		
+		if(gameState.equals("GAME OVER")) {
+			
+			Graphics2D g2 = (Graphics2D) g;
+			
+			g2.setColor(new Color(0,0,0,150));
+			g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+			g.setFont(new Font("arial", Font.BOLD, 40));
+			g.setColor(Color.white);
+			g.drawString("GAME OVER", (Toolkit.getDefaultToolkit().getScreenSize().width)/2 - 105, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 + 20);
+			g.setFont(new Font("arial", Font.BOLD, 20));
+			g.setColor(Color.white);
+			if(showMessageGameOver)
+				g.drawString("Pressione ENTER para reiniciar", (Toolkit.getDefaultToolkit().getScreenSize().width)/2 - 130, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 + 45 );
+			
+		}else if (gameState.equals("MENU")) {
+			menu.render(g);
+		}
+		
+		//Rotacionar objetos
+//		Graphics2D g2 = (Graphics2D) g;
+//		double angleMouse = Math.atan2((200+25) - my, (200+25) - mx);
+//		g2.rotate(angleMouse, 200+25, 200+25);
+//		g.setColor(Color.red);
+//		g.fillRect(200, 200, 50, 50);
+	
 		
 		bs.show();
 	}
@@ -570,16 +615,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		player.mouseShoot =  true;
-		player.mx = (e.getX() / 3);
-		player.my = (e.getY() / 3);
 		
-		if(!Game.player.openLvls && (e.getX()/ 3) >= 2 && (e.getX()/ 3) <= 78 && (e.getY()/ 3) >= 40 && (e.getY()/ 3) <= 45) {
+		player.mouseShoot =  true;
+		player.mx = e.getX()/3;
+		player.my = e.getY()/3;
+		
+//		System.out.println("x: " + player.mx + "    y:" + player.my);
+		
+		if(!Game.player.openLvls && player.mx >= 2 && player.my >= 59 && player.mx <= 147 && player.my <= 74) {
 			player.openLvls = true;
 			player.offLvls = false;
 			player.mouseShoot =  false;
 			
-		}else if(!Game.player.offLvls && (e.getX()/ 3) >= 2 && (e.getX()/ 3) <= 78 && (e.getY()/ 3) >= 40 && (e.getY()/ 3) <= 49) {
+		}else if(!Game.player.offLvls && player.mx >= 2 && player.my >= 59 && player.mx <= 147 && player.my <= 74) {
 			player.offLvls = true;
 			player.openLvls = false;
 			player.mouseShoot =  false;
@@ -614,10 +662,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		player.moveMx = (e.getX() / 3);
 		player.moveMy = (e.getY() / 3);
-		
-		mx = e.getX();
-		my = e.getY();
-		
 	}
 
 }
