@@ -26,7 +26,7 @@ public class Player extends Entity{
 	public boolean jumpUp, jumpDown;
 	
 	private int frames, maxFrames = 5, index, maxIndex = 3;
-	private boolean moved;
+	public boolean moved;
 	public boolean isDamage;
 	private int damageFrames;
 //	private boolean isCollidingTree;

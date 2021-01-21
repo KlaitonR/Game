@@ -97,6 +97,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean dusk, dawn;
 	private int controlDarken;
 	
+	public static int entrada = 1;
+	public static int comecar = 2;
+	public static int jogando = 3;
+	public static int estado_cena = entrada;
+	
+	public int timeCena = 0, maxTimeCena = 60*3;
+
 	public Game() {
 	
 		Sound.Clips.music.loop();
@@ -224,13 +231,37 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			//xx++;
 			restartGame = false;
 			
-			for(int i = 0; i<entities.size(); i++) {
-				Entity e = entities.get(i);
-				e.tick();
-			}
-			
-			for(int i = 0; i<bulletShootes.size(); i++) {
-				bulletShootes.get(i).tick();
+			if(estado_cena == jogando) {
+				for(int i = 0; i<entities.size(); i++) {
+					Entity e = entities.get(i);
+					e.tick();
+				}
+				
+				for(int i = 0; i<bulletShootes.size(); i++) {
+					bulletShootes.get(i).tick();
+				}
+				
+			}else {
+				if(estado_cena == entrada) {
+					if(player.getX() < 200) {
+						player.moved = true;
+						player.speed = 1;
+						player.dir = player.rightDir;
+						player.rigth = true;
+						player.tick();
+						player.updateCamera();
+					}else {
+						estado_cena = comecar;
+					}
+				}else if(estado_cena == comecar) {
+					player.moved = false;
+					player.rigth = false;
+					player.tick();
+					timeCena++;
+					if(timeCena == maxTimeCena) {
+						estado_cena = jogando;
+					}
+				}
 			}
 
 			//Up Niveis
@@ -383,6 +414,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		ui.render(g);
 		
+		if(estado_cena == comecar) {
+			g.setFont(new Font("arial", Font.BOLD, 10));
+			g.setColor(Color.white);
+			g.drawString("O jogo irá começar!", Game.WIDTH/2 - 50, Game.HEIGHT/2);		
+		}else if (estado_cena == entrada) {
+			player.render(g);
+		}
 		//drawRectangleExemple(xx, yy);
 		
 		g.dispose();
@@ -446,6 +484,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}else if (gameState.equals("MENU")) {
 			menu.render(g);
 		}
+		
 		
 		//Rotacionar objetos
 //		Graphics2D g2 = (Graphics2D) g;
