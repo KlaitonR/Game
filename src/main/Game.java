@@ -51,12 +51,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	static public Spritsheet spritButton;
 	
 	public static World world;
-	
 	public static Player player;
-	
-	public static Random rand;
-	
 	public Menu menu;
+	public static UI ui;
+
+	public static Random rand;
 	
 	public int [] pixels;
 	public int [] pixels2;
@@ -76,8 +75,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static int [] minimapaPixels;
 	public static BufferedImage minimapa;
 	
-	public static UI ui;
-	
 	double mx, my;
 	
 //	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
@@ -93,7 +90,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean restartGame;
 	
 	private double timer;
-	public static int hour = 18, minute = 50, second, darken;
+	public static int hour = 18, minute = 0, second, darken;
 	private boolean dusk, dawn;
 	private int controlDarken;
 	
@@ -101,6 +98,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static int comecar = 2;
 	public static int jogando = 3;
 	public static int estado_cena = entrada;
+	public int darkenScena = 255;
 	
 	public int timeCena = 0, maxTimeCena = 60*3;
 
@@ -295,12 +293,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				World.restarGame(newWorld);
 			}
 		} else if(gameState.equals("MENU")) {
-			player.updateCamera();
+			menu.tick();
+		}else if(gameState.equals("CONTROLES")) {
 			menu.tick();
 		}
 		
+//		TimeSystem
 		if(Game.gameState.equals("NORMAL")) {
-			
 //			System.out.println(timer);
 			
 			if(timer >= 1)
@@ -408,16 +407,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for(int i = 0; i<bulletShootes.size(); i++) {
 			bulletShootes.get(i).render(g);
 		}
-		
+
 		if(Game.player.useLighter)
 			applayLight();
 		
-		ui.render(g);
+		if(estado_cena == jogando)
+			ui.render(g);
 		
 		if(estado_cena == comecar) {
-			g.setFont(new Font("arial", Font.BOLD, 10));
+			g.setFont(new Font("arial", Font.BOLD, 50));
 			g.setColor(Color.white);
-			g.drawString("O jogo irá começar!", Game.WIDTH/2 - 50, Game.HEIGHT/2);		
+			g.drawString("GO!", Game.WIDTH/2 - 40, Game.HEIGHT/2 + 20);		
 		}else if (estado_cena == entrada) {
 			player.render(g);
 		}
@@ -437,11 +437,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		g.drawString("Level " + CUR_LEVEL, 10, 745);
 		
 		if(gameState.equals("NORMAL") || Menu.pause) {
+			
 			World.renderMiniMap();
 			g.drawImage(minimapa, 1070, 40, Toolkit.getDefaultToolkit().getScreenSize().width/5, Toolkit.getDefaultToolkit().getScreenSize().height/3, null);
-		}
-		
-		if(gameState.equals("NORMAL") || Menu.pause) {
 			
 			Graphics2D g2 = (Graphics2D) g;
 			
@@ -470,7 +468,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if(gameState.equals("GAME OVER")) {
 			
 			Graphics2D g2 = (Graphics2D) g;
-			
 			g2.setColor(new Color(0,0,0,150));
 			g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 			g.setFont(new Font("arial", Font.BOLD, 40));
@@ -484,7 +481,22 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}else if (gameState.equals("MENU")) {
 			menu.render(g);
 		}
+		else if (gameState.equals("CONTROLES")) {
+			g.setColor(new Color(0,0,0));
+			menu.render(g);
+		}
 		
+		//Shade de entrada
+		if(estado_cena == entrada && gameState.equals("NORMAL")) {
+			Graphics2D g2 = (Graphics2D) g;
+			darkenScena -= second;
+			if(darkenScena < 0)
+				g2.setColor(new Color(0,0,0,0));
+			else
+				g2.setColor(new Color(0,0,0,darkenScena));
+		
+			g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+		}
 		
 		//Rotacionar objetos
 //		Graphics2D g2 = (Graphics2D) g;
@@ -610,7 +622,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) { 
 			restartGame =  true;
 			
-			if(gameState.equals("MENU"))
+			if(gameState.equals("MENU") || gameState.equals("CONTROLES"))
 				menu.enter = true;
 		}
 		

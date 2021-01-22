@@ -29,7 +29,6 @@ public class Player extends Entity{
 	public boolean moved;
 	public boolean isDamage;
 	private int damageFrames;
-//	private boolean isCollidingTree;
 	
 	public boolean hasGun;
 	public boolean hasAxe;
@@ -324,7 +323,6 @@ public class Player extends Entity{
 			
 			if(atual instanceof Tree) {
 				if(Entity.isColidding(this, atual)) {
-//					isCollidingTree = true;
 					if(useItem && handItem == "machado")
 						((Tree) atual).life--;
 				}
@@ -377,7 +375,7 @@ public class Player extends Entity{
 		
 		if(dropItem) {
 			dropItem = false;
-			int hi = handIndexItem; //Estas variaveis evitam que os valores sejam alocados nas posiõs erradas do vetor
+			int hi = handIndexItem; //Estas variaveis locais evitam que os valores sejam alocados nas posiõs erradas do vetor
 			String h = handItem;    //após o processamento o checkScrollItem, no qual modifica o atributo handIndexItem do Player
 			
 			if(handItem != null){
@@ -419,11 +417,10 @@ public class Player extends Entity{
 	
 	public void checkScrollItem(int handIndexItem) {
 		
-		if(handIndexItem-1 >= 0) {
+		if(handIndexItem - 1 >= 0) {
 
 			int index = handIndexItem-1;
-			
-			while(index >= 0 && inventario[index] == null) {
+			while(index > 0 && inventario[index] == null){
 				index--;
 			}
 				
@@ -450,7 +447,6 @@ public class Player extends Entity{
 				this.handIndexItem = 0;
 			}
 		}
-		
 	}
 	
 	public void checkUseItem() {
@@ -606,25 +602,25 @@ public class Player extends Entity{
 		
 		if(rigth && World.isFree((int)(x+speed), this.getY(), this.z)) {
 			moved =  true;
-			//dir = rightDir; //Rotação de sprites com teclado
+			dir = rightDir; //Rotação de sprites com teclado
 			x+=speed;
 			
 			
 		}else if (left && World.isFree((int)(x-speed), this.getY(), this.z)) {
 			moved =  true;
-			//dir = leftDir; //Rotação de sprites com teclado
+			dir = leftDir; //Rotação de sprites com teclado
 			x-=speed;
 		
 		}
 			
 		if(up && World.isFree(this.getX(),(int)(y-speed), this.z)) {
 			moved =  true;
-			//dir = upDir; //Rotação de sprites com teclado 
+			dir = upDir; //Rotação de sprites com teclado 
 			y-=speed;
 
 		}else if (down && World.isFree(this.getX(), (int)(y+speed), this.z)) {
 			moved =  true;
-			//dir = downDir; //Rotação de sprites com teclado
+			dir = downDir; //Rotação de sprites com teclado
 			y+=speed;
 			
 		}
@@ -657,7 +653,7 @@ public class Player extends Entity{
 			}
 		}
 		
-//Atirar com o teclado
+//		Atirar com o teclado e rotacionar sprite com teclado 
 //		if(shoot) {
 //			
 //			shoot = false;
@@ -701,56 +697,100 @@ public class Player extends Entity{
 //			}
 //		}
 		
-		//Rotacionar sprite
-		double angle = Math.atan2(moveMy - (this.getY()+8 - Camera.y), moveMx - (this.getX()+8 - Camera.x));
-		double direction = Math.toDegrees(angle);
-		System.out.println(direction);
-		
-		
-		if(direction <= 35 && direction > -35)  //direita
-			dir = rightDir;
-		else if(direction <= -35 && direction > -145) //cima
-			dir = upDir;
-		else if (direction <= -145 || direction > 145)  //esquerda
-			dir = leftDir;
-		else if (direction <= 145 && direction > 50)  //baixo
-			dir = downDir;
-		
+//		Atirar com o mouse e rotacionar sprite com teclado
 		if(mouseShoot) {
 			
 			mouseShoot = false;
-			//Sound.missAmo.play();
 			
 			if(hasGun && ammo > 0) {
-				//Sound.missAmo.stop();
-				//Sound.shootRifle.play();
 				ammo--;
-				
-				double dx = Math.cos(angle);
-				double dy = Math.sin(angle);
+				int dx = 0;
+				int dy = 0;
 				int px = 0;
 				int py = 0;
 				
 				if(dir == rightDir) {
+					dx = 1;
 					px = 12;
 					py = 7;
 				}else if (dir == leftDir){
+					dx = -1;
 					px = 0;
 					py = 7;
 				}
 				
 				if (dir == downDir) {
+					dy = 1;
 					px = 6;
 					py = 6;
 				}else if (dir == upDir){
+					dy = -1;
 					px = 5;
 					py = 0;
 				}
-		
-				BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, dx, dy);
-				Game.bulletShootes.add(bulletShoot);
+				
+				if(dir == rightDir || dir == leftDir) {
+					BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, dx, 0);
+					Game.bulletShootes.add(bulletShoot);
+				}
+				
+				if(dir == downDir || dir == upDir) {
+					BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, 0, dy);
+					Game.bulletShootes.add(bulletShoot);
+				}
 			}
 		}
+		
+		//Rotacionar sprite
+//		double angle = Math.atan2(moveMy - (this.getY()+8 - Camera.y), moveMx - (this.getX()+8 - Camera.x));
+//		double direction = Math.toDegrees(angle);
+//		System.out.println(direction);
+		
+//		if(direction <= 35 && direction > -35)  //direita
+//			dir = rightDir;
+//		else if(direction <= -35 && direction > -145) //cima
+//			dir = upDir;
+//		else if (direction <= -145 || direction > 145)  //esquerda
+//			dir = leftDir;
+//		else if (direction <= 145 && direction > 50)  //baixo
+//			dir = downDir;
+//		
+////Atirar e rotacionar sprite com o mouse
+//		if(mouseShoot) {
+//			
+//			mouseShoot = false;
+//			//Sound.missAmo.play();
+//			
+//			if(hasGun && ammo > 0) {
+//				//Sound.missAmo.stop();
+//				//Sound.shootRifle.play();
+//				ammo--;
+//				
+//				double dx = Math.cos(angle);
+//				double dy = Math.sin(angle);
+//				int px = 0;
+//				int py = 0;
+//				
+//				if(dir == rightDir) {
+//					px = 12;
+//					py = 7;
+//				}else if (dir == leftDir){
+//					px = 0;
+//					py = 7;
+//				}
+//				
+//				if (dir == downDir) {
+//					px = 6;
+//					py = 6;
+//				}else if (dir == upDir){
+//					px = 5;
+//					py = 0;
+//				}
+//		
+//				BulletShoot bulletShoot = new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, dx, dy);
+//				Game.bulletShootes.add(bulletShoot);
+//			}
+//		}
 		
 	updateCamera();
 		

@@ -17,13 +17,14 @@ import world.World;
 
 public class Menu {
 	
-	public String[] options = {"Novo jogo", "Carregar jogo", "Sair"};
+	public String[] options = {"Novo jogo", "Carregar jogo","Controles", "Sair"};
 	
 	public int currentOption = 0;
 	public int maxOption = options.length-1;
 	
 	public boolean up, down, enter;
-	public static boolean pause = false;
+	public static boolean pause;
+	public static boolean controles;
 	
 	public static boolean saveExixts, saveGame;
 	
@@ -130,34 +131,52 @@ public class Menu {
 			saveExixts = false;
 		}
 		
-		if(up) {
-			up = false;
-			currentOption--;
-			if(currentOption < 0)
-				currentOption = maxOption;
-		}
-		
-		if(down) {
-			down = false;
-			currentOption++;
-			if(currentOption > maxOption)
-				currentOption = 0;
+		if(controles) {
+			currentOption = 3;
+		}else {
+			if(up) {
+				up = false;
+				currentOption--;
+				if(currentOption < 0)
+					currentOption = maxOption;
+			}
+			
+			if(down) {
+				down = false;
+				currentOption++;
+				if(currentOption > maxOption)
+					currentOption = 0;
+			}
 		}
 		
 		if(enter) {
 			enter = false;
-			if(options[currentOption].equals("Novo jogo") || options[currentOption].equals("Continuar")) {
+			if(options[currentOption].equals("Novo jogo")) {
 				Game.gameState = "NORMAL";
 				pause = false;
 				file = new File("save.txt");
 				file.delete();
-			}else if (options[currentOption] == "Carregar jogo") {
+				
+			}else if (options[currentOption].equals("Continuar")) {
+				Game.gameState = "NORMAL";
+				pause = false;
+			
+			}else if (options[currentOption].equals("Carregar jogo")) {
 				file = new File("save.txt");
 				if(file.exists()) {
 					String saver = loadGame(10);
 					applySave(saver);
 				}
 				
+			}else if (options[currentOption].equals("Controles")) {
+				Game.gameState = "CONTROLES";
+				controles = true;
+					
+			}else if (options[currentOption].equals("Sair") && controles) { //Voltar
+				Game.gameState = "MENU";
+				controles = false;
+				currentOption = 0;
+					
 			}else if (options[currentOption].equals("Sair")) {
 				System.exit(1);
 			}
@@ -178,16 +197,19 @@ public class Menu {
 			//opções de menu
 			g.setColor(Color.white);
 			g.setFont(new Font("arial", Font.BOLD, 24));
-			g2.drawString("Continuar", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 300);
-			g2.drawString("Carregar Jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 75, 340);
-			g2.drawString("Sair", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 20, 380);
+			g2.drawString("Continuar", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 340);
+			g2.drawString("Carregar Jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 75, 380);
+			g2.drawString("Controles", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 420);
+			g2.drawString("Sair", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 20, 460);
 			
 			if(options[currentOption].equals("Novo jogo")) 
-				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 300);
+				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 340);
 			else if(options[currentOption].equals("Carregar jogo"))
-				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 95, 340);
+				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 95, 380);
+			else if(options[currentOption].equals("Controles"))
+				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 420);
 			else if(options[currentOption].equals("Sair"))
-				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 40, 380);
+				g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 40, 460);
 			
 		}else {
 			
@@ -200,18 +222,43 @@ public class Menu {
 			//opções de menu
 			g.setColor(Color.white);
 			g.setFont(new Font("arial", Font.BOLD, 24));
-			g.drawString("Novo jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 300);
-			g.drawString("Carregar Jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 75, 340);
-			g.drawString("Sair", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 20, 380);
+			g.drawString("Novo jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 340);
+			g.drawString("Carregar Jogo", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 75, 380);
+			g.drawString("Controles", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 50, 420);
+			g.drawString("Sair", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 15, 460);
 			
 			if(options[currentOption].equals("Novo jogo")) 
-				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 300);
+				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 340);
 			else if(options[currentOption].equals("Carregar jogo"))
-				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 95, 340);
+				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 95, 380);
+			else if(options[currentOption].equals("Controles"))
+				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 70, 420);
 			else if(options[currentOption].equals("Sair"))
-				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 40, 380);
+				g.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 35, 460);
+		}
+		
+		if(controles) {
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setColor(new Color(0,0,0,255));
+			g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+			g2.setColor(Color.RED);
+			g2.setFont(new Font("arial", Font.BOLD, 70));
+			g2.drawString("Controles", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 200, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - 250);
+			
+			//instruções de controle
+			g.setColor(Color.white);
+			g.setFont(new Font("arial", Font.BOLD, 24));
+			g2.drawString("A, W, S, D: Movimentar o jogador", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 280);
+			g2.drawString("E/Q: Mudar o item que o jogador está segurando", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 320);
+			g2.drawString("G: Pegar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 360);
+			g2.drawString("F: Largar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 400);
+			g2.drawString("R: Utilizar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 440);
+			g2.drawString("LEFT CLICK: Atirar", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 480);
+			g2.drawString("ENTER: Selecionar opções do MENU", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 520);
+			
+			g2.drawString("Voltar", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 20, 650);
+			g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 40, 650);
 		}
 		
 	}
-
 }

@@ -192,7 +192,7 @@ public class World {
 				!((tiles[x1 + (y1*World.WIDTH)] instanceof WaterTile) ||
 				(tiles[x2 + (y2*World.WIDTH)] instanceof WaterTile) ||
 				(tiles[x3 + (y3*World.WIDTH)] instanceof WaterTile) ||
-				(tiles[x4 + (y4*World.WIDTH)] instanceof WaterTile)) ){
+				(tiles[x4 + (y4*World.WIDTH)] instanceof WaterTile))){
 			return true;
 		}
 		
