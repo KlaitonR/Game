@@ -243,7 +243,7 @@ public class Menu {
 			g2.fillRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 			g2.setColor(Color.RED);
 			g2.setFont(new Font("arial", Font.BOLD, 70));
-			g2.drawString("Controles", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 200, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - 250);
+			g2.drawString("Controles", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 170, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - 250);
 			
 			//instruções de controle
 			g.setColor(Color.white);

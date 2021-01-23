@@ -239,13 +239,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					bulletShootes.get(i).tick();
 				}
 				
+				player.speed = 1.4;
+				
 			}else {
 				if(estado_cena == entrada) {
 					if(player.getX() < 200) {
 						player.moved = true;
+						player.rigth = true;
 						player.speed = 1;
 						player.dir = player.rightDir;
-						player.rigth = true;
 						player.tick();
 						player.updateCamera();
 					}else {
@@ -411,7 +413,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if(Game.player.useLighter)
 			applayLight();
 		
-		if(estado_cena == jogando)
+//		if(estado_cena == jogando)
 			ui.render(g);
 		
 		if(estado_cena == comecar) {
@@ -486,7 +488,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			menu.render(g);
 		}
 		
-		//Shade de entrada
+		//shade de entrada
 		if(estado_cena == entrada && gameState.equals("NORMAL")) {
 			Graphics2D g2 = (Graphics2D) g;
 			darkenScena -= second;
@@ -505,7 +507,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		g.setColor(Color.red);
 //		g.fillRect(200, 200, 50, 50);
 	
-		
 		bs.show();
 	}
 
@@ -548,58 +549,70 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-			player.rigth = true;
-		}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-			player.left = true;
+		
+		if(estado_cena == jogando) {
+		
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+				player.rigth = true;
+			}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+				player.left = true;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_W) {
+				player.up = true;
+			}else if (e.getKeyCode() == KeyEvent.VK_S) {
+				player.down = true;	
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_X) {
+				player.shoot = true;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+				player.jump = true;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_P) {
+				if(gameState.equals("NORMAL")) {
+					this.saveGame =  true;
+				}
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_R) {
+				player.useItem = true;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_F){
+				player.dropItem = true;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_G){
+				player.getItem = true;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_Q){
+				player.scrollItemLef = true;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_E) {
+				player.scrollItemDir = true;
+			}
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_B) {
+			if(!player.useBag)
+				player.useBag = true;
+			else
+				player.useBag = false;
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-			player.up = true;
-			
 			if(gameState.equals("MENU"))
 				menu.up = true;
 			
 		}else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-			player.down = true;
-			
 			if(gameState.equals("MENU"))
 				menu.down = true;
-			
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_X) {
-			player.shoot = true;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.jump = true;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_P) {
-			if(gameState.equals("NORMAL")) {
-				this.saveGame =  true;
-			}
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_R) {
-			player.useItem = true;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_F){
-			player.dropItem = true;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_G){
-			player.getItem = true;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_Q){
-			player.scrollItemLef = true;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_E) {
-			player.scrollItemDir = true;
 		}
 		
 	}
@@ -607,16 +620,36 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void keyReleased(KeyEvent e) {
 		
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-			player.rigth = false;
-		}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-			player.left = false;
-		}
+		if(estado_cena == jogando) {
 		
-		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-			player.up = false;
-		}else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-			player.down = false;
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+				player.rigth = false;
+			}else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+				player.left = false;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_W) {
+				player.up = false;
+			}else if (e.getKeyCode() == KeyEvent.VK_S) {
+				player.down = false;	
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_R) { 
+				player.useItem = false;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_F){
+				player.dropItem = false;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_G){
+				player.getItem = false;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_Q){
+				player.scrollItemLef = false;
+			}
+		
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) { 
@@ -635,27 +668,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				gameState = "NORMAL";			
 			}
 		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_R) { 
-			player.useItem = false;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_F){
-			player.dropItem = false;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_G){
-			player.getItem = false;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_Q){
-			player.scrollItemLef = false;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_E) { 
-			player.scrollItemDir = false;
-		}
-		
 	}
 
 	@Override
@@ -673,15 +685,41 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 //		System.out.println("x: " + player.mx + "    y:" + player.my);
 		
-		if(!Game.player.openLvls && player.mx >= 2 && player.my >= 59 && player.mx <= 147 && player.my <= 74) {
+		if(!player.openLvls && player.mx >= 2 && player.my >= 59 && player.mx <= 147 && player.my <= 74) {
 			player.openLvls = true;
 			player.offLvls = false;
 			player.mouseShoot =  false;
 			
-		}else if(!Game.player.offLvls && player.mx >= 2 && player.my >= 59 && player.mx <= 147 && player.my <= 74) {
+		}else if(!player.offLvls && player.mx >= 2 && player.my >= 59 && player.mx <= 147 && player.my <= 74) {
 			player.offLvls = true;
 			player.openLvls = false;
 			player.mouseShoot =  false;
+		}
+		
+		if(player.useBag) {
+			 
+			if(player.mx >= 82 && player.my >= 212 && player.mx <= 136 && player.my <= 240) { 
+				player.checkClickPositionItemInv(0);
+				player.clickInv = true;
+				
+			}else if (player.mx >= 139 && player.my >= 212 && player.mx <= 193 && player.my <= 240) {
+				player.checkClickPositionItemInv(1);
+				player.clickInv = true;
+				
+			}else if (player.mx >= 196 && player.my >= 212 && player.mx <= 250 && player.my <= 240) {
+				player.checkClickPositionItemInv(2);
+				player.clickInv = true;
+				
+			}else if (player.mx >= 253 && player.my >= 212 && player.mx <= 306 && player.my <= 240) {
+				player.checkClickPositionItemInv(3);
+				player.clickInv = true;
+				
+			}else if (player.mx >= 309 && player.my >= 212 && player.mx <= 364 && player.my <= 240) {
+				player.checkClickPositionItemInv(4);
+				player.clickInv = true;
+				
+			}
+			
 		}
 		
 	}

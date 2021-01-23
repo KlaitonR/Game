@@ -72,14 +72,16 @@ public class World {
 						tree.psTiles = xx + (yy*WIDTH);
 						tree.xTile = xx;
 						tree.yTile = yy;
-						
 					}
+					
 					else if(pixelAtual == 0xFF7F3300) { // Machado
 						Game.entities.add(new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN));
 					}
+					
 					else if(pixelAtual == 0xFF0094FF) { // Água
 						tiles[xx + (yy*WIDTH)] = new WaterTile(xx*16, yy*16, Tile.TILE_WATER);
 					}
+					
 					else if(pixelAtual == 0xFF4C1E00) { // Terra
 						tiles[xx + (yy*WIDTH)] = new EarthTile(xx*16, yy*16, Tile.TILE_EARTH);
 						
@@ -168,7 +170,6 @@ public class World {
 		for(int i = 0; i < Game.enemies.size(); i++) {
 			Game.minimapaPixels[(Game.enemies.get(i).getX()/16) + ((Game.enemies.get(i).getY()/16)*WIDTH)] = 0xFF0000;
 		}
-		
 	}
 	
 	public static boolean isFree(int xNext, int yNext, int zPlayer) {
@@ -233,8 +234,5 @@ public class World {
 				tile.render(g);
 			}
 		}
-		
-		
-		
 	}
 }

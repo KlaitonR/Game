@@ -15,7 +15,7 @@ public class Player extends Entity{
 	public int dir = rightDir;
 	public int maskx = 3, masky = 0, maskw = 10, maskh = 16;
 	
-	public double speed = 1.4;
+	public double speed;
 	public double moveMx, moveMy, mx, my;
 	
 	public boolean jump;
@@ -25,7 +25,7 @@ public class Player extends Entity{
 	public int jumpSp = 1;
 	public boolean jumpUp, jumpDown;
 	
-	private int frames, maxFrames = 5, index, maxIndex = 3;
+	public int frames, maxFrames = 5, index, maxIndex = 3;
 	public boolean moved;
 	public boolean isDamage;
 	private int damageFrames;
@@ -35,6 +35,8 @@ public class Player extends Entity{
 	public boolean shoot;
 	public boolean mouseShoot;
 	public boolean useLighter;
+	public boolean useBag;
+	public boolean clickInv;
 	public double life = 100, maxLife = 100;
 	public int ammo = 1000;
 	
@@ -45,6 +47,7 @@ public class Player extends Entity{
 	public int handIndexItem;
 	public boolean scrollItemLef;
 	public boolean scrollItemDir;
+	public int clickSelectIndexInv;
 	
 	public boolean openLvls;
 	public boolean offLvls = true;
@@ -56,6 +59,7 @@ public class Player extends Entity{
 	public double [] maxExp = {100, 500, 1000, 5000, 10000};
 	
 	public String inventario[];
+	public String backpack[][]; //4x6
 	
 	private BufferedImage [] rightPlayer;
 	private BufferedImage [] leftPlayer;
@@ -108,6 +112,7 @@ public class Player extends Entity{
 	private BufferedImage downPlayerGunDamageJumping;
 	
 	public BufferedImage [] inv = new BufferedImage[5];
+	public BufferedImage [][] bag = new BufferedImage[4][6];
 	
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -196,6 +201,7 @@ public class Player extends Entity{
 		downPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 240, 16, 16);
 		
 		inventario = new String[5];
+		backpack = new String[4][6];
 
 	}
 	
@@ -341,6 +347,66 @@ public class Player extends Entity{
 		
 	}
 	
+	//pega o index do Item que foi clicado no inventario
+	public void checkClickPositionItemInv(int index) {
+		clickSelectIndexInv = index;
+	}
+	
+	public void putItemBag() {
+		
+		int i, j = -1;
+		int [] index = checkPositionPutBag(); // chegar a posição do primeiro espaço vazio que tiver na mochila
+	
+		i = index[0]; // retorna as posições da matriz em um vetor
+		j = index[1];
+		
+		//verifica se na posição selecionada do inv não está vazia, e se a mochila está cheia
+		if(inventario[clickSelectIndexInv] != null && i < 4 && j < 6 && i >= 0 && j >= 0) {
+			
+			//Joga o item para a mochila
+			backpack[i][j] = inventario[clickSelectIndexInv];
+			bag[i][j] = inv[clickSelectIndexInv];
+			
+			//Se o Item que foi selecionado com o click estiver na mão, retira da mão e do inventario
+			if(inventario[clickSelectIndexInv].equals(handItem) && clickSelectIndexInv == handIndexItem) {
+				handItem = null;
+				inventario[clickSelectIndexInv] = null;
+				inv[clickSelectIndexInv] = null;
+			}else { // se não, apenas retira do inventario
+				inventario[clickSelectIndexInv] = null;
+				inv[clickSelectIndexInv] = null;
+			}
+		}
+		
+//		System.out.println(backpack[i][j]);
+		System.out.println(clickSelectIndexInv);
+		System.out.println(i);
+		System.out.println(j);
+		
+	}
+	
+	//verifica a primeira posição vazia na mochila
+	public int[] checkPositionPutBag() {
+		
+		int [] index = {-1, -1};
+		
+			for(int j=0; j<6; j++) {
+				for(int i=0; i<4; i++) {
+				if(bag[i][j] == null) {
+					index[0] = i;
+					index[1] = j;
+					break;
+				}	
+			}
+			
+			if(index[0] != -1 && index[1] != -1) 
+				break;
+		}
+		
+		return index;
+		
+	}
+	
 	public int checkPositionGetInv() {
 			
 		int index = -1;
@@ -353,7 +419,6 @@ public class Player extends Entity{
 		}
 
 		return index;
-
 	}
 	
 //	public int checkPositionDropInv() {
@@ -437,7 +502,7 @@ public class Player extends Entity{
 			int index = inventario.length-1;
 			do {
 				index--;
-			}while(index > 0 && inventario[index] == null);
+			}while(index > 0 && inventario[index] == null); 
 			
 			if(inventario[index] != null) {
 				handItem = inventario[index];	
@@ -565,6 +630,11 @@ public class Player extends Entity{
 		checkUseItem();
 		checkScrollItem();
 		checkItem();
+		
+		if(clickInv) {
+			clickInv = false;
+			putItemBag();
+		}
 		
 		if(!hasGun)
 			checkCollisionGun();

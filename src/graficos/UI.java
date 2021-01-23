@@ -86,7 +86,7 @@ public class UI {
 		g.setColor(Color.black); 
 		g.fillRect(45, 135, 150, 1);
 				
-		for(int i=0; i<5; i++) {
+		for(int i=1; i<5; i++) {
 			g.setColor(Color.black); 
 			g.fillRect(45 + (i*30), 135, 1, 20);
 		}
@@ -124,11 +124,10 @@ public class UI {
 	
 	private void levelTab(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-			g2.setColor(new Color(0,0,0,150));
+		g2.setColor(new Color(0,0,0,150));
 			
 			if(Game.player.openLvls && !Game.player.offLvls) {
 					
-				g2.setColor(new Color(0,0,0,150));
 				g2.fillRect(5, 40, 75, 90);
 					
 				g.setColor(Color.black); 
@@ -180,6 +179,42 @@ public class UI {
 			}
 	}
 	
+	public void systemBag(Graphics g) {
+		g.setColor(new Color(0xC0C0C0));
+		g.fillRect(75, 10, 100, 120);
+				
+		//barra esquerda
+		g.setColor(Color.black); 
+		g.fillRect(175, 10, 1, 121);
+		//barra direita
+		g.setColor(Color.black); 
+		g.fillRect(74, 10, 1, 120);
+		//barra de cima
+		g.setColor(Color.black); 
+		g.fillRect(74, 10, 101, 1);
+		//baara de baixo
+		g.setColor(Color.black); 
+		g.fillRect(74, 130, 102, 1);
+		
+		for(int i=1; i<4; i++) { // linhas horizontais
+			g.setColor(Color.white); 
+			g.fillRect(75 + (i*25), 11, 1, 119);
+		}
+		
+		for(int i=1; i<6; i++) { // linhas verticais
+			g.setColor(Color.white); 
+			g.fillRect(75, 10 + (i*20) , 100, 1);
+		}
+		
+		//Apenas renderizando oque foi colocado no buffer do inventario
+		for(int j=0; j < 6; j++) {
+			for(int i=0; i < 4; i++) {
+					g.drawImage(Game.player.bag[i][j], 80 + (i*25), 12 + (j*20), null);
+				}
+			}
+		
+	}
+	
 	
 	public void render(Graphics g) {
 		
@@ -188,6 +223,9 @@ public class UI {
 		timeSystem(g);
 		invSystem(g);
 		levelTab(g);
+		
+		if(Game.player.useBag)
+			systemBag(g);
 		
 	}
 }
