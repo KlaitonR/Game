@@ -185,20 +185,24 @@ public class UI {
 				
 		//barra esquerda
 		g.setColor(Color.black); 
-		g.fillRect(175, 10, 1, 121);
+		g.fillRect(175, 2, 1, 129);
 		//barra direita
 		g.setColor(Color.black); 
-		g.fillRect(74, 10, 1, 120);
+		g.fillRect(74, 2, 1, 128);
 		//barra de cima
 		g.setColor(Color.black); 
-		g.fillRect(74, 10, 101, 1);
+		g.fillRect(74, 2, 101, 8);
 		//baara de baixo
 		g.setColor(Color.black); 
 		g.fillRect(74, 130, 102, 1);
 		
+		g.setFont(newfont);
+		g.setColor(Color.white);
+		g.drawString("Mochila", 78, 9);
+		
 		for(int i=1; i<4; i++) { // linhas horizontais
 			g.setColor(Color.white); 
-			g.fillRect(75 + (i*25), 11, 1, 119);
+			g.fillRect(75 + (i*25), 10, 1, 120);
 		}
 		
 		for(int i=1; i<6; i++) { // linhas verticais

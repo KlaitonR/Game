@@ -37,6 +37,7 @@ public class Player extends Entity{
 	public boolean useLighter;
 	public boolean useBag;
 	public boolean clickInv;
+	public boolean clickBag;
 	public double life = 100, maxLife = 100;
 	public int ammo = 1000;
 	
@@ -48,6 +49,7 @@ public class Player extends Entity{
 	public boolean scrollItemLef;
 	public boolean scrollItemDir;
 	public int clickSelectIndexInv;
+	public int[] clickSelectIndexBag;
 	
 	public boolean openLvls;
 	public boolean offLvls = true;
@@ -352,6 +354,32 @@ public class Player extends Entity{
 		clickSelectIndexInv = index;
 	}
 	
+	public void checkClickPositionItemBag(int[] index) {
+		clickSelectIndexBag = index;
+	}
+	
+	//verifica a primeira posição vazia na mochila
+	public int[] checkPositionPutBag() {
+		
+		int [] index = {-1, -1};
+		
+			for(int j=0; j<6; j++) {
+				for(int i=0; i<4; i++) {
+				if(bag[i][j] == null) {
+					index[0] = i;
+					index[1] = j;
+					break;
+				}	
+			}
+				
+			if(index[0] != -1 && index[1] != -1) 
+				break;
+		}
+			
+		return index;
+			
+	}
+	
 	public void putItemBag() {
 		
 		int i, j = -1;
@@ -377,34 +405,32 @@ public class Player extends Entity{
 				inv[clickSelectIndexInv] = null;
 			}
 		}
-		
-//		System.out.println(backpack[i][j]);
-		System.out.println(clickSelectIndexInv);
-		System.out.println(i);
-		System.out.println(j);
-		
 	}
 	
-	//verifica a primeira posição vazia na mochila
-	public int[] checkPositionPutBag() {
+	public void getItemBag() {
 		
-		int [] index = {-1, -1};
+		int i, j = -1;
+		int [] index = clickSelectIndexBag; // chegar a posição do primeiro espaço vazio que tiver na mochila
 		
-			for(int j=0; j<6; j++) {
-				for(int i=0; i<4; i++) {
-				if(bag[i][j] == null) {
-					index[0] = i;
-					index[1] = j;
-					break;
-				}	
-			}
+		System.out.println(index[0] + "  " + index[1]);
+		
+		i = index[0]; // retorna as posições da matriz em um vetor
+		j = index[1];
+		
+		if(backpack[j][i] != null) {
 			
-			if(index[0] != -1 && index[1] != -1) 
-				break;
+			int indexInv = checkPositionGetInv();
+			
+			//verifica se o inventario não está cheio e o player estiver com o espaço do inventario selecionado para a mão
+			if((indexInv >= 0 && indexInv < inventario.length)) {
+				inventario[indexInv] = backpack[j][i];
+				handItem = backpack[j][i];
+				inv[indexInv] = bag[j][i];
+				handIndexItem = indexInv;
+				backpack[j][i] = null;
+				bag[j][i] = null;
+			}
 		}
-		
-		return index;
-		
 	}
 	
 	public int checkPositionGetInv() {
@@ -634,6 +660,11 @@ public class Player extends Entity{
 		if(clickInv) {
 			clickInv = false;
 			putItemBag();
+		}
+		
+		if(clickBag) {
+			clickBag = false;
+			getItemBag();
 		}
 		
 		if(!hasGun)
