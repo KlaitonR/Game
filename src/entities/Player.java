@@ -433,6 +433,27 @@ public class Player extends Entity{
 		}
 	}
 	
+	public void checkItemBag() {
+		
+		boolean lighterInv = false;
+		boolean lighterBug =  false;
+		
+		for(int i=0; i<4; i++) {
+			for(int j=0; j<6; j++) {
+				if(backpack[i][j] != null && backpack[i][j].equals("isqueiro"))
+					lighterBug = true;
+			}
+		}
+		
+		for(int i=0;i<5;i++) {
+			if(inventario[i] != null && inventario[i].equals("isqueiro"))
+				lighterInv = true;
+		}
+		
+		if(lighterBug && !lighterInv)
+			useLighter = false;
+	}
+	
 	public int checkPositionGetInv() {
 			
 		int index = -1;
@@ -656,6 +677,7 @@ public class Player extends Entity{
 		checkUseItem();
 		checkScrollItem();
 		checkItem();
+		checkItemBag();
 		
 		if(clickInv) {
 			clickInv = false;

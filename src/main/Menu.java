@@ -248,13 +248,14 @@ public class Menu {
 			//instruções de controle
 			g.setColor(Color.white);
 			g.setFont(new Font("arial", Font.BOLD, 24));
-			g2.drawString("A, W, S, D: Movimentar o jogador", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 280);
-			g2.drawString("E/Q: Mudar o item que o jogador está segurando", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 320);
-			g2.drawString("G: Pegar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 360);
-			g2.drawString("F: Largar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 400);
-			g2.drawString("R: Utilizar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 440);
-			g2.drawString("LEFT CLICK: Atirar", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 480);
-			g2.drawString("ENTER: Selecionar opções do MENU", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 520);
+			g2.drawString("A, W, S, D: Movimentar o jogador", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 260);
+			g2.drawString("E / Q: Mudar o item que o jogador está segurando", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 300);
+			g2.drawString("G: Pegar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 340);
+			g2.drawString("F: Largar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 380);
+			g2.drawString("R: Utilizar itens", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 420);
+			g2.drawString("B: Abrir / Fechar mochila", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 460);
+			g2.drawString("LEFT CLICK: Atirar / Mover itens do inventário e mochila", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 500);
+			g2.drawString("ENTER: Selecionar opções do MENU", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 250, 540);
 			
 			g2.drawString("Voltar", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 20, 650);
 			g2.drawString(">", (Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - 40, 650);

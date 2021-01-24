@@ -413,7 +413,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if(Game.player.useLighter)
 			applayLight();
 		
-//		if(estado_cena == jogando)
+		if(estado_cena == jogando)
 			ui.render(g);
 		
 		if(estado_cena == comecar) {
@@ -597,13 +597,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			if(e.getKeyCode() == KeyEvent.VK_E) {
 				player.scrollItemDir = true;
 			}
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_B) {
-			if(!player.useBag)
-				player.useBag = true;
-			else
-				player.useBag = false;
+			
+			if(e.getKeyCode() == KeyEvent.VK_B) {
+				if(!player.useBag)
+					player.useBag = true;
+				else
+					player.useBag = false;
+			}
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
@@ -723,154 +723,152 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 			int [] index = {-1, -1};
 			//Mascaras da mochila
-			if(player.mx >=  137 && player.my >= 11 && player.mx <= 183 && player.my <=42) { //
+			if(player.mx >=  137 && player.my >= 11 && player.mx <= 183 && player.my <=42) {
 				index[0] = 0;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >=  186 && player.my >= 11 && player.mx <= 232 && player.my <=42) { //
+			}else if (player.mx >=  186 && player.my >= 11 && player.mx <= 232 && player.my <=42) {
 				index[0] = 0;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 233 && player.my >= 11 && player.mx <= 279 && player.my <= 42) { //
+			}else if (player.mx >= 233 && player.my >= 11 && player.mx <= 279 && player.my <= 42) {
 				index[0] = 0;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 281 && player.my >= 11 && player.mx <= 325 && player.my <= 42) {//
+			}else if (player.mx >= 281 && player.my >= 11 && player.mx <= 325 && player.my <= 42) {
 				index[0] = 0;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 138 && player.my >= 45 && player.mx <= 184 && player.my <= 75) {//
+			}else if (player.mx >= 138 && player.my >= 45 && player.mx <= 184 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 186 && player.my >= 45 && player.mx <= 232 && player.my <= 75) {//
+			}else if (player.mx >= 186 && player.my >= 45 && player.mx <= 232 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 233 && player.my >= 45 && player.mx <= 279 && player.my <= 75) {//
+			}else if (player.mx >= 233 && player.my >= 45 && player.mx <= 279 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 281 && player.my >= 45 && player.mx <= 325 && player.my <= 75) {//
+			}else if (player.mx >= 281 && player.my >= 45 && player.mx <= 325 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 137 && player.my >= 76 && player.mx <= 183 && player.my <= 107) {//
+			}else if (player.mx >= 137 && player.my >= 76 && player.mx <= 183 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 186 && player.my >= 76 && player.mx <= 232 && player.my <= 107) {//
+			}else if (player.mx >= 186 && player.my >= 76 && player.mx <= 232 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 233 && player.my >= 76 && player.mx <= 279 && player.my <= 107) {//
+			}else if (player.mx >= 233 && player.my >= 76 && player.mx <= 279 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 281 && player.my >= 76 && player.mx <= 325 && player.my <= 107) {//
+			}else if (player.mx >= 281 && player.my >= 76 && player.mx <= 325 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 137 && player.my >= 108 && player.mx <= 183 && player.my <= 138) {//
+			}else if (player.mx >= 137 && player.my >= 108 && player.mx <= 183 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 186 && player.my >= 108 && player.mx <= 232 && player.my <= 138) {//
+			}else if (player.mx >= 186 && player.my >= 108 && player.mx <= 232 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 233 && player.my >= 108 && player.mx <= 279 && player.my <= 138) {//
+			}else if (player.mx >= 233 && player.my >= 108 && player.mx <= 279 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 281 && player.my >= 108 && player.mx <= 325 && player.my <= 138) {//
+			}else if (player.mx >= 281 && player.my >= 108 && player.mx <= 325 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 137 && player.my >= 140 && player.mx <= 183 && player.my <= 170) {//
+			}else if (player.mx >= 137 && player.my >= 140 && player.mx <= 183 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 186 && player.my >= 140 && player.mx <= 232 && player.my <= 170) {//
+			}else if (player.mx >= 186 && player.my >= 140 && player.mx <= 232 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 233 && player.my >= 140 && player.mx <= 279 && player.my <= 170) {//
+			}else if (player.mx >= 233 && player.my >= 140 && player.mx <= 279 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 281 && player.my >= 140 && player.mx <= 325 && player.my <= 170) {//
+			}else if (player.mx >= 281 && player.my >= 140 && player.mx <= 325 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 137 && player.my >= 172 && player.mx <= 183 && player.my <= 202) {//
+			}else if (player.mx >= 137 && player.my >= 172 && player.mx <= 183 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 186 && player.my >= 172 && player.mx <= 232 && player.my <= 202) {//
+			}else if (player.mx >= 186 && player.my >= 172 && player.mx <= 232 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 233 && player.my >= 172 && player.mx <= 279 && player.my <= 202) {//
+			}else if (player.mx >= 233 && player.my >= 172 && player.mx <= 279 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
-			}else if (player.mx >= 281 && player.my >= 172 && player.mx <= 325 && player.my <= 202) {//
+			}else if (player.mx >= 281 && player.my >= 172 && player.mx <= 325 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
 				
 			}
-			
 		}
-		
 	}
 
 	@Override
