@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import entities.BulletShoot;
 import entities.Enemy;
 import entities.Entity;
+import entities.Npc;
 import entities.Player;
 import graficos.Spritsheet;
 import graficos.UI;
@@ -52,6 +53,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static World world;
 	public static Player player;
+	public static Npc npc;
 	public Menu menu;
 	public static UI ui;
 
@@ -104,7 +106,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public Game() {
 	
-		Sound.Clips.music.loop();
+		Sound.Clips.music.play();
 		rand = new Random();
 		
 		addKeyListener(this);
@@ -157,6 +159,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		minimapaPixels = ((DataBufferInt)minimapa.getRaster().getDataBuffer()).getData();
 		
 		menu = new Menu();
+		
+		npc = new Npc(150, 70, 16, 16, spritesheet.getSprite(224, 0, 16, 16));
+		entities.add(npc);
 		
 //		try {
 //			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(70f);
@@ -570,6 +575,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 				player.jump = true;
+				
 			}
 			
 			if(e.getKeyCode() == KeyEvent.VK_P) {
@@ -603,6 +609,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					player.useBag = true;
 				else
 					player.useBag = false;
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_ENTER) { 
+				
+				if(npc.showMessage) 
+					npc.showMessage = false;
 			}
 		}
 		
@@ -702,22 +714,27 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			if(player.mx >= 82 && player.my >= 212 && player.mx <= 136 && player.my <= 240) { 
 				player.checkClickPositionItemInv(0);
 				player.clickInv = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 139 && player.my >= 212 && player.mx <= 193 && player.my <= 240) {
 				player.checkClickPositionItemInv(1);
 				player.clickInv = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 196 && player.my >= 212 && player.mx <= 250 && player.my <= 240) {
 				player.checkClickPositionItemInv(2);
 				player.clickInv = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 253 && player.my >= 212 && player.mx <= 306 && player.my <= 240) {
 				player.checkClickPositionItemInv(3);
 				player.clickInv = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 309 && player.my >= 212 && player.mx <= 364 && player.my <= 240) {
 				player.checkClickPositionItemInv(4);
 				player.clickInv = true;
+				player.mouseShoot = false;
 				
 			}
 			
@@ -728,144 +745,168 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >=  186 && player.my >= 11 && player.mx <= 232 && player.my <=42) {
 				index[0] = 0;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 233 && player.my >= 11 && player.mx <= 279 && player.my <= 42) {
 				index[0] = 0;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 281 && player.my >= 11 && player.mx <= 325 && player.my <= 42) {
 				index[0] = 0;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 138 && player.my >= 45 && player.mx <= 184 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 186 && player.my >= 45 && player.mx <= 232 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 233 && player.my >= 45 && player.mx <= 279 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 281 && player.my >= 45 && player.mx <= 325 && player.my <= 75) {
 				index[0] = 1;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 137 && player.my >= 76 && player.mx <= 183 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 186 && player.my >= 76 && player.mx <= 232 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 233 && player.my >= 76 && player.mx <= 279 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 281 && player.my >= 76 && player.mx <= 325 && player.my <= 107) {
 				index[0] = 2;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 137 && player.my >= 108 && player.mx <= 183 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 186 && player.my >= 108 && player.mx <= 232 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 233 && player.my >= 108 && player.mx <= 279 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 281 && player.my >= 108 && player.mx <= 325 && player.my <= 138) {
 				index[0] = 3;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 137 && player.my >= 140 && player.mx <= 183 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 186 && player.my >= 140 && player.mx <= 232 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 233 && player.my >= 140 && player.mx <= 279 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 281 && player.my >= 140 && player.mx <= 325 && player.my <= 170) {
 				index[0] = 4;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 137 && player.my >= 172 && player.mx <= 183 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 0;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 186 && player.my >= 172 && player.mx <= 232 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 1;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 233 && player.my >= 172 && player.mx <= 279 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 2;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}else if (player.mx >= 281 && player.my >= 172 && player.mx <= 325 && player.my <= 202) {
 				index[0] = 5;
 				index[1] = 3;
 				player.checkClickPositionItemBag(index);
 				player.clickBag = true;
+				player.mouseShoot = false;
 				
 			}
 		}
@@ -896,8 +937,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		
-		player.moveMx = (e.getX() / 3);
-		player.moveMy = (e.getY() / 3);
+		if(player != null) {
+			player.moveMx = (e.getX() / 3);
+			player.moveMy = (e.getY() / 3);
+		}
 	}
 
 }

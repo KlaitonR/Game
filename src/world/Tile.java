@@ -16,6 +16,8 @@ public class Tile {
 	
 	protected BufferedImage sprite;
 	protected int x,y,z;
+	public int psTiles, xTile, yTile;
+	public boolean open;
 	
 	public Tile(int x, int y, BufferedImage sprite) {
 		this.x = x;

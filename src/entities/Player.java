@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import main.Sound;
 import world.Camera;
+import world.DoorTile;
 import world.World;
 
 public class Player extends Entity{
@@ -35,6 +36,7 @@ public class Player extends Entity{
 	public boolean shoot;
 	public boolean mouseShoot;
 	public boolean useLighter;
+	public boolean openDoor;
 	public boolean useBag;
 	public boolean clickInv;
 	public boolean clickBag;
@@ -331,11 +333,51 @@ public class Player extends Entity{
 			
 			if(atual instanceof Tree) {
 				if(Entity.isColidding(this, atual)) {
-					if(useItem && handItem == "machado")
+					if(useItem && handItem == "machado") {
 						((Tree) atual).life--;
+						Sound.Clips.shoot.play();
+					}
 				}
 			}
 		}
+	}
+	
+	public void checkCollisionDoor() {
+		
+		if(rigth && World.checkCollisionDoor((int)(x+speed), this.getY(), this.z)) {
+			if(useItem) {
+				openDoor = true;
+			}
+			
+		}else if (left && World.checkCollisionDoor((int)(x-speed), this.getY(), this.z)) {
+			if(useItem) {
+				openDoor = true;
+			}
+		}
+		if(up && World.checkCollisionDoor(this.getX(),(int)(y-speed), this.z)) {
+			if(useItem) {
+				openDoor = true;
+			}
+
+		}else if (down && World.checkCollisionDoor(this.getX(), (int)(y+speed), this.z)) {
+			if(useItem) {
+				openDoor = true;
+			}
+		}
+	}
+	
+	public void openDoor() {
+		 openDoor = false;
+		 
+		 for(int i=0; i<World.tiles.length; i++) {
+			 if(World.tiles[i] instanceof DoorTile && !World.tiles[i].open) {
+				 setX(World.tiles[i].xTile);
+				 setY(World.tiles[i].yTile);
+				 break;
+			 }
+		 }
+		
+		
 	}
 	
 	public void checkKillEnemy() {
@@ -412,7 +454,7 @@ public class Player extends Entity{
 		int i, j = -1;
 		int [] index = clickSelectIndexBag; // chegar a posição do primeiro espaço vazio que tiver na mochila
 		
-		System.out.println(index[0] + "  " + index[1]);
+//		System.out.println(index[0] + "  " + index[1]);
 		
 		i = index[0]; // retorna as posições da matriz em um vetor
 		j = index[1];
@@ -641,9 +683,7 @@ public class Player extends Entity{
 				handIndexItem = 0;
 				handItem = inventario[handIndexItem];
 			}
-			
 		}
-		
 	}
 	
 	public void checkItem() {
@@ -659,7 +699,6 @@ public class Player extends Entity{
 		}else {
 			hasAxe = false;
 		}
-		
 	}
 	
 	public void tick() {
@@ -671,6 +710,7 @@ public class Player extends Entity{
 		checkCollisionTree();
 		checkCollisionFirewood();
 		checkCollisionLighter();
+		checkCollisionDoor();
 		checkKillEnemy();
 		
 		checkDropItem();
@@ -694,6 +734,9 @@ public class Player extends Entity{
 		
 		if(!hasAxe)
 			checkCollisionAxe();
+		
+		if(openDoor)
+			openDoor();
 		
 		if(jump) {
 			if(isJumping == false) {
@@ -749,7 +792,12 @@ public class Player extends Entity{
 		}
 		
 		if(moved) {
-//			Sound.passosGrama.loop();
+			int c = 0;
+			c = Game.minute;
+			if(c > 1) {
+				Sound.Clips.passos.loop();
+				c = 0;
+			}
 			frames++;
 			if(frames == maxFrames) {
 				frames = 0;
@@ -758,7 +806,6 @@ public class Player extends Entity{
 					index = 0;
 			}
 		}else{
-//			Sound.passosGrama.stop();
 			index = 0;
 			frames = 0;
 		}
@@ -826,6 +873,7 @@ public class Player extends Entity{
 			mouseShoot = false;
 			
 			if(hasGun && ammo > 0) {
+				Sound.Clips.missAmo.play();
 				ammo--;
 				int dx = 0;
 				int dy = 0;
@@ -868,7 +916,7 @@ public class Player extends Entity{
 //		double angle = Math.atan2(moveMy - (this.getY()+8 - Camera.y), moveMx - (this.getX()+8 - Camera.x));
 //		double direction = Math.toDegrees(angle);
 //		System.out.println(direction);
-		
+//		
 //		if(direction <= 35 && direction > -35)  //direita
 //			dir = rightDir;
 //		else if(direction <= -35 && direction > -145) //cima
@@ -1094,9 +1142,6 @@ public class Player extends Entity{
 		
 //		g.setColor(Color.black);
 //		g.fillRect(this.getX() - Camera.x + maskx, this.getY() - Camera.y + masky, maskw, maskh);
-		
-//		g.setColor(Color.black);
-//		g.fillRect((int)mx, (int)my, 100 ,10);
 		
 	}	
 }

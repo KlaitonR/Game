@@ -1,5 +1,6 @@
 package world;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -7,10 +8,12 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import entities.Axe;
 import entities.Bullet;
+import entities.BulletShoot;
 import entities.Enemy;
 import entities.Entity;
 import entities.LifePack;
 import entities.Lighter;
+import entities.Particle;
 import entities.Tree;
 import entities.Wapon;
 import graficos.Spritsheet;
@@ -63,7 +66,11 @@ public class World {
 						Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
 		
 					}else if (pixelAtual == 0xFFB200FF){ //Portas
-						tiles[xx + (yy*WIDTH)] = new DoorTile(xx*16, yy*16, Tile.TILE_DOOR);
+						DoorTile door = new DoorTile(xx*16, yy*16, Tile.TILE_DOOR);
+						tiles[xx + (yy*WIDTH)] = door;
+						door.xTile = xx;
+						door.yTile = yy;
+						door.psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFFFF00DC) { // Arvore
 						
@@ -172,6 +179,19 @@ public class World {
 		}
 	}
 	
+	public static void generateParticles(int amount, int x, int y) {
+		
+		for(int i=0; i < amount; i++) {
+			if(BulletShoot.collidingBullet) {
+				Game.entities.add(new Particle(x + 8, y + 5, 1, 1, null));
+			}else {
+				Game.entities.add(new Particle(x, y, 1, 1, null));
+			}
+		}
+		
+		
+	}
+	
 	public static boolean isFree(int xNext, int yNext, int zPlayer) {
 		
 		int x1 = xNext / TILE_SIZE;
@@ -205,6 +225,41 @@ public class World {
 				
 	}
 	
+	public static boolean checkCollisionDoor(int xNext, int yNext, int zPlayer) {
+		
+		int x1 = xNext / TILE_SIZE;
+		int y1 = yNext / TILE_SIZE;
+		
+		int x2 = (xNext + TILE_SIZE -1) / TILE_SIZE;
+		int y2 = yNext / TILE_SIZE;
+		
+		int x3 = xNext / TILE_SIZE;
+		int y3 = (yNext + TILE_SIZE -1) / TILE_SIZE;
+		
+		int x4 = (xNext + TILE_SIZE - 1) / TILE_SIZE;
+		int y4 = (yNext + TILE_SIZE -1) / TILE_SIZE;
+		
+		if (tiles[x1 + (y1*World.WIDTH)] instanceof DoorTile) {
+			tiles[x1 + (y1*World.WIDTH)].open = true;
+			return true;
+		}
+		if (tiles[x2 + (y2*World.WIDTH)] instanceof DoorTile) {
+			tiles[x2 + (y2*World.WIDTH)].open = true;
+			return true;
+		}
+		if (tiles[x3 + (y3*World.WIDTH)] instanceof DoorTile) {
+			tiles[x3 + (y3*World.WIDTH)].open = true;
+			return true;
+		}
+		if (tiles[x4 + (y4*World.WIDTH)] instanceof DoorTile){
+			tiles[x4 + (y4*World.WIDTH)].open = true;
+			return true;
+		}
+
+		return false;
+				
+	}
+
 	public static void restarGame(String level) {
 		
 		Game.entities =  new ArrayList<Entity>();
@@ -234,5 +289,10 @@ public class World {
 				tile.render(g);
 			}
 		}
+		
+		
+		g.setColor(Color.black);
+		g.fillRect(xStart - Camera.x  , yStart - Camera.y , xFinal, yFinal);
+		
 	}
 }

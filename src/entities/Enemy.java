@@ -337,6 +337,10 @@ import world.World;
 		
 		for(int i=0; i < Game.bulletShootes.size(); i++) {
 			if(Entity.isColidding(this, Game.bulletShootes.get(i))) {
+				BulletShoot.collidingBullet =  true;
+				BulletShoot.collidingWall = false;
+				BulletShoot.collidingEnemy = true;
+				World.generateParticles(50, (int)x, (int)y);
 				Game.bulletShootes.remove(i);
 				life --;
 				isDamage = true;

@@ -15,6 +15,9 @@ public class BulletShoot extends Entity {
 	private double dy;
 	private double speed = 4;
 	private int life = 60, curLife = 0;
+	static public boolean collidingWall;
+	static public boolean collidingEnemy;
+	static public boolean collidingBullet;
 	
 	public BulletShoot(double x, double y, int width, int height, BufferedImage sprite, double dx, double dy) {
 		super(x, y, width, height, sprite);
@@ -28,7 +31,14 @@ public class BulletShoot extends Entity {
 			Tile t =  World.tiles[i];
 			if(t instanceof WallTile) {
 				if(Entity.isColiddingTile(this, t)) {
+					BulletShoot.collidingBullet = false;
+					collidingWall = true;
+					collidingEnemy = false;
+					World.generateParticles(50, (int)x, (int)y);
 					Game.bulletShootes.remove(this);
+					collidingWall = true;
+					collidingEnemy = false;
+					return;	
 				}
 			}
 		}
@@ -40,6 +50,7 @@ public class BulletShoot extends Entity {
 		y += dy * speed;
 		curLife++;
 		if(curLife == life) {
+			BulletShoot.collidingBullet = false;
 			Game.bulletShootes.remove(this);
 			return;	
 		}
