@@ -39,38 +39,47 @@ public class World {
 			
 					int pixelAtual = pixels[xx + (yy*map.getWidth())];
 					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
+					tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
 					
 					if(pixelAtual == 0xFF000000) {
 						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
+						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFFFFFFFF) { //Parede
 						tiles[xx + (yy*WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
+						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFF0000FF) { //Player
 						Game.player.setX(xx*16);
 						Game.player.setY(yy*16);
+						Game.player.psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFFFF0000) { //Inimigo
 						Enemy en = new Enemy(xx*16, yy*16, 16, 16, Entity.ENEMY_EN);
 						Game.entities.add(en);
 						Game.enemies.add(en);
+						en.psTiles =  xx + (yy*WIDTH);
+						en.xTile = xx;
+						en.yTile = yy;
 						
 					}else if(pixelAtual == 0xFFFF6A00) { //Arma
-						Game.entities.add(new Wapon(xx*16, yy*16, 16, 16, Entity.WEAPON_EN));
+						Wapon wapon = new Wapon(xx*16, yy*16, 16, 16, Entity.WEAPON_EN);
+						Game.entities.add(wapon);
+						wapon.psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFF00FF00) { //Cura
 						LifePack lifePack = new LifePack(xx*16, yy*16, 16, 16, Entity.LIFE_PACK_EN);
 						Game.entities.add(lifePack);
+						lifePack.psTiles = xx + (yy*WIDTH);
 		
 					}else if(pixelAtual == 0xFFFFFF00) { //Munição
-						Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
+						Bullet bullet = new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN);
+						Game.entities.add(bullet);
+						bullet.psTiles = xx + (yy*WIDTH);
 		
 					}else if (pixelAtual == 0xFFB200FF){ //Portas
-						DoorTile door = new DoorTile(xx*16, yy*16, Tile.TILE_DOOR);
-						tiles[xx + (yy*WIDTH)] = door;
-						door.xTile = xx;
-						door.yTile = yy;
-						door.psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)] = new DoorTile(xx*16, yy*16, Tile.TILE_DOOR);
+						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFFFF00DC) { // Arvore
 						
@@ -82,18 +91,24 @@ public class World {
 					}
 					
 					else if(pixelAtual == 0xFF7F3300) { // Machado
-						Game.entities.add(new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN));
+						Axe axe = new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN);
+						Game.entities.add(axe);
+						axe.psTiles = xx + (yy*WIDTH);
 					}
 					
 					else if(pixelAtual == 0xFF0094FF) { // Água
 						tiles[xx + (yy*WIDTH)] = new WaterTile(xx*16, yy*16, Tile.TILE_WATER);
+						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
 					}
 					
 					else if(pixelAtual == 0xFF4C1E00) { // Terra
 						tiles[xx + (yy*WIDTH)] = new EarthTile(xx*16, yy*16, Tile.TILE_EARTH);
+						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFF808080) { //Isqueiro
-						Game.entities.add(new Lighter(xx*16, yy*16, 16, 16, Entity.LIGHTER_EN));
+						Lighter lighter = new Lighter(xx*16, yy*16, 16, 16, Entity.LIGHTER_EN);
+						Game.entities.add(lighter);
+						lighter.psTiles = xx + (yy*WIDTH);
 					
 					}
 				}
@@ -179,13 +194,15 @@ public class World {
 		}
 	}
 	
-	public static void generateParticles(int amount, int x, int y) {
+	public static void generateParticles(int amount, int x, int y, int ps) {
 		
 		for(int i=0; i < amount; i++) {
 			if(BulletShoot.collidingBullet) {
-				Game.entities.add(new Particle(x + 8, y + 5, 1, 1, null));
+				Particle particle = new Particle(x + 8, y + 5, 1, 1, null);
+				Game.particles.add(particle);
 			}else {
-				Game.entities.add(new Particle(x, y, 1, 1, null));
+				Particle particle = new Particle(x, y, 1, 1, null);
+				Game.particles.add(particle);
 			}
 		}
 		

@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import main.Game;
+import main.Sound;
 
 public class Npc extends Entity{
 	
@@ -38,6 +39,7 @@ public class Npc extends Entity{
 		
 		
 		if(showMessage) {
+			Sound.Clips.text.play();
 			time++;
 			if(time >= maxTime) {
 				time = 0;
@@ -55,17 +57,19 @@ public class Npc extends Entity{
 		super.render(g);
 		
 		if(showMessage) {
-		
+			
 			g.setColor(Color.black);
-			g.fillRect(49, 89, 144, 42);
-			g.setColor(Color.blue);
-			g.fillRect(50, 90, 142, 40);
+			g.fillRect(48, 83, 146, 39);
+			g.setColor(Color.white);
+			g.fillRect(49, 84, 144, 37);
+			g.setColor(Color.black);
+			g.fillRect(50, 85, 142, 35);
 			
 			g.setColor(Color.white);
 			g.setFont(new Font("Arial", Font.BOLD, 9));
-			g.drawString(frases[fraseIndex].substring(0, curIndexMsg), 55, 100);
+			g.drawString(frases[fraseIndex].substring(0, curIndexMsg), 55, 95);
 			g.setFont(new Font("Arial", Font.BOLD, 9));
-			g.drawString("> ENTER par fechar <", 55, 125);
+			g.drawString("> ENTER par fechar <", 55, 115);
 		}
 		
 	}

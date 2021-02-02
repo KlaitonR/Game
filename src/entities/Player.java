@@ -206,6 +206,8 @@ public class Player extends Entity{
 		
 		inventario = new String[5];
 		backpack = new String[4][6];
+		
+		depth = 1;
 
 	}
 	
@@ -226,7 +228,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		
 	}
 	
 	public void checkCollisionLighter() {
@@ -237,7 +238,7 @@ public class Player extends Entity{
 			if(getItem && index >= 0 && index <= inventario.length) {
 				if(atual instanceof Lighter) {
 					if(Entity.isColidding(this, atual)) {
-						inventario[index] =  "isqueiro";
+						inventario[index] =  "fósforo";
 						inv[index] = Game.spritesheet.getSprite(0, 128, 16, 16);
 						handItem = inventario[index];
 						handIndexItem = index;
@@ -246,7 +247,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		
 	}
 	
 	public void checkCollisionAmmo() {
@@ -262,7 +262,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		
 	}
 	
 	public void checkCollisionGun() {
@@ -283,7 +282,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		
 	}
 	
 	public void checkCollisionAxe() {
@@ -303,7 +301,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		
 	}
 	
 	public void checkCollisionFirewood() {
@@ -323,7 +320,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		
 	}
 	
 	public void checkCollisionTree(){
@@ -376,8 +372,6 @@ public class Player extends Entity{
 				 break;
 			 }
 		 }
-		
-		
 	}
 	
 	public void checkKillEnemy() {
@@ -388,7 +382,6 @@ public class Player extends Entity{
 				break;
 			}
 		}
-		
 	}
 	
 	//pega o index do Item que foi clicado no inventario
@@ -419,7 +412,6 @@ public class Player extends Entity{
 		}
 			
 		return index;
-			
 	}
 	
 	public void putItemBag() {
@@ -537,31 +529,44 @@ public class Player extends Entity{
 				if(inventario[hi] == "gun" && h == "gun") {
 					inventario[hi] = null;
 					inv[hi] = null;
-					Game.entities.add(new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN));
+					Wapon wapon = new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN);
+					Game.entities.add(wapon);	
+					wapon.show =  true;
 					Sound.Clips.dropItem.play();
+					
+//					int ps =(int)x+(int)(y*World.WIDTH); 
+//					if(World.tiles[ps].show)	
 					
 				}else if(inventario[hi] == "lifePack" && h  == "lifePack") {
 					inventario[hi] = null;
 					inv[hi] = null;
-					Game.entities.add(new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN));
+					LifePack lifePack = new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN);
+					Game.entities.add(lifePack);
+					lifePack.show = true;
 					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "machado" && h  == "machado") {
 					inventario[hi] = null;
 					inv[hi] = null;
-					Game.entities.add(new Axe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.AXE_EN));
+					Axe axe = new Axe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.AXE_EN);
+					Game.entities.add(axe);
+					axe.show =  true;
 					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "lenha" && h  == "lenha") {
 					inventario[hi] = null;
 					inv[hi] = null;
-					Game.entities.add(new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_EN));
+					Firewood fireWood = new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_EN);
+					Game.entities.add(fireWood);
+					fireWood.show = true;
 					Sound.Clips.dropItem.play();
 					
-				}else if(inventario[hi] == "isqueiro" && h  == "isqueiro") {
+				}else if(inventario[hi] == "fósforo" && h  == "fósforo") {
 					inventario[hi] = null;
 					inv[hi] = null;
-					Game.entities.add(new Lighter(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIGHTER_EN));
+					Lighter lighter = new Lighter(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIGHTER_EN);
+					Game.entities.add(lighter);
+					lighter.show =  true;
 					useLighter = false;
 					Sound.Clips.dropItem.play();
 				}
@@ -629,10 +634,10 @@ public class Player extends Entity{
 						
 			}
 			
-			if(inventario[hi] == "isqueiro" && h == "isqueiro" && !useLighter && (Game.hour >= 18 || (Game.hour <= 7 && Game.hour >=0))) {
+			if(inventario[hi] == "fósforo" && h == "fósforo" && !useLighter && (Game.hour >= 18 || (Game.hour <= 7 && Game.hour >=0))) {
 				useLighter = true;
 				Sound.Clips.lighter.play();
-			}else  if(inventario[hi] == "isqueiro" && useLighter){
+			}else  if(inventario[hi] == "fósforo" && useLighter){
 				useLighter = false;
 			}
 			
@@ -701,9 +706,104 @@ public class Player extends Entity{
 		}
 	}
 	
+	public void revealMap() {
+		
+		int xx = (int) (x/16);
+		int yy = (int) (y/16);
+		
+		int ps1, ps2,ps3,ps4;
+		
+		for(int i = 0; i < 4; i++) {
+			for(int j = 0; j < 4; j++) {
+				
+				ps1 = (int)xx+(i)+(yy+j)*World.WIDTH;
+				ps2 = (int)xx-(i)+(yy+j)*World.WIDTH;
+				ps3 = (int)xx+(i)+(yy-j)*World.WIDTH;
+				ps4 = (int)xx-(i)+(yy-j)*World.WIDTH;
+				
+				if(ps1 < World.tiles.length && ps2 < World.tiles.length && ps3 < World.tiles.length && ps4 < World.tiles.length
+						&& ps1 > 0 && ps2 > 0 && ps3 > 0 && ps4 > 0) {
+					
+					revealEntity(ps1, ps2, ps3, ps4);
+					revealEnemy(ps1, ps2, ps3, ps4);
+					revealBulletShot(ps1, ps2, ps3, ps4);
+					revealParticle(ps1, ps2, ps3, ps4);
+					
+					World.tiles[ps1].show = true;
+					World.tiles[ps2].show = true;
+					World.tiles[ps3].show = true;
+					World.tiles[ps4].show = true;
+				}
+			}
+		}
+	}
+	
+	public void revealEntity(int ps1, int ps2, int ps3, int ps4) {
+		
+		for(int i=0; i < Game.entities.size(); i++) {
+			if(Game.entities.get(i).psTiles == ps1 || Game.entities.get(i).psTiles == ps2 ||
+				Game.entities.get(i).psTiles == ps3 || Game.entities.get(i).psTiles == ps4 ) {
+					Game.entities.get(i).show = true;
+			}
+		}
+		
+	}
+	
+	public void revealEnemy(int ps1, int ps2, int ps3, int ps4) {
+		
+		for(int i=0; i < Game.enemies.size(); i++) {
+			int xx = (int) (Game.enemies.get(i).x/16);
+			int yy = (int) (Game.enemies.get(i).y/16);
+			
+			int ps = (int)xx+(yy)*World.WIDTH;
+			
+			if(World.tiles[ps].show) {
+				Game.enemies.get(i).show = true;
+			}else {
+				Game.enemies.get(i).show = false;
+			}
+			
+		}
+	}
+	
+	public void revealBulletShot(int ps1, int ps2, int ps3, int ps4) {
+		
+		for(int i=0; i < Game.bulletShootes.size(); i++) {
+			int xx = (int) (Game.bulletShootes.get(i).x/16);
+			int yy = (int) (Game.bulletShootes.get(i).y/16);
+			
+			int ps = (int)xx+(yy)*World.WIDTH;
+			
+			if(World.tiles[ps].show) {
+				Game.bulletShootes.get(i).show = true;
+			}else {
+				Game.bulletShootes.get(i).show = false;
+			}
+		}
+	}
+	
+	public void revealParticle(int ps1, int ps2, int ps3, int ps4) {
+		
+		if(Game.particles != null) {
+			for(int i=0; i < Game.particles.size(); i++) {
+				int xx = (int) (Game.particles.get(i).x/16);
+				int yy = (int) (Game.particles.get(i).y/16);
+				
+				int ps = (int)xx+(yy)*World.WIDTH;
+				
+				if(World.tiles[ps].show) {
+					Game.particles.get(i).show = true;
+				}else {
+					Game.particles.get(i).show = false;
+				}
+			}
+		}
+	}
+	
+	
 	public void tick() {
 		
-		depth = 1;
+		revealMap();
 		
 		checkCollisionLifePack();
 		checkCollisionAmmo();

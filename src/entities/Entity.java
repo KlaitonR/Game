@@ -1,5 +1,4 @@
 package entities;
-
 //import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -23,6 +22,7 @@ public class Entity {
 	protected int height;
 	
 	public int psTiles, xTile, yTile;
+	public boolean show;
 	
 	public int maskx, masky, mwidth, mheigth;
 	

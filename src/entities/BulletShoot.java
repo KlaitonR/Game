@@ -34,7 +34,7 @@ public class BulletShoot extends Entity {
 					BulletShoot.collidingBullet = false;
 					collidingWall = true;
 					collidingEnemy = false;
-					World.generateParticles(50, (int)x, (int)y);
+					World.generateParticles(50, (int)x, (int)y, World.tiles[i].psTiles);
 					Game.bulletShootes.remove(this);
 					collidingWall = true;
 					collidingEnemy = false;

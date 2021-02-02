@@ -21,6 +21,7 @@ public class Particle extends Entity{
 		
 		dx = new Random().nextGaussian();
 		dy = new Random().nextGaussian();
+	
 	}
 	
 	public void tick() {
@@ -29,7 +30,7 @@ public class Particle extends Entity{
 		y+=dy*spd;
 		curLife++;
 		if(lifeTime == curLife) {
-			Game.entities.remove(this);
+			Game.particles.remove(this);
 		}
 	}
 	

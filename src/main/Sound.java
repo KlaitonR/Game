@@ -49,6 +49,8 @@ public class Sound {
 		public static Clips missAmo = load("/missAmo.wav", 1);
 		public static Clips dropItem = load("/dropItem.wav", 1);
 		public static Clips lighter = load("/lighter.wav", 1);
+		public static Clips text = load("/text.wav", 1);
+		public static Clips selected = load("/selected.wav", 1);
 		
 		private static Clips load(String name, int count) {
 			try {

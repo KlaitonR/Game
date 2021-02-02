@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import main.Game;
 import main.Menu;
-import world.Camera;
 
 public class UI {
 	
@@ -32,18 +31,6 @@ public class UI {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	private void lifeEnemy(Graphics g) {
-		//Life do Enemy
-		for(int i = 0; i < Game.enemies.size(); i++) {
-			g.setColor(Color.black); 
-			g.fillRect((int)Game.enemies.get(i).getX() + 2 - Camera.x, (int)Game.enemies.get(i).getY() - 5 - Camera.y, 12, 3);
-			g.setColor(Color.red);
-			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, 10, 1);
-			g.setColor(Color.green);
-			g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, (int)((Game.enemies.get(i).life/Game.enemies.get(i).maxLife)*10), 1);
-		}
 	}
 	
 	private void timeSystem(Graphics g) {
@@ -221,8 +208,7 @@ public class UI {
 	
 	
 	public void render(Graphics g) {
-		
-		lifeEnemy(g);
+
 		lifePlayer(g);
 		timeSystem(g);
 		invSystem(g);

@@ -28,6 +28,7 @@ import entities.BulletShoot;
 import entities.Enemy;
 import entities.Entity;
 import entities.Npc;
+import entities.Particle;
 import entities.Player;
 import graficos.Spritsheet;
 import graficos.UI;
@@ -48,6 +49,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	static public java.util.List<Entity> entities;
 	static public java.util.List<Enemy> enemies;
 	static public java.util.List<BulletShoot> bulletShootes;
+	static public java.util.List<Particle> particles;
 	static public Spritsheet spritesheet;
 	static public Spritsheet spritButton;
 	
@@ -150,6 +152,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		entities =  new ArrayList<Entity>();
 		enemies =  new ArrayList<Enemy>();
 		bulletShootes = new  ArrayList<BulletShoot>();
+		particles =  new ArrayList<Particle>();
 		spritesheet =  new Spritsheet("/spritesheet.png");
 		player  = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
@@ -242,6 +245,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				
 				for(int i = 0; i<bulletShootes.size(); i++) {
 					bulletShootes.get(i).tick();
+				}
+				
+				if(particles != null) {
+					for(int i = 0; i<particles.size(); i++) {
+						particles.get(i).tick();
+					}
 				}
 				
 				player.speed = 1.4;
@@ -408,11 +417,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		for(int i = 0; i<entities.size(); i++) {
 			Entity e = entities.get(i);
-			e.render(g);
+			
+			if(e.show)
+				e.render(g);
 		}
 		
 		for(int i = 0; i<bulletShootes.size(); i++) {
 			bulletShootes.get(i).render(g);
+		}
+		
+		if(particles != null) {
+			for(int i = 0; i<particles.size(); i++) {
+				particles.get(i).render(g);
+			}
 		}
 
 		if(Game.player.useLighter)
@@ -619,12 +636,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-			if(gameState.equals("MENU"))
+			if(gameState.equals("MENU")) {
 				menu.up = true;
+				Sound.Clips.selected.play();
+			}
 			
 		}else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-			if(gameState.equals("MENU"))
+			if(gameState.equals("MENU")) {
 				menu.down = true;
+				Sound.Clips.selected.play();
+			}
 		}
 		
 	}

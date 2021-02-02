@@ -1,5 +1,6 @@
 package entities;
 
+import java.awt.Color;
 //import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -75,6 +76,8 @@ import world.World;
 			downEnemyDamage[i] = Game.spritesheet.getSprite(96 + (i*16), 112, 16, 16);
 			
 		}
+		
+		depth = 0;
 	}
 	
 	public boolean isColiddingWithPlayer() {
@@ -93,8 +96,6 @@ import world.World;
 	}
 	
 	public void tick() {
-		
-		depth = 0;
 		
 		moved = false;
 		
@@ -340,7 +341,7 @@ import world.World;
 				BulletShoot.collidingBullet =  true;
 				BulletShoot.collidingWall = false;
 				BulletShoot.collidingEnemy = true;
-				World.generateParticles(50, (int)x, (int)y);
+				World.generateParticles(50, (int)x, (int)y, this.psTiles);
 				Game.bulletShootes.remove(i);
 				life --;
 				isDamage = true;
@@ -377,6 +378,15 @@ import world.World;
 			else if(dir == downDir)
 				g.drawImage(downEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 		}		
+		
+			for(int i = 0; i < Game.enemies.size(); i++) {
+				g.setColor(Color.black); 
+				g.fillRect((int)Game.enemies.get(i).getX() + 2 - Camera.x, (int)Game.enemies.get(i).getY() - 5 - Camera.y, 12, 3);
+				g.setColor(Color.red);
+				g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, 10, 1);
+				g.setColor(Color.green);
+				g.fillRect((int)Game.enemies.get(i).getX() + 3 - Camera.x, (int)Game.enemies.get(i).getY() - 4 - Camera.y, (int)((Game.enemies.get(i).life/Game.enemies.get(i).maxLife)*10), 1);
+			}
 		
 //		g.setColor(Color.black);
 //		g.fillRect(Game.player.getX() - Camera.x + Game.player.maskx, Game.player.getY() - Camera.y + Game.player.masky, Game.player.maskw, Game.player.maskh);

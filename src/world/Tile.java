@@ -14,6 +14,8 @@ public class Tile {
 	static public BufferedImage TILE_EARTH = Game.spritesheet.getSprite(16, 80, 16, 16);
 	static public BufferedImage TILE_STUMP = Game.spritesheet.getSprite(0, 144, 16, 16);
 	
+	public boolean show;
+	
 	protected BufferedImage sprite;
 	protected int x,y,z;
 	public int psTiles, xTile, yTile;
@@ -26,7 +28,8 @@ public class Tile {
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(sprite, x - Camera.x ,y - Camera.y ,null);
+		if(show) 
+			g.drawImage(sprite, x - Camera.x ,y - Camera.y ,null);
 	}
 
 	public int getX() {
