@@ -2,24 +2,27 @@ package world;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+
+import entities.Entity;
 import main.Game;
 
 public class Tile {
 	
+	public Entity en;
+	
 	static public BufferedImage TILE_FLOOR = Game.spritesheet.getSprite(0, 0, 16, 16);
 	static public BufferedImage TILE_WALL = Game.spritesheet.getSprite(16, 0, 16, 16);
 	static public BufferedImage TILE_TREE = Game.spritesheet.getSprite(0, 48, 16, 16);
-	static public BufferedImage TILE_DOOR = Game.spritesheet.getSprite(16, 48, 16, 16);
-	static public BufferedImage TILE_WATER = Game.spritesheet.getSprite(0, 80, 16, 16);
 	static public BufferedImage TILE_EARTH = Game.spritesheet.getSprite(16, 80, 16, 16);
 	static public BufferedImage TILE_STUMP = Game.spritesheet.getSprite(0, 144, 16, 16);
+	static public BufferedImage TILE_WATER;
 	
 	public boolean show;
+	public boolean open;
 	
 	protected BufferedImage sprite;
 	protected int x,y,z;
 	public int psTiles, xTile, yTile;
-	public boolean open;
 	
 	public Tile(int x, int y, BufferedImage sprite) {
 		this.x = x;

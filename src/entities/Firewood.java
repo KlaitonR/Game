@@ -6,7 +6,12 @@ public class Firewood extends Entity{
 
 	public Firewood(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
-		// TODO Auto-generated constructor stub
+		
+		pack = true;
+		qtPack = 64;
+		qtItem = 1;
+		depth = 0;
+		
 	}
 
 }

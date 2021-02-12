@@ -1,6 +1,6 @@
 package world;
 
-import java.awt.Color;
+//import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -9,8 +9,10 @@ import javax.imageio.ImageIO;
 import entities.Axe;
 import entities.Bullet;
 import entities.BulletShoot;
+import entities.Door;
 import entities.Enemy;
 import entities.Entity;
+import entities.FishingSpot;
 import entities.LifePack;
 import entities.Lighter;
 import entities.Particle;
@@ -78,13 +80,18 @@ public class World {
 						bullet.psTiles = xx + (yy*WIDTH);
 		
 					}else if (pixelAtual == 0xFFB200FF){ //Portas
-						tiles[xx + (yy*WIDTH)] = new DoorTile(xx*16, yy*16, Tile.TILE_DOOR);
-						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
+						Door door = new Door(xx*16, yy*16, 16, 16, Entity.DOOR_EN);
+						Game.entities.add(door);
+						tiles[xx + (yy*WIDTH)].en = door;
+						door.psTiles = xx + (yy*WIDTH);
+						door.xTile = xx;
+						door.yTile = yy;
 						
 					}else if(pixelAtual == 0xFFFF00DC) { // Arvore
 						
 						Tree tree = new Tree(xx*16, yy*16, 16, 16, Entity.TREE_EN);
 						Game.entities.add(tree);
+						tiles[xx + (yy*WIDTH)].en = tree;
 						tree.psTiles = xx + (yy*WIDTH);
 						tree.xTile = xx;
 						tree.yTile = yy;
@@ -110,6 +117,11 @@ public class World {
 						Game.entities.add(lighter);
 						lighter.psTiles = xx + (yy*WIDTH);
 					
+					}else if (pixelAtual == 0xFF00FFFF) { // Local de pesca
+						FishingSpot fs = new FishingSpot(xx*16, yy*16, 16, 16, Entity.FISHING_EN);
+						Game.entities.add(fs);
+						tiles[xx + (yy*WIDTH)].en = fs;
+						fs.psTiles = xx + (yy*WIDTH);
 					}
 				}
 			}
@@ -172,26 +184,55 @@ public class World {
 	
 	public static void renderMiniMap() {
 		
-		for(int i =0; i < Game.minimapaPixels.length; i++) {
-			Game.minimapaPixels[i] = 0xEFD551;
-		}
+//		for(int i =0; i < Game.minimapaPixels.length; i++) {
+//			Game.minimapaPixels[i] = 0xEFD551;
+//		}
 		
 		for(int xx = 0; xx< WIDTH; xx++) {
 			for(int yy = 0; yy < HEIGHT; yy++) {
-				if(tiles[xx + (yy*WIDTH)] instanceof WallTile) {
+				
+				if(!tiles[xx + (yy*WIDTH)].show)
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x000000;
+				else {
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0xEFD551;
+				}
+				
+				if(tiles[xx + (yy*WIDTH)] instanceof WallTile && tiles[xx + (yy*WIDTH)].show) {
 					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x87782D;
 				}
+				
+				if(tiles[xx + (yy*WIDTH)] instanceof WaterTile && tiles[xx + (yy*WIDTH)].show) {
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x0094FF;
+				}
+				
+				for(int i=0; i < Game.enemies.size(); i++) {
+					int xEnemy = (int) (Game.enemies.get(i).x/16);
+					int yEnemy = (int) (Game.enemies.get(i).y/16);
+					
+					int ps = (int)(xEnemy+ yEnemy*World.WIDTH);
+					
+					if(World.tiles[ps].show) {
+						Game.minimapaPixels[ps] = 0xFF0000;
+					}else {
+						Game.minimapaPixels[ps] = 0x000000;
+					}
+					
+				}
+				
+				if(yy == 0 || xx == 0 || xx == 99 || yy == 99 ) { //Vizualizar as bordas do mapa
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x87782D;
+				}
+				
 			}
 		}
 		
 		int xPlayer = Game.player.getX()/16;
 		int yPlayer = Game.player.getY()/16;
-		
 		Game.minimapaPixels[xPlayer + (yPlayer*WIDTH)] = 0x00C2FF;
 		
-		for(int i = 0; i < Game.enemies.size(); i++) {
-			Game.minimapaPixels[(Game.enemies.get(i).getX()/16) + ((Game.enemies.get(i).getY()/16)*WIDTH)] = 0xFF0000;
-		}
+//		for(int i = 0; i < Game.enemies.size(); i++) {
+//			Game.minimapaPixels[(Game.enemies.get(i).getX()/16) + ((Game.enemies.get(i).getY()/16)*WIDTH)] = 0xFF0000;
+//		}
 	}
 	
 	public static void generateParticles(int amount, int x, int y, int ps) {
@@ -205,7 +246,6 @@ public class World {
 				Game.particles.add(particle);
 			}
 		}
-		
 		
 	}
 	
@@ -241,8 +281,33 @@ public class World {
 		return false;
 				
 	}
+		
+	public static boolean isFreeTree(int xNext, int yNext, int zPlayer) {
+		
+		int x1 = xNext / TILE_SIZE;
+		int y1 = yNext / TILE_SIZE;
+		
+		int x2 = (xNext + TILE_SIZE - 4) / TILE_SIZE;
+		int y2 = yNext / TILE_SIZE;
+		
+		int x3 = xNext / TILE_SIZE; 
+		int y3 = (yNext + TILE_SIZE - 4) / TILE_SIZE; //direita
+		
+		int x4 = (xNext + TILE_SIZE - 4) / TILE_SIZE; // para baixo
+		int y4 = (yNext + TILE_SIZE - 4) / TILE_SIZE;
+		
+		if (!((tiles[x1 + (y1*World.WIDTH)].en instanceof Tree) ||
+				(tiles[x2 + (y2*World.WIDTH)].en instanceof Tree) ||
+				(tiles[x3 + (y3*World.WIDTH)].en instanceof Tree) ||
+				(tiles[x4 + (y4*World.WIDTH)].en instanceof Tree)) ){
+			return true;
+		}
+			
+		return false;
+				
+	}
 	
-	public static boolean checkCollisionDoor(int xNext, int yNext, int zPlayer) {
+	public static boolean checkCollidingFishingSpot(int xNext, int yNext) {
 		
 		int x1 = xNext / TILE_SIZE;
 		int y1 = yNext / TILE_SIZE;
@@ -255,24 +320,13 @@ public class World {
 		
 		int x4 = (xNext + TILE_SIZE - 1) / TILE_SIZE;
 		int y4 = (yNext + TILE_SIZE -1) / TILE_SIZE;
-		
-		if (tiles[x1 + (y1*World.WIDTH)] instanceof DoorTile) {
-			tiles[x1 + (y1*World.WIDTH)].open = true;
+	
+		if (!(((tiles[x1 + (y1*World.WIDTH)].en instanceof FishingSpot) ||
+				(tiles[x2 + (y2*World.WIDTH)].en instanceof FishingSpot) ||
+				(tiles[x3 + (y3*World.WIDTH)].en instanceof FishingSpot) ||
+				(tiles[x4 + (y4*World.WIDTH)].en instanceof FishingSpot)))){
 			return true;
-		}
-		if (tiles[x2 + (y2*World.WIDTH)] instanceof DoorTile) {
-			tiles[x2 + (y2*World.WIDTH)].open = true;
-			return true;
-		}
-		if (tiles[x3 + (y3*World.WIDTH)] instanceof DoorTile) {
-			tiles[x3 + (y3*World.WIDTH)].open = true;
-			return true;
-		}
-		if (tiles[x4 + (y4*World.WIDTH)] instanceof DoorTile){
-			tiles[x4 + (y4*World.WIDTH)].open = true;
-			return true;
-		}
-
+		} 
 		return false;
 				
 	}
@@ -308,8 +362,8 @@ public class World {
 		}
 		
 		
-		g.setColor(Color.black);
-		g.fillRect(xStart - Camera.x  , yStart - Camera.y , xFinal, yFinal);
+//		g.setColor(Color.black);
+//		g.fillRect(xStart - Camera.x  , yStart - Camera.y , xFinal, yFinal);
 		
 	}
 }

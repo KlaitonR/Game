@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import main.Sound;
 import world.Camera;
-import world.DoorTile;
 import world.World;
 
 public class Player extends Entity{
@@ -64,6 +63,8 @@ public class Player extends Entity{
 	
 	public String inventario[];
 	public String backpack[][]; //4x6
+	
+	public Door doorCollision;
 	
 	private BufferedImage [] rightPlayer;
 	private BufferedImage [] leftPlayer;
@@ -207,7 +208,7 @@ public class Player extends Entity{
 		inventario = new String[5];
 		backpack = new String[4][6];
 		
-		depth = 1;
+		depth = 5;
 
 	}
 	
@@ -340,38 +341,43 @@ public class Player extends Entity{
 	
 	public void checkCollisionDoor() {
 		
-		if(rigth && World.checkCollisionDoor((int)(x+speed), this.getY(), this.z)) {
-			if(useItem) {
-				openDoor = true;
-			}
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
 			
-		}else if (left && World.checkCollisionDoor((int)(x-speed), this.getY(), this.z)) {
-			if(useItem) {
-				openDoor = true;
+			if(atual instanceof Door) {
+				if(Entity.isColidding(this, atual)) {
+					if(useItem) {
+						openDoor =  true;
+						doorCollision = (Door) atual;
+					}
+				}
 			}
 		}
-		if(up && World.checkCollisionDoor(this.getX(),(int)(y-speed), this.z)) {
-			if(useItem) {
-				openDoor = true;
-			}
-
-		}else if (down && World.checkCollisionDoor(this.getX(), (int)(y+speed), this.z)) {
-			if(useItem) {
-				openDoor = true;
-			}
-		}
+		
 	}
 	
 	public void openDoor() {
 		 openDoor = false;
+		 double menor = 99999999;
+		 double dist;
+		 int xTile = 0;
+		 int yTile = 0; 
 		 
-		 for(int i=0; i<World.tiles.length; i++) {
-			 if(World.tiles[i] instanceof DoorTile && !World.tiles[i].open) {
-				 setX(World.tiles[i].xTile);
-				 setY(World.tiles[i].yTile);
-				 break;
+		 for(int i=0; i<Game.entities.size(); i++) {
+			 if(Game.entities.get(i) instanceof Door && Game.entities.get(i) != doorCollision ) {
+				 dist = Entity.calculateDistance((int)this.getX(), (int)this.getY(), (int)Game.entities.get(i).getX(), (int)Game.entities.get(i).getY());
+				 if(dist < menor) {
+					 menor = dist;
+					 xTile = (int)Game.entities.get(i).getX();
+					 yTile = (int)Game.entities.get(i).getY();
+					 System.out.println("x " + xTile + "   y " + yTile + "\n");
+				 }
 			 }
 		 }
+		 
+		 setX(xTile);
+		 setY(yTile);
+		 updateCamera();
 	}
 	
 	public void checkKillEnemy() {
@@ -800,6 +806,19 @@ public class Player extends Entity{
 		}
 	}
 	
+//	public int collidingFishingSpot() {
+//		
+//		for(int i=0; i<Game.entities.size(); i++) {
+//				
+//			if((int)(getX()+(getY()*World.WIDTH)) == Game.entities.get(i).psTiles && Game.entities.get(i) instanceof FishingSpot) {
+//				return (int)(getX()+(getY()*World.WIDTH));
+//			}
+//		}
+//		
+//		return -1;
+//		
+//	}
+	
 	
 	public void tick() {
 		
@@ -866,25 +885,37 @@ public class Player extends Entity{
 		
 		moved = false;
 		
-		if(rigth && World.isFree((int)(x+speed), this.getY(), this.z)) {
+		if(rigth && World.isFree((int)(x+speed), this.getY(), this.z)
+				&& World.checkCollidingFishingSpot((int)(x+speed), this.getY())
+//				&& World.isFreeTree((int)(x+speed), this.getY(), this.z)) {
+				) {
 			moved =  true;
 			dir = rightDir; //Rotação de sprites com teclado
 			x+=speed;
 			
 			
-		}else if (left && World.isFree((int)(x-speed), this.getY(), this.z)) {
+		}else if (left && World.isFree((int)(x-speed), this.getY(), this.z) 
+				&& World.checkCollidingFishingSpot((int)(x-speed), this.getY())
+//				&& World.isFreeTree((int)(x-speed), this.getY(), this.z)) {
+				) {
 			moved =  true;
 			dir = leftDir; //Rotação de sprites com teclado
 			x-=speed;
 		
 		}
 			
-		if(up && World.isFree(this.getX(),(int)(y-speed), this.z)) {
+		if(up && World.isFree(this.getX(),(int)(y-speed), this.z) 
+				&& World.checkCollidingFishingSpot(this.getX(),(int)(y-speed))
+//				&& World.isFreeTree(this.getX(),(int)(y-speed), this.z)) {
+				) {
 			moved =  true;
 			dir = upDir; //Rotação de sprites com teclado 
 			y-=speed;
 
-		}else if (down && World.isFree(this.getX(), (int)(y+speed), this.z)) {
+		}else if (down && World.isFree(this.getX(), (int)(y+speed), this.z) 
+				&& World.checkCollidingFishingSpot(this.getX(), (int)(y+speed))
+//				&& World.isFreeTree(this.getX(), (int)(y+speed), this.z)) {
+				) {
 			moved =  true;
 			dir = downDir; //Rotação de sprites com teclado
 			y+=speed;
@@ -892,12 +923,9 @@ public class Player extends Entity{
 		}
 		
 		if(moved) {
-			int c = 0;
-			c = Game.minute;
-			if(c > 1) {
-				Sound.Clips.passos.loop();
-				c = 0;
-			}
+				
+			Sound.Clips.passos.loop();
+
 			frames++;
 			if(frames == maxFrames) {
 				frames = 0;

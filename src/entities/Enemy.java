@@ -77,7 +77,7 @@ import world.World;
 			
 		}
 		
-		depth = 0;
+		depth = 4;
 	}
 	
 	public boolean isColiddingWithPlayer() {

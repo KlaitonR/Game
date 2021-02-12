@@ -239,8 +239,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 			if(estado_cena == jogando) {
 				for(int i = 0; i<entities.size(); i++) {
+//					if(entities.get(i) instanceof Enemy) {
+						
+//					}else {
 					Entity e = entities.get(i);
 					e.tick();
+//					}
 				}
 				
 				for(int i = 0; i<bulletShootes.size(); i++) {

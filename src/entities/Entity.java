@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
 import java.util.List;
-
 import main.Game;
 import world.Camera;
 import world.Node;
@@ -21,6 +20,10 @@ public class Entity {
 	protected int width;
 	protected int height;
 	
+	public boolean pack;
+	public int qtPack = 1;
+	public int qtItem;
+	
 	public int psTiles, xTile, yTile;
 	public boolean show;
 	
@@ -35,6 +38,8 @@ public class Entity {
 	public static BufferedImage FIREWOOD_EN = Game.spritesheet.getSprite(0, 64, 16, 16);
 	public static BufferedImage AXE_EN = Game.spritesheet.getSprite(0, 96, 16, 16);
 	public static BufferedImage LIGHTER_EN = Game.spritesheet.getSprite(0, 128, 16, 16);
+	static public BufferedImage DOOR_EN = Game.spritesheet.getSprite(16, 48, 16, 16);
+	public static BufferedImage FISHING_EN;
 	
 	protected List<Node> path;
 	
@@ -113,8 +118,13 @@ public class Entity {
 		return false;
 	}
 	
-	public double calculateDistance(int x1, int y1, int x2, int y2) {
+	public static double calculateDistance(int x1, int y1, int x2, int y2) {
+		
 		return Math.sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1 - y2));
+	}
+	
+	public void tick() {
+		
 	}
 	
 	public void render(Graphics g) {
@@ -123,10 +133,6 @@ public class Entity {
 		
 //		g.setColor(Color.red);
 //		g.fillRect(this.getX() + maskx - Camera.x, this.getY() + masky - Camera.y, maskw, maskh);
-		
-	}
-	
-	public void tick() {
 		
 	}
 	
