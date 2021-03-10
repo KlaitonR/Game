@@ -12,6 +12,7 @@ import entities.BulletShoot;
 import entities.Door;
 import entities.Enemy;
 import entities.Entity;
+import entities.FishingRod;
 import entities.FishingSpot;
 import entities.LifePack;
 import entities.Lighter;
@@ -122,6 +123,11 @@ public class World {
 						Game.entities.add(fs);
 						tiles[xx + (yy*WIDTH)].en = fs;
 						fs.psTiles = xx + (yy*WIDTH);
+						
+					}else if (pixelAtual == 0xFF5B7F00) {//Vara de pesca
+						FishingRod fr = new FishingRod(xx*16, yy*16, 16, 16, Entity.FISHING_ROD_EN);
+						Game.entities.add(fr);
+						fr.psTiles = xx + (yy*WIDTH);
 					}
 				}
 			}
@@ -312,14 +318,14 @@ public class World {
 		int x1 = xNext / TILE_SIZE;
 		int y1 = yNext / TILE_SIZE;
 		
-		int x2 = (xNext + TILE_SIZE -1) / TILE_SIZE;
+		int x2 = (xNext + TILE_SIZE -4) / TILE_SIZE;
 		int y2 = yNext / TILE_SIZE;
 		
 		int x3 = xNext / TILE_SIZE;
-		int y3 = (yNext + TILE_SIZE -1) / TILE_SIZE;
+		int y3 = (yNext + TILE_SIZE -4) / TILE_SIZE;
 		
-		int x4 = (xNext + TILE_SIZE - 1) / TILE_SIZE;
-		int y4 = (yNext + TILE_SIZE -1) / TILE_SIZE;
+		int x4 = (xNext + TILE_SIZE - 4) / TILE_SIZE;
+		int y4 = (yNext + TILE_SIZE -4) / TILE_SIZE;
 	
 		if (!(((tiles[x1 + (y1*World.WIDTH)].en instanceof FishingSpot) ||
 				(tiles[x2 + (y2*World.WIDTH)].en instanceof FishingSpot) ||
