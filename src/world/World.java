@@ -288,19 +288,43 @@ public class World {
 				
 	}
 		
-	public static boolean isFreeTree(int xNext, int yNext, int zPlayer) {
+	public static boolean isFreeTree(int xNext, int yNext) {
+				
 		
-		int x1 = xNext / TILE_SIZE;
-		int y1 = yNext / TILE_SIZE;
+		int x1 = (xNext + 4) / TILE_SIZE;
+		int y1 = (yNext + 4) / TILE_SIZE;
 		
-		int x2 = (xNext + TILE_SIZE - 4) / TILE_SIZE;
-		int y2 = yNext / TILE_SIZE;
+		int x2 = (xNext + TILE_SIZE - 6) / TILE_SIZE;
+		int y2 = (yNext + 6) / TILE_SIZE;
 		
-		int x3 = xNext / TILE_SIZE; 
-		int y3 = (yNext + TILE_SIZE - 4) / TILE_SIZE; //direita
+		int x3 = (xNext + 6) / TILE_SIZE; 
+		int y3 = (yNext + TILE_SIZE - 6) / TILE_SIZE; //direita
 		
-		int x4 = (xNext + TILE_SIZE - 4) / TILE_SIZE; // para baixo
-		int y4 = (yNext + TILE_SIZE - 4) / TILE_SIZE;
+		int x4 = (xNext + TILE_SIZE - 6) / TILE_SIZE; // para baixo
+		int y4 = (yNext + TILE_SIZE - 6) / TILE_SIZE;
+		
+		
+//		int xx1 = xNext / TILE_SIZE;
+//		int yy1 = yNext  / TILE_SIZE;
+//		
+//		int xx2 = (xNext + TILE_SIZE) / TILE_SIZE;
+//		int yy2 = yNext / TILE_SIZE;
+//		
+//		int xx3 = xNext / TILE_SIZE; 
+//		int yy3 = (yNext + TILE_SIZE)  / TILE_SIZE; //direita
+//		
+//		int xx4 = (xNext + TILE_SIZE)  / TILE_SIZE; // para baixo
+//		int yy4 = (yNext + TILE_SIZE)  / TILE_SIZE;
+//		
+//		
+//		if (((tiles[xx1 + (yy1*World.WIDTH)].en instanceof Tree) ||
+//				(tiles[xx2 + (yy2*World.WIDTH)].en instanceof Tree) ||
+//				(tiles[xx3 + (yy3*World.WIDTH)].en instanceof Tree) ||
+//				(tiles[xx4 + (yy4*World.WIDTH)].en instanceof Tree)) ){
+//			Game.player.depth = 2;
+//		}
+		
+		
 		
 		if (!((tiles[x1 + (y1*World.WIDTH)].en instanceof Tree) ||
 				(tiles[x2 + (y2*World.WIDTH)].en instanceof Tree) ||
@@ -315,13 +339,13 @@ public class World {
 	
 	public static boolean checkCollidingFishingSpot(int xNext, int yNext) {
 		
-		int x1 = xNext / TILE_SIZE;
-		int y1 = yNext / TILE_SIZE;
+		int x1 = (xNext + 6) / TILE_SIZE;
+		int y1 = (yNext + 6) / TILE_SIZE;
 		
 		int x2 = (xNext + TILE_SIZE -4) / TILE_SIZE;
-		int y2 = yNext / TILE_SIZE;
+		int y2 = (yNext  + 6)/ TILE_SIZE;
 		
-		int x3 = xNext / TILE_SIZE;
+		int x3 = (xNext  + 6) / TILE_SIZE;
 		int y3 = (yNext + TILE_SIZE -4) / TILE_SIZE;
 		
 		int x4 = (xNext + TILE_SIZE - 4) / TILE_SIZE;

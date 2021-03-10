@@ -101,7 +101,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static int entrada = 1;
 	public static int comecar = 2;
 	public static int jogando = 3;
-	public static int estado_cena = entrada;
+	public static int estado_cena = jogando;
 	public int darkenScena = 255;
 	
 	public int timeCena = 0, maxTimeCena = 60*3;

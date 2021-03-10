@@ -363,6 +363,15 @@ public class Player extends Entity{
 			
 			if(atual instanceof Tree) {
 				if(Entity.isColidding(this, atual)) {
+
+					if(y>atual.getY()) { // colocar o player atras da árvore
+						atual.depth = 1;
+						depth = 2;
+					}else {
+						atual.depth = 2;
+						depth = 1;
+					}
+					
 					if(useItem && handItem == "machado") {
 						((Tree) atual).life--;
 						Sound.Clips.shoot.play();
@@ -1034,18 +1043,17 @@ public class Player extends Entity{
 		moved = false;
 		
 		if(rigth && World.isFree((int)(x+speed), this.getY(), this.z)
-//				&& World.checkCollidingFishingSpot((int)(x+speed), this.getY())
-//				&& World.isFreeTree((int)(x+speed), this.getY(), this.z)) {
-				) {
+				&& World.checkCollidingFishingSpot((int)(x+speed), this.getY())
+				&& World.isFreeTree((int)(x+speed), this.getY())) {
 			moved =  true;
 			dir = rightDir; //Rotação de sprites com teclado
 			x+=speed;
 			
 			
 		}else if (left && World.isFree((int)(x-speed), this.getY(), this.z) 
-//				&& World.checkCollidingFishingSpot((int)(x-speed), this.getY())
-//				&& World.isFreeTree((int)(x-speed), this.getY(), this.z)) {
-				) {
+				&& World.checkCollidingFishingSpot((int)(x-speed), this.getY())
+				&& World.isFreeTree((int)(x-speed), this.getY())) {
+
 			moved =  true;
 			dir = leftDir; //Rotação de sprites com teclado
 			x-=speed;
@@ -1053,17 +1061,16 @@ public class Player extends Entity{
 		}
 			
 		if(up && World.isFree(this.getX(),(int)(y-speed), this.z) 
-//				&& World.checkCollidingFishingSpot(this.getX(),(int)(y-speed))
-//				&& World.isFreeTree(this.getX(),(int)(y-speed), this.z)) {
-				) {
+				&& World.checkCollidingFishingSpot(this.getX(),(int)(y-speed))
+				&& World.isFreeTree(this.getX(),(int)(y-speed))) {
+
 			moved =  true;
 			dir = upDir; //Rotação de sprites com teclado 
 			y-=speed;
 
 		}else if (down && World.isFree(this.getX(), (int)(y+speed), this.z) 
-//				&& World.checkCollidingFishingSpot(this.getX(), (int)(y+speed))
-//				&& World.isFreeTree(this.getX(), (int)(y+speed), this.z)) {
-				) {
+				&& World.checkCollidingFishingSpot(this.getX(), (int)(y+speed))
+				&& World.isFreeTree(this.getX(), (int)(y+speed))) {
 			moved =  true;
 			dir = downDir; //Rotação de sprites com teclado
 			y+=speed;
