@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import main.Sound;
 import world.Camera;
+import world.Tile;
 import world.World;
 
 public class Player extends Entity{
@@ -33,6 +34,7 @@ public class Player extends Entity{
 	public boolean hasGun;
 	public boolean hasAxe;
 	public boolean hasFishingRod;
+	public boolean hasHoe;
 	public boolean shoot;
 	public boolean mouseShoot;
 	public boolean useLighter;
@@ -109,6 +111,16 @@ public class Player extends Entity{
 	private BufferedImage [] upPlayerWithFishingRod;
 	private BufferedImage [] downPlayerWithFishingRod;
 	
+	private BufferedImage [] rightPlayerWithHoe;
+	private BufferedImage [] leftPlayerWithHoe;
+	private BufferedImage [] upPlayerWithHoe;
+	private BufferedImage [] downPlayerWithHoe; 
+	
+	private BufferedImage [] rightPlayerDamageWithHoe;
+	private BufferedImage [] leftPlayerDamageWithHoe;
+	private BufferedImage [] upPlayerDamageWithHoe;
+	private BufferedImage [] downPlayerDamageWithHoe;
+	
 	private BufferedImage rightPlayerJumping;
 	private BufferedImage leftPlayerJumping;
 	private BufferedImage upPlayerJumping;
@@ -175,6 +187,16 @@ public class Player extends Entity{
 		upPlayerDamageWithFishingRod = new BufferedImage[4];
 		downPlayerDamageWithFishingRod = new BufferedImage[4];
 		
+		rightPlayerWithHoe = new BufferedImage[4];
+		leftPlayerWithHoe = new BufferedImage[4];
+		upPlayerWithHoe = new BufferedImage[4];
+		downPlayerWithHoe = new BufferedImage[4];
+		
+		rightPlayerDamageWithHoe = new BufferedImage[4];
+		leftPlayerDamageWithHoe = new BufferedImage[4];
+		upPlayerDamageWithHoe = new BufferedImage[4];
+		downPlayerDamageWithHoe = new BufferedImage[4];
+		
 		for(int i = 0; i<4; i++) {
 			rightPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 0, 16, 16);
 			leftPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 16, 16, 16);
@@ -216,6 +238,17 @@ public class Player extends Entity{
 			upPlayerDamageWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 224, 16, 16);
 			downPlayerDamageWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 240, 16, 16);
 			
+			//
+			rightPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 32, 16, 16);
+			leftPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 48, 16, 16);
+			upPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 64, 16, 16);
+			downPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 80, 16, 16);
+			
+			rightPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 96, 16, 16);
+			leftPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 112, 16, 16);
+			upPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 128, 16, 16);
+			downPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 144, 16, 16);
+			
 		}
 		
 		rightPlayerJumping = Game.spritesheet.getSprite(96, 128, 16, 16);
@@ -240,8 +273,6 @@ public class Player extends Entity{
 		
 		inventario = new String[5];
 		backpack = new String[4][6];
-		
-		depth = 5;
 
 	}
 	
@@ -250,9 +281,12 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
-				if(atual instanceof LifePack) {
-					if(Entity.isColidding(this, atual)) {
+			if(atual instanceof LifePack) {
+				if(Entity.isColidding(this, atual)) {
+						
+					atual.depth = depthPlayer(atual.getY());
+						
+					if(getItem && index >= 0 && index <= inventario.length) {
 						inventario[index] =  "lifePack";
 						inv[index] = Game.spritesheet.getSprite(0, 16, 16, 16);
 						handItem = inventario[index];
@@ -269,9 +303,12 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
-				if(atual instanceof Lighter) {
-					if(Entity.isColidding(this, atual)) {
+			if(atual instanceof Lighter) {
+				if(Entity.isColidding(this, atual)) {
+					
+					atual.depth = depthPlayer(atual.getY());
+						
+					if(getItem && index >= 0 && index <= inventario.length) {
 						inventario[index] =  "fósforo";
 						inv[index] = Game.spritesheet.getSprite(0, 128, 16, 16);
 						handItem = inventario[index];
@@ -290,6 +327,9 @@ public class Player extends Entity{
 			
 			if(atual instanceof Bullet) {
 				if(Entity.isColidding(this, atual)) {
+					
+					atual.depth = depthPlayer(atual.getY());
+					
 					ammo += 10;
 					Game.entities.remove(atual);
 					Sound.Clips.missAmo.play();
@@ -303,9 +343,12 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
-				if(atual instanceof Wapon) {
-					if(Entity.isColidding(this, atual)) {
+			if(atual instanceof Wapon) {
+				if(Entity.isColidding(this, atual)) {
+					
+					atual.depth = depthPlayer(atual.getY());
+					
+					if(getItem && index >= 0 && index <= inventario.length) {
 						inventario[index] = "gun";
 						inv[index] = Game.spritesheet.getSprite(16, 16, 16, 16);
 						handItem = inventario[index];
@@ -323,9 +366,12 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
-				if(atual instanceof Axe) {
-					if(Entity.isColidding(this, atual)) {
+			if(atual instanceof Axe) {
+				if(Entity.isColidding(this, atual)) {
+						
+					atual.depth = depthPlayer(atual.getY());
+						
+					if(getItem && index >= 0 && index <= inventario.length) {
 						inventario[index] = "machado";
 						inv[index] = Game.spritesheet.getSprite(0, 96, 16, 16);
 						handItem = inventario[index];
@@ -342,9 +388,12 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
+			if(Entity.isColidding(this, atual)) {
 				if(atual instanceof Firewood) {
-					if(Entity.isColidding(this, atual)) {
+					
+					atual.depth = depthPlayer(atual.getY());
+					
+					if(getItem && index >= 0 && index <= inventario.length) {
 						inventario[index] = "lenha";
 						inv[index] = Game.spritesheet.getSprite(0, 64, 16, 16);
 						handItem = inventario[index];
@@ -364,17 +413,55 @@ public class Player extends Entity{
 			if(atual instanceof Tree) {
 				if(Entity.isColidding(this, atual)) {
 
-					if(y>atual.getY()) { // colocar o player atras da árvore
-						atual.depth = 1;
-						depth = 2;
-					}else {
-						atual.depth = 2;
-						depth = 1;
-					}
+					atual.depth = depthPlayer(atual.getY());
 					
 					if(useItem && handItem == "machado") {
 						((Tree) atual).life--;
 						Sound.Clips.shoot.play();
+					}
+				}
+			}
+		}
+	}
+	
+	public void checkCollisionSeed1() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			int index = checkPositionGetInv();
+			if(atual instanceof Seed) {
+				if(Entity.isColidding(this, atual)) {
+					
+					atual.depth = depthPlayer(atual.getY());
+					
+					if(getItem && index >= 0 && index <= inventario.length) {
+						inventario[index] = "semente de carvalho";
+						inv[index] = Entity.SEED1_EN;
+						handItem = inventario[index];
+						handIndexItem = index;
+						Game.entities.remove(atual);
+					}
+				}
+			}
+		}
+	}
+	
+	public void checkCollisionHoe() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			int index = checkPositionGetInv();
+			if(atual instanceof Hoe) {
+				if(Entity.isColidding(this, atual)) {
+					
+					atual.depth = depthPlayer(atual.getY());
+						
+					if(getItem && index >= 0 && index <= inventario.length) {
+						inventario[index] = "enxada";
+						inv[index] = Entity.HOE_EN;
+						handItem = inventario[index];
+						handIndexItem = index;
+						Game.entities.remove(atual);
 					}
 				}
 			}
@@ -386,9 +473,12 @@ public class Player extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
-				if(atual instanceof FishingRod) {
-					if(Entity.isColidding(this, atual)) {
+			if(atual instanceof FishingRod) {
+				if(Entity.isColidding(this, atual)) {
+						
+					atual.depth = depthPlayer(atual.getY());
+						
+					if(getItem && index >= 0 && index <= inventario.length) {
 						inventario[index] =  "vara de pesca";
 						inv[index] = Game.spritesheet.getSprite(0, 208, 16, 16);
 						handItem = inventario[index];
@@ -484,6 +574,61 @@ public class Player extends Entity{
 		 updateCamera();
 	}
 	
+	public void checkColisionGroundHasHoe() {
+		
+		Tile t;
+		
+		for(int i=0; i<World.WIDTH; i++) {
+			for(int j=0; j<World.HEIGHT; j++) {
+				
+				t = World.tiles[i + (j*World.WIDTH)];
+				
+				if(World.isColiddingTile(this, t) && hasHoe && useItem){
+					Ground gd = new Ground(t.getX(), t.getY(), 16, 16, Entity.GROUND_EN, t.psTiles, t.xTile, t.yTile);
+					gd.show = true;
+					Game.entities.add(gd);
+				}
+
+			}
+		}
+	}
+	
+	public void checkColisionGround() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			
+			if(atual instanceof Ground) {
+				if(Entity.isColidding(this, atual)) {
+					if(inventario[handIndexItem] != null) {
+						if(useItem && inventario[handIndexItem].equals("semente de carvalho")) {
+							((Ground) atual).plant = true;
+							inventario[handIndexItem] = null;
+							inv[handIndexItem] = null;
+						}
+					}
+				}
+			}
+		}
+		
+	}
+	
+	public boolean checkColisionGroundToTree() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			
+			if(atual instanceof Ground) {
+				if(Entity.isColidding(this, atual)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+	
 	public void checkKillEnemy() {
 		
 		for(int i=0; i<maxExp.length; i++) {
@@ -491,6 +636,18 @@ public class Player extends Entity{
 				levelPlayer = i;
 				break;
 			}
+		}
+	}
+	
+	public int depthPlayer(int yAtual) {
+		
+		if(y > yAtual - 2) { // colocar o player atras da árvore
+			depth = 2;
+			return  1;
+		
+		}else {
+			depth = 1;
+			return 2;
 		}
 	}
 	
@@ -696,6 +853,23 @@ public class Player extends Entity{
 					Game.entities.add(fish);
 					fish.show =  true;
 					Sound.Clips.dropItem.play();
+					
+				}else if(inventario[hi] == "semente de carvalho" && h  == "semente de carvalho") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Seed sd1 = new Seed(Game.player.getX(),Game.player.getY(), 16, 16, Entity.SEED1_EN);
+					Game.entities.add(sd1);
+					sd1.show =  true;
+					Sound.Clips.dropItem.play();
+					
+				}else if(inventario[hi] == "enxada" && h  == "enxada") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Hoe hoe = new Hoe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.HOE_EN);
+					Game.entities.add(hoe);
+					hoe.show =  true;
+					Sound.Clips.dropItem.play();
+					
 				}
 			}
 		}
@@ -838,6 +1012,12 @@ public class Player extends Entity{
 			hasFishingRod = false;
 		}
 		
+		if(handItem == "enxada" && inventario[handIndexItem] == "enxada") {
+			hasHoe = true;
+		}else {
+			hasHoe = false;
+		}
+		
 	}
 	
 	public void revealMap() {
@@ -950,6 +1130,8 @@ public class Player extends Entity{
 	
 	public void tick() {
 		
+		depth = 5;
+		
 		revealMap();
 		
 		checkCollisionLifePack();
@@ -960,6 +1142,10 @@ public class Player extends Entity{
 		checkCollisionDoor();
 		checkKillEnemy();
 		checkCollisionFish();
+		checkCollisionSeed1();
+		checkCollisionHoe();
+		checkColisionGroundHasHoe();
+		checkColisionGround();
 		
 		checkDropItem();
 		checkScrollItem();
@@ -990,7 +1176,7 @@ public class Player extends Entity{
 			fishing = true;
 		}
 		
-		if(fishing) {
+		if(fishing && hasFishingRod) {
 			
 			if(!checkCollisionFishingSpot()) {
 				fishing = false;
@@ -1270,6 +1456,8 @@ public class Player extends Entity{
 						g.drawImage(rightPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(rightPlayerWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(rightPlayerWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -1282,6 +1470,8 @@ public class Player extends Entity{
 						g.drawImage(leftPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(leftPlayerWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(leftPlayerWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -1294,6 +1484,8 @@ public class Player extends Entity{
 						g.drawImage(upPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(upPlayerWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(upPlayerWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -1306,6 +1498,8 @@ public class Player extends Entity{
 						g.drawImage(downPlayerWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(downPlayerWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(downPlayerWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -1321,6 +1515,8 @@ public class Player extends Entity{
 						g.drawImage(rightPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(rightPlayerDamageWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(rightPlayerDamageWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(rightPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -1333,6 +1529,8 @@ public class Player extends Entity{
 						g.drawImage(rightPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(leftPlayerDamageWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(leftPlayerDamageWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(leftPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -1345,6 +1543,8 @@ public class Player extends Entity{
 						g.drawImage(upPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(upPlayerDamageWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(upPlayerDamageWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(upPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}
@@ -1357,6 +1557,8 @@ public class Player extends Entity{
 						g.drawImage(downPlayerDamageWithAxe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else if (hasFishingRod){
 						g.drawImage(downPlayerDamageWithFishingRod[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
+					}else if (hasHoe){
+						g.drawImage(downPlayerDamageWithHoe[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}else {
 						g.drawImage(downPlayerDamage[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 					}

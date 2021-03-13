@@ -94,7 +94,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean restartGame;
 	
 	private double timer;
-	public static int hour = 18, minute = 0, second, darken;
+	public static int hour = 17, minute = 0, second, darken;
 	private boolean dusk, dawn;
 	private int controlDarken;
 	

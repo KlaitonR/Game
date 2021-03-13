@@ -14,15 +14,28 @@ public class Tree extends Entity{
 
 	public Tree(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
-		depth = 1;
 		height += 10;
 		width -= 9;
 		x += 4;
 		y-=7;
 	}
 	
+	public Tree(double x, double y, int width, int height, BufferedImage sprite, int ps, int xTile, int yTile) {
+		super(x, y, width, height, sprite);
+		height += 10;
+		width -= 9;
+		x += 4;
+		y-=7;
+		this.psTiles = ps;
+		this.xTile = xTile;
+		this.yTile = yTile;
+	}
+	
 	public void destroySelf() {
+		
 		Game.entities.remove(this);
+		
+		//lenhas
 		Firewood fireWood1 = new Firewood(this.x, this.y, 16, 16, Entity.FIREWOOD_EN);
 		Game.entities.add(fireWood1);
 		fireWood1.show = true;
@@ -32,7 +45,20 @@ public class Tree extends Entity{
 		Firewood fireWood3 = new Firewood(this.x + 10, this.y + 5, 16, 16, Entity.FIREWOOD_EN);
 		Game.entities.add(fireWood3);
 		fireWood3.show = true;
+		
+		//Renderizar cepo
 		World.tiles[this.psTiles] = new StumpTile(this.xTile*16, this.yTile*16, Tile.TILE_STUMP);
+//		World.tiles[this.psTiles].show = true;
+		
+		//sementes
+		Seed sd1 = new Seed(this.x - 6, this.y - 3, 16, 16, Entity.SEED1_EN);
+		Game.entities.add(sd1);
+		sd1.show = true;
+		
+		Seed sd2 = new Seed(this.x + 5, this.y + 5, 16, 16, Entity.SEED1_EN);
+		Game.entities.add(sd2);
+		sd2.show = true;
+		
 	}
 	
 	public void tick() {

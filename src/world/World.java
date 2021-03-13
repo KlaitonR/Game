@@ -2,6 +2,7 @@ package world;
 
 //import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import entities.Enemy;
 import entities.Entity;
 import entities.FishingRod;
 import entities.FishingSpot;
+import entities.Hoe;
 import entities.LifePack;
 import entities.Lighter;
 import entities.Particle;
@@ -43,10 +45,16 @@ public class World {
 					int pixelAtual = pixels[xx + (yy*map.getWidth())];
 					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 					tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
+					tiles[xx + (yy*WIDTH)].xTile = xx;
+					tiles[xx + (yy*WIDTH)].yTile = yy;
 					
-					if(pixelAtual == 0xFF000000) {
+					
+					if(pixelAtual == 0xFF000000) { //chão
 						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)].xTile = xx;
+						tiles[xx + (yy*WIDTH)].yTile = yy;
+						
 						
 					}else if(pixelAtual == 0xFFFFFFFF) { //Parede
 						tiles[xx + (yy*WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
@@ -102,6 +110,7 @@ public class World {
 						Axe axe = new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN);
 						Game.entities.add(axe);
 						axe.psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)].en = axe;
 					}
 					
 					else if(pixelAtual == 0xFF0094FF) { // Água
@@ -117,17 +126,27 @@ public class World {
 						Lighter lighter = new Lighter(xx*16, yy*16, 16, 16, Entity.LIGHTER_EN);
 						Game.entities.add(lighter);
 						lighter.psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)].en = lighter;
 					
 					}else if (pixelAtual == 0xFF00FFFF) { // Local de pesca
 						FishingSpot fs = new FishingSpot(xx*16, yy*16, 16, 16, Entity.FISHING_EN);
 						Game.entities.add(fs);
 						tiles[xx + (yy*WIDTH)].en = fs;
 						fs.psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)].en = fs;
 						
 					}else if (pixelAtual == 0xFF5B7F00) {//Vara de pesca
 						FishingRod fr = new FishingRod(xx*16, yy*16, 16, 16, Entity.FISHING_ROD_EN);
 						Game.entities.add(fr);
 						fr.psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)].en = fr;
+						
+						
+					}else if (pixelAtual == 0xFF808042) {//Enxada
+						Hoe hoe = new Hoe(xx*16, yy*16, 16, 16, Entity.HOE_EN);
+						Game.entities.add(hoe);
+						hoe.psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)].en = hoe;
 					}
 				}
 			}
@@ -303,29 +322,6 @@ public class World {
 		int x4 = (xNext + TILE_SIZE - 6) / TILE_SIZE; // para baixo
 		int y4 = (yNext + TILE_SIZE - 6) / TILE_SIZE;
 		
-		
-//		int xx1 = xNext / TILE_SIZE;
-//		int yy1 = yNext  / TILE_SIZE;
-//		
-//		int xx2 = (xNext + TILE_SIZE) / TILE_SIZE;
-//		int yy2 = yNext / TILE_SIZE;
-//		
-//		int xx3 = xNext / TILE_SIZE; 
-//		int yy3 = (yNext + TILE_SIZE)  / TILE_SIZE; //direita
-//		
-//		int xx4 = (xNext + TILE_SIZE)  / TILE_SIZE; // para baixo
-//		int yy4 = (yNext + TILE_SIZE)  / TILE_SIZE;
-//		
-//		
-//		if (((tiles[xx1 + (yy1*World.WIDTH)].en instanceof Tree) ||
-//				(tiles[xx2 + (yy2*World.WIDTH)].en instanceof Tree) ||
-//				(tiles[xx3 + (yy3*World.WIDTH)].en instanceof Tree) ||
-//				(tiles[xx4 + (yy4*World.WIDTH)].en instanceof Tree)) ){
-//			Game.player.depth = 2;
-//		}
-		
-		
-		
 		if (!((tiles[x1 + (y1*World.WIDTH)].en instanceof Tree) ||
 				(tiles[x2 + (y2*World.WIDTH)].en instanceof Tree) ||
 				(tiles[x3 + (y3*World.WIDTH)].en instanceof Tree) ||
@@ -335,6 +331,23 @@ public class World {
 			
 		return false;
 				
+	}
+	
+	public static boolean isColiddingTile(Entity e, Tile t ) {
+		
+		Rectangle e1Mask = new Rectangle(e.getX(), e.getY() , 16, 16);
+		Rectangle e2Mask = new Rectangle(t.getX() , t.getY() , 16,16);
+		
+		if(t instanceof FloorTile &&
+				!(t.en instanceof Tree) &&
+				e1Mask.intersects(e2Mask) &&
+				e.getX() >= (t.getX()-1) &&
+				e.getY() >= (t.getY())-1) {
+			return true;
+		}else {
+			return false;	
+		}
+		
 	}
 	
 	public static boolean checkCollidingFishingSpot(int xNext, int yNext) {

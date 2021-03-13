@@ -44,8 +44,20 @@ public class Entity {
 	static public BufferedImage PLAT_EN = Game.spritesheet.getSprite(16, 176, 16, 16);
 	static public BufferedImage FISHING_ROD_EN = Game.spritesheet.getSprite(0, 208, 16, 16);
 	static public BufferedImage FISH_EN = Game.spritesheet.getSprite(16, 192, 16, 16);
-	
+	static public BufferedImage HOE_EN = Game.spritesheet.getSprite(16, 128, 16, 16);
+	static public BufferedImage GROUND_EN = Game.spritesheet.getSprite(0, 160, 16, 16);
+	static public BufferedImage GROUND_F1_EN = Game.spritesheet.getSprite(16, 208, 16, 16);
+	static public BufferedImage GROUND_F2_EN = Game.spritesheet.getSprite(16, 160, 16, 16);
+	static public BufferedImage GROUND_F3_EN = Game.spritesheet.getSprite(0, 192, 16, 16);
 	public static BufferedImage FISHING_EN;
+	
+	public BufferedImage getSprite() {
+		return sprite;
+	}
+
+	public void setSprite(BufferedImage sprite) {
+		this.sprite = sprite;
+	}
 	
 	protected List<Node> path;
 	
@@ -62,6 +74,9 @@ public class Entity {
 		this.masky = 0;
 		this.mwidth = width;
 		this.mheigth = height;
+		
+		depth = 1;
+		
 	}
 	
 	public void setMask(int maskx, int masky, int maskw, int maskh) {
