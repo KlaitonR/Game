@@ -20,9 +20,10 @@ public class Entity {
 	protected int width;
 	protected int height;
 	
+	public int id;
+	
 	public boolean pack;
-	public int qtPack = 1;
-	public int qtItem;
+	public int qtPack = 64;
 	
 	public int psTiles, xTile, yTile;
 	public boolean show;

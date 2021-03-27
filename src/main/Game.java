@@ -46,10 +46,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	private BufferedImage image;
 	
-	static public java.util.List<Entity> entities;
-	static public java.util.List<Enemy> enemies;
-	static public java.util.List<BulletShoot> bulletShootes;
-	static public java.util.List<Particle> particles;
+	static public ArrayList <Entity> entities;
+	static public ArrayList <Enemy> enemies;
+	static public ArrayList <BulletShoot> bulletShootes;
+	static public ArrayList <Particle> particles;
 	static public Spritsheet spritesheet;
 	static public Spritsheet spritButton;
 	

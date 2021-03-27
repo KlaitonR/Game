@@ -32,13 +32,13 @@ public class Ground extends Entity{
 				this.setSprite(Entity.GROUND_F3_EN);
 			}
 			
-			if (time == f3 && !Game.player.checkColisionGroundToTree()) {
+			if (time == f3 && !Game.player.checkColisionGroundToTree(this)) {
 				Tree tr = new Tree(this.x, this.y, 16, 16, Entity.TREE_EN, psTiles, this.xTile, this.yTile);
 				Game.entities.add(tr);
 				tr.show = true;
 				World.tiles[psTiles].en = tr;
-				Game.entities.remove(this);
 				plant = false;
+				Game.entities.remove(this);
 			}else if(time == f3){
 				time--;
 			}

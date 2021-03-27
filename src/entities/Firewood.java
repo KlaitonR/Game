@@ -9,7 +9,7 @@ public class Firewood extends Entity{
 		
 		pack = true;
 		qtPack = 64;
-		qtItem = 1;
+		id = 1;
 		
 	}
 

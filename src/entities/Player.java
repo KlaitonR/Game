@@ -276,7 +276,7 @@ public class Player extends Entity{
 
 	}
 	
-	public void checkCollisionLifePack() {
+public void checkCollisionLifePack() {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
@@ -297,6 +297,7 @@ public class Player extends Entity{
 			}
 		}
 	}
+	
 	
 	public void checkCollisionLighter() {
 		
@@ -574,18 +575,17 @@ public class Player extends Entity{
 		 updateCamera();
 	}
 	
-	public void checkColisionGroundHasHoe() {
-		
-		Tile t;
+	public void createGround() {
 		
 		for(int i=0; i<World.WIDTH; i++) {
 			for(int j=0; j<World.HEIGHT; j++) {
 				
-				t = World.tiles[i + (j*World.WIDTH)];
+				Tile t = World.tiles[i + (j*World.WIDTH)];
 				
-				if(World.isColiddingTile(this, t) && hasHoe && useItem){
+				if(World.isColiddingTile(this, t) && hasHoe && useItem && !(t.en instanceof Ground)){
 					Ground gd = new Ground(t.getX(), t.getY(), 16, 16, Entity.GROUND_EN, t.psTiles, t.xTile, t.yTile);
 					gd.show = true;
+					World.tiles[t.psTiles].en = gd;
 					Game.entities.add(gd);
 				}
 
@@ -600,6 +600,9 @@ public class Player extends Entity{
 			
 			if(atual instanceof Ground) {
 				if(Entity.isColidding(this, atual)) {
+					
+					depthPlayer(atual.getY());
+					
 					if(inventario[handIndexItem] != null) {
 						if(useItem && inventario[handIndexItem].equals("semente de carvalho")) {
 							((Ground) atual).plant = true;
@@ -613,12 +616,12 @@ public class Player extends Entity{
 		
 	}
 	
-	public boolean checkColisionGroundToTree() {
+	public boolean checkColisionGroundToTree(Ground gd) {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			
-			if(atual instanceof Ground) {
+			if(atual == gd) {
 				if(Entity.isColidding(this, atual)) {
 					return true;
 				}
@@ -642,12 +645,12 @@ public class Player extends Entity{
 	public int depthPlayer(int yAtual) {
 		
 		if(y > yAtual - 2) { // colocar o player atras da árvore
-			depth = 2;
+			depth = 5;
 			return  1;
 		
 		}else {
 			depth = 1;
-			return 2;
+			return 5;
 		}
 	}
 	
@@ -1144,7 +1147,7 @@ public class Player extends Entity{
 		checkCollisionFish();
 		checkCollisionSeed1();
 		checkCollisionHoe();
-		checkColisionGroundHasHoe();
+		createGround();
 		checkColisionGround();
 		
 		checkDropItem();

@@ -43,6 +43,31 @@ public class BulletShoot extends Entity {
 			}
 		}
 	}
+	
+	public void checkCollisionTree(){
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			
+			if(atual instanceof Tree) {
+				if(Entity.isColidding(this, atual)) {
+					atual.depth = depthBullet(atual.getY());
+				}
+			}
+		}
+	}
+	
+	public int depthBullet(int yAtual) {
+		
+		if(y > yAtual) { 
+			depth = 2;
+			return  1;
+		
+		}else {
+			depth = 1;
+			return 2;
+		}
+	}
 
 	public void tick() {
 		
@@ -56,7 +81,7 @@ public class BulletShoot extends Entity {
 		}
 		
 		collidingTile();
-		
+		checkCollisionTree();
 	}
 	
 	public void render(Graphics g) {
