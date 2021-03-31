@@ -1,15 +1,21 @@
 package entities;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import main.Game;
+import world.FloorTile;
+import world.Tile;
 import world.World;
 
 public class Ground extends Entity{
 	
 	public int time;
-	public int f1 = 1*60, f2 = 2*60, f3 = 3*60;;
+	public int f1 = 1*60, f2 = 2*60, f3 = 3*60;
 	public boolean plant;
+	public int life = 100;
+	public int cont;
+	public String tipo;
 
 	public Ground(double x, double y, int width, int height, BufferedImage sprite, int ps, int xTile, int yTile) {
 		super(x, y, width, height, sprite);
@@ -33,12 +39,22 @@ public class Ground extends Entity{
 			}
 			
 			if (time == f3 && !Game.player.checkColisionGroundToTree(this)) {
-				Tree tr = new Tree(this.x, this.y, 16, 16, Entity.TREE_EN, psTiles, this.xTile, this.yTile);
+				
+				Tree tr = null;
+				
+				if(tipo.equals("semente de carvalho")) {
+					 tr = new Tree(this.x, this.y, 16, 16, Entity.CARVALHO_EN, psTiles, this.xTile, this.yTile);
+				}else if (tipo.equals("semente de pinheiro")){
+					tr = new Tree(this.x, this.y, 16, 16, Entity.PINHEIRO_EN, psTiles, this.xTile, this.yTile);
+				}
+				
 				Game.entities.add(tr);
 				tr.show = true;
 				World.tiles[psTiles].en = tr;
+				
 				plant = false;
 				Game.entities.remove(this);
+				
 			}else if(time == f3){
 				time--;
 			}
@@ -46,11 +62,35 @@ public class Ground extends Entity{
 		
 	}
 	
+	public void generateFloor() {
+		
+		cont++;
+		
+		if(!plant && cont >= 60){
+			life --;
+		}
+		
+		if(life == 0) {
+			
+			World.tiles[psTiles] = new FloorTile((int)x, (int)y, Tile.TILE_FLOOR);
+			World.tiles[psTiles].show = true;
+			Game.entities.remove(this);
+			
+		}
+
+		
+	}
+	
 	public void tick() {
 		
 		depth = 0;
 		plant();
+		generateFloor();
 		
+	}
+	
+	public void render(Graphics g) {
+		super.render(g);
 	}
 
 }

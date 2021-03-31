@@ -18,7 +18,9 @@ import entities.FishingSpot;
 import entities.Hoe;
 import entities.LifePack;
 import entities.Lighter;
+import entities.Oak;
 import entities.Particle;
+import entities.Pine;
 import entities.Tree;
 import entities.Wapon;
 import graficos.Spritsheet;
@@ -59,6 +61,8 @@ public class World {
 					}else if(pixelAtual == 0xFFFFFFFF) { //Parede
 						tiles[xx + (yy*WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
 						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
+						tiles[xx + (yy*WIDTH)].xTile = xx;
+						tiles[xx + (yy*WIDTH)].yTile = yy;
 						
 					}else if(pixelAtual == 0xFF0000FF) { //Player
 						Game.player.setX(xx*16);
@@ -96,14 +100,27 @@ public class World {
 						door.xTile = xx;
 						door.yTile = yy;
 						
-					}else if(pixelAtual == 0xFFFF00DC) { // Arvore
+					}else if(pixelAtual == 0xFFFF00DC) { // Arvores
 						
-						Tree tree = new Tree(xx*16, yy*16, 16, 16, Entity.TREE_EN);
-						Game.entities.add(tree);
-						tiles[xx + (yy*WIDTH)].en = tree;
-						tree.psTiles = xx + (yy*WIDTH);
-						tree.xTile = xx;
-						tree.yTile = yy;
+						//método para randomizar a instancia de arvores
+						
+						if(Game.rand.nextInt(11) <=5) {
+							Tree tree = new Oak(xx*16, yy*16, 16, 16, Entity.CARVALHO_EN);
+							Game.entities.add(tree);
+							tiles[xx + (yy*WIDTH)].en = tree;
+							tree.psTiles = xx + (yy*WIDTH);
+							tree.xTile = xx;
+							tree.yTile = yy;
+						}else {
+							Tree tree = new Pine(xx*16, yy*16, 16, 16, Entity.PINHEIRO_EN);
+							Game.entities.add(tree);
+							tiles[xx + (yy*WIDTH)].en = tree;
+							tree.psTiles = xx + (yy*WIDTH);
+							tree.xTile = xx;
+							tree.yTile = yy;
+						}
+						
+					
 					}
 					
 					else if(pixelAtual == 0xFF7F3300) { // Machado

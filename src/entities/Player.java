@@ -395,8 +395,12 @@ public void checkCollisionLifePack() {
 					atual.depth = depthPlayer(atual.getY());
 					
 					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] = "lenha";
-						inv[index] = Game.spritesheet.getSprite(0, 64, 16, 16);
+						if(((Firewood) atual).tipo.equals("lenha de carvalho")) {
+							inventario[index] = "lenha de carvalho";
+						} else if(((Firewood) atual).tipo.equals("lenha de pinheiro")) {
+							inventario[index] = "lenha de pinheiro";
+						}
+						inv[index] = atual.getSprite();
 						handItem = inventario[index];
 						handIndexItem = index;
 						Game.entities.remove(atual);
@@ -416,7 +420,7 @@ public void checkCollisionLifePack() {
 
 					atual.depth = depthPlayer(atual.getY());
 					
-					if(useItem && handItem == "machado") {
+					if(useItem && hasAxe) {
 						((Tree) atual).life--;
 						Sound.Clips.shoot.play();
 					}
@@ -425,7 +429,7 @@ public void checkCollisionLifePack() {
 		}
 	}
 	
-	public void checkCollisionSeed1() {
+	public void checkCollisionSeedCarvalho() {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
@@ -436,8 +440,13 @@ public void checkCollisionLifePack() {
 					atual.depth = depthPlayer(atual.getY());
 					
 					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] = "semente de carvalho";
-						inv[index] = Entity.SEED1_EN;
+						
+						if(((Seed) atual).tipo.equals("semente de carvalho")) {
+							inventario[index] = "semente de carvalho";
+						}else if (((Seed) atual).tipo.equals("semente de pinheiro")) {
+							inventario[index] = "semente de pinheiro";
+						}
+						inv[index] = atual.getSprite();
 						handItem = inventario[index];
 						handIndexItem = index;
 						Game.entities.remove(atual);
@@ -481,7 +490,26 @@ public void checkCollisionLifePack() {
 						
 					if(getItem && index >= 0 && index <= inventario.length) {
 						inventario[index] =  "vara de pesca";
-						inv[index] = Game.spritesheet.getSprite(0, 208, 16, 16);
+						inv[index] = Entity.FISHING_ROD_EN;
+						handItem = inventario[index];
+						handIndexItem = index;
+						Game.entities.remove(atual);
+					}
+				}
+			}
+		}
+	}
+	
+	public void checkCollisionRoot() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			Entity atual = Game.entities.get(i);
+			int index = checkPositionGetInv();
+			if(getItem && index >= 0 && index <= inventario.length) {
+				if(atual instanceof Root) {
+					if(Entity.isColidding(this, atual)) {
+						inventario[index] = "raiz";
+						inv[index] = Entity.RAIZ_EN;
 						handItem = inventario[index];
 						handIndexItem = index;
 						Game.entities.remove(atual);
@@ -514,7 +542,7 @@ public void checkCollisionLifePack() {
 				if(atual instanceof Fish) {
 					if(Entity.isColidding(this, atual)) {
 						inventario[index] = "peixe";
-						inv[index] = Game.spritesheet.getSprite(16, 192, 16, 16);
+						inv[index] = Entity.FISH_EN;
 						handItem = inventario[index];
 						handIndexItem = index;
 						Game.entities.remove(atual);
@@ -577,18 +605,15 @@ public void checkCollisionLifePack() {
 	
 	public void createGround() {
 		
-		for(int i=0; i<World.WIDTH; i++) {
-			for(int j=0; j<World.HEIGHT; j++) {
+		for(int i = 0; i < World.tiles.length; i++) {
 				
-				Tile t = World.tiles[i + (j*World.WIDTH)];
+			Tile t = World.tiles[i];
 				
-				if(World.isColiddingTile(this, t) && hasHoe && useItem && !(t.en instanceof Ground)){
-					Ground gd = new Ground(t.getX(), t.getY(), 16, 16, Entity.GROUND_EN, t.psTiles, t.xTile, t.yTile);
-					gd.show = true;
-					World.tiles[t.psTiles].en = gd;
-					Game.entities.add(gd);
-				}
-
+			if(World.isColiddingTile(this, t) && hasHoe && useItem && !(t.en instanceof Ground)){
+				Ground gd = new Ground(t.getX(), t.getY(), 16, 16, Entity.GROUND_EN, t.psTiles, t.xTile, t.yTile);
+				gd.show = true;
+				World.tiles[t.psTiles].en = gd;
+				Game.entities.add(gd);
 			}
 		}
 	}
@@ -606,6 +631,12 @@ public void checkCollisionLifePack() {
 					if(inventario[handIndexItem] != null) {
 						if(useItem && inventario[handIndexItem].equals("semente de carvalho")) {
 							((Ground) atual).plant = true;
+							((Ground) atual).tipo = "semente de carvalho";
+							inventario[handIndexItem] = null;
+							inv[handIndexItem] = null;
+						} else if(useItem && inventario[handIndexItem].equals("semente de pinheiro")) {
+							((Ground) atual).plant = true;
+							((Ground) atual).tipo = "semente de pinheiro";
 							inventario[handIndexItem] = null;
 							inv[handIndexItem] = null;
 						}
@@ -630,6 +661,22 @@ public void checkCollisionLifePack() {
 		
 		return false;
 		
+	}
+	
+	public void checkCollisionStumpTile() {
+		
+		for(int i = 0; i < Game.entities.size(); i++) {
+			
+			Entity atual = Game.entities.get(i);
+			
+			if(atual instanceof Stump) {
+				if(Entity.isColidding(this, atual)) {
+					if(useItem && hasHoe) {
+						((Stump) atual).destroySelf();
+					}
+				}
+			}
+		}
 	}
 	
 	public void checkKillEnemy() {
@@ -823,14 +870,23 @@ public void checkCollisionLifePack() {
 					axe.show =  true;
 					Sound.Clips.dropItem.play();
 					
-				}else if(inventario[hi] == "lenha" && h  == "lenha") {
+				}else if(inventario[hi] == "lenha de carvalho" && h  == "lenha de carvalho") {
 					inventario[hi] = null;
 					inv[hi] = null;
-					Firewood fireWood = new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_EN);
+					Firewood fireWood = new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_CARVALHO_EN);
 					Game.entities.add(fireWood);
 					fireWood.show = true;
+					fireWood.tipo = "lenha de carvalho";
 					Sound.Clips.dropItem.play();
 					
+				}else if(inventario[hi] == "lenha de pinheiro" && h  == "lenha de pinheiro") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Firewood fireWood = new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_PINHEIRO_EN);
+					Game.entities.add(fireWood);
+					fireWood.tipo = "lenha de pinheiro";
+					fireWood.show = true;
+						
 				}else if(inventario[hi] == "fósforo" && h  == "fósforo") {
 					inventario[hi] = null;
 					inv[hi] = null;
@@ -838,7 +894,6 @@ public void checkCollisionLifePack() {
 					Game.entities.add(lighter);
 					lighter.show =  true;
 					useLighter = false;
-					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "vara de pesca" && h  == "vara de pesca") {
 					inventario[hi] = null;
@@ -847,7 +902,6 @@ public void checkCollisionLifePack() {
 					Game.entities.add(fr);
 					fr.show =  true;
 					hasFishingRod = false;
-					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "peixe" && h  == "peixe") {
 					inventario[hi] = null;
@@ -855,15 +909,22 @@ public void checkCollisionLifePack() {
 					Fish fish = new Fish(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FISH_EN);
 					Game.entities.add(fish);
 					fish.show =  true;
-					Sound.Clips.dropItem.play();
 					
 				}else if(inventario[hi] == "semente de carvalho" && h  == "semente de carvalho") {
 					inventario[hi] = null;
 					inv[hi] = null;
-					Seed sd1 = new Seed(Game.player.getX(),Game.player.getY(), 16, 16, Entity.SEED1_EN);
+					Seed sd1 = new Seed(Game.player.getX(),Game.player.getY(), 16, 16, Entity.SEED_CARVALHO_EN);
+					sd1.tipo = "semente de carvalho";
 					Game.entities.add(sd1);
 					sd1.show =  true;
-					Sound.Clips.dropItem.play();
+					
+				}else if(inventario[hi] == "semente de pinheiro" && h  == "semente de pinheiro") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Seed sd1 = new Seed(Game.player.getX(),Game.player.getY(), 16, 16, Entity.SEED_PINHEIRO_EN);
+					sd1.tipo = "semente de pinheiro";
+					Game.entities.add(sd1);
+					sd1.show =  true;
 					
 				}else if(inventario[hi] == "enxada" && h  == "enxada") {
 					inventario[hi] = null;
@@ -871,9 +932,16 @@ public void checkCollisionLifePack() {
 					Hoe hoe = new Hoe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.HOE_EN);
 					Game.entities.add(hoe);
 					hoe.show =  true;
-					Sound.Clips.dropItem.play();
 					
+				}else if(inventario[hi] == "raiz" && h  == "raiz") {
+					inventario[hi] = null;
+					inv[hi] = null;
+					Root root = new Root(Game.player.getX(),Game.player.getY(), 16, 16, Entity.RAIZ_EN);
+					Game.entities.add(root);
+					root.show =  true;
 				}
+				
+				Sound.Clips.dropItem.play();
 			}
 		}
 	}
@@ -1145,10 +1213,13 @@ public void checkCollisionLifePack() {
 		checkCollisionDoor();
 		checkKillEnemy();
 		checkCollisionFish();
-		checkCollisionSeed1();
+		checkCollisionSeedCarvalho();
 		checkCollisionHoe();
-		createGround();
 		checkColisionGround();
+		createGround();
+		checkCollisionRoot();
+		
+		checkCollisionStumpTile();
 		
 		checkDropItem();
 		checkScrollItem();
@@ -1198,10 +1269,10 @@ public void checkCollisionLifePack() {
 			}
 		}
 		
-		checkUseItem(); //Precisa ficar por últomo pois deixa a variavel useitem false
-		
 		if(openDoor)
 			openDoor();
+		
+		checkUseItem(); //Precisa ficar por últomo pois deixa a variavel useItem false
 		
 		if(jump) {
 			if(isJumping == false) {
