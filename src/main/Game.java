@@ -90,7 +90,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private boolean showMessageGameOver = true;
 	private int framesGameOver = 0;
 	
-	private int CUR_LEVEL = 1, MAX_LVL  = 2;
+	private int CUR_LEVEL = 1; //	MAX_LVL  = 2;
+	
 	private boolean restartGame;
 	
 	private double timer;
@@ -163,8 +164,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		menu = new Menu();
 		
-		npc = new Npc(150, 70, 16, 16, spritesheet.getSprite(224, 0, 16, 16));
-		entities.add(npc);
+//		npc = new Npc(150, 70, 16, 16, spritesheet.getSprite(224, 0, 16, 16));
+//		entities.add(npc);
 		
 //		try {
 //			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(70f);
@@ -283,16 +284,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 
 			//Up Niveis
-			if (enemies.size() == 0) {
-				CUR_LEVEL++;
-				if(CUR_LEVEL > MAX_LVL) {
-					CUR_LEVEL = 1;
-				}
-				
-				String newWorld = "level" + CUR_LEVEL + ".png";
-				player.levelRoom = newWorld;
-				World.restarGame(newWorld);
-			}
+//			if (enemies.size() == 0) {
+//				CUR_LEVEL++;
+//				if(CUR_LEVEL > MAX_LVL) {
+//					CUR_LEVEL = 1;
+//				}
+//				
+//				String newWorld = "level" + CUR_LEVEL + ".png";
+//				player.levelRoom = newWorld;
+//				World.restarGame(newWorld);
+//			}
 			
 		}else if (gameState.equals("GAME OVER")) {
 			framesGameOver++;
@@ -422,7 +423,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for(int i = 0; i<entities.size(); i++) {
 			Entity e = entities.get(i);
 			
-			if(e.show)
+//			if(e.show)
 				e.render(g);
 		}
 		
@@ -632,11 +633,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					player.useBag = false;
 			}
 			
-			if(e.getKeyCode() == KeyEvent.VK_ENTER) { 
-				
-				if(npc.showMessage) 
-					npc.showMessage = false;
-			}
+//			if(e.getKeyCode() == KeyEvent.VK_ENTER) { 
+//				
+//				if(npc.showMessage) 
+//					npc.showMessage = false;
+//			}
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {

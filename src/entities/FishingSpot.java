@@ -33,8 +33,7 @@ public class FishingSpot extends Entity{
 				index = 0;
 		}
 		
-		if(show) 
-			g.drawImage(moveFishing[index] ,this.getX() - Camera.x, this.getY() - Camera.y , null);
+		g.drawImage(moveFishing[index] ,this.getX() - Camera.x, this.getY() - Camera.y , null);
 		
 	}
 

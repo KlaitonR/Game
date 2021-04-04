@@ -21,7 +21,7 @@ public class Tile {
 	
 	protected BufferedImage sprite;
 	protected int x,y,z;
-	public int psTiles, xTile, yTile;
+	public int psTiles;
 	
 	public Tile(int x, int y, BufferedImage sprite) {
 		this.x = x;
@@ -30,7 +30,7 @@ public class Tile {
 	}
 	
 	public void render(Graphics g) {
-		if(show) 
+//		if(show) 
 			g.drawImage(sprite, x - Camera.x ,y - Camera.y ,null);
 	}
 

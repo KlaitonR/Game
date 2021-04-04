@@ -32,8 +32,7 @@ public class WaterTile extends Tile{
 				index = 0;
 		}
 		
-		if(show) 
-			g.drawImage(moveWater[index], x - Camera.x ,y - Camera.y ,null);
+		g.drawImage(moveWater[index], x - Camera.x ,y - Camera.y ,null);
 		
 	}
 	

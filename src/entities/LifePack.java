@@ -8,8 +8,8 @@ public class LifePack extends Entity{
 		super(x, y, width, height, sprite);
 		
 		pack = true;
-		qtPack = 2;
-		id = 3;
+		qtPack = 4;
+		id = 6;
 		
 	}
 

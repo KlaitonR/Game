@@ -8,7 +8,7 @@ import world.World;
 public class Tree extends Entity{
 	
 	public int life = 1;
-	public boolean isColliding;
+//	public boolean isColliding;
 
 	public Tree(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -16,17 +16,6 @@ public class Tree extends Entity{
 		width -= 9;
 		x += 4;
 		y-=7;
-	}
-	
-	public Tree(double x, double y, int width, int height, BufferedImage sprite, int ps, int xTile, int yTile) {
-		super(x, y, width, height, sprite);
-		height += 10;
-		width -= 9;
-		x += 4;
-		y-=7;
-		this.psTiles = ps;
-		this.xTile = xTile;
-		this.yTile = yTile;
 	}
 	
 	public void destroySelf(BufferedImage sprite, BufferedImage seed) {
@@ -44,8 +33,10 @@ public class Tree extends Entity{
 		
 		//Renderizar cepo
 		Stump sp = new Stump(this.getX(), this.getY(), 16, 16, Entity.STUMP_EN);
+		sp.tipo = "cepo";
 		Game.entities.add(sp);
 		sp.show = true;
+		sp.psTiles = psTiles;
 		
 		//sementes
 		Seed sd1 = new Seed(this.x - 6, this.y - 3, 16, 16, seed);
@@ -58,19 +49,29 @@ public class Tree extends Entity{
 		
 		if(this instanceof Oak) {
 			fireWood1.tipo = "lenha de carvalho";
+			fireWood1.id = 1;
 			fireWood2.tipo = "lenha de carvalho";
+			fireWood2.id = 1;
 			fireWood3.tipo = "lenha de carvalho";
+			fireWood3.id = 1;
 			sd1.tipo = "semente de carvalho";
+			sd1.id = 10;
 			sd2.tipo = "semente de carvalho";
+			sd2.id = 10;
 		}else if (this instanceof Pine) {
 			fireWood1.tipo = "lenha de pinheiro";
+			fireWood1.id = 11;
 			fireWood2.tipo = "lenha de pinheiro";
+			fireWood2.id = 11;
 			fireWood3.tipo = "lenha de pinheiro";
+			fireWood3.id = 11;
 			sd1.tipo = "semente de pinheiro";
+			sd1.id = 12;
 			sd2.tipo = "semente de pinheiro";
+			sd2.id = 12;
 		}
 		
-		World.tiles[this.psTiles].en = null;
+		World.tiles[psTiles].en = null;
 		Game.entities.remove(this);
 		
 	}

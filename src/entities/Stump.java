@@ -15,6 +15,7 @@ public class Stump extends Entity{
 		
 		Root root = new Root(x+5, y-7, 16, 16, Entity.RAIZ_EN);
 		root.show = true;
+		root.tipo = "raiz";
 		Game.entities.add(root);
 		
 		Game.entities.remove(this);

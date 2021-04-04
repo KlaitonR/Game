@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import main.Sound;
 import world.Camera;
+import world.FloorTile;
 import world.Tile;
 import world.World;
 
@@ -50,7 +51,7 @@ public class Player extends Entity{
 	public boolean dropItem;
 	public boolean getItem;
 	public boolean useItem;
-	public String handItem;
+	public Entity handItem;
 	public int handIndexItem;
 	public boolean scrollItemLef;
 	public boolean scrollItemDir;
@@ -66,8 +67,8 @@ public class Player extends Entity{
 	public int maxLevel = 4;
 	public double [] maxExp = {100, 500, 1000, 5000, 10000};
 	
-	public String inventario[];
-	public String backpack[][]; //4x6
+	public Entity inventario[];
+	public Entity bagpack[][]; //4x6
 	
 	public Door doorCollision;
 	
@@ -271,12 +272,12 @@ public class Player extends Entity{
 		upPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 224, 16, 16);
 		downPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 240, 16, 16);
 		
-		inventario = new String[5];
-		backpack = new String[4][6];
+		inventario = new Entity[5];
+		bagpack = new Entity[4][6];
 
 	}
 	
-public void checkCollisionLifePack() {
+	public void checkCollisionLifePack() {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
@@ -284,14 +285,20 @@ public void checkCollisionLifePack() {
 			if(atual instanceof LifePack) {
 				if(Entity.isColidding(this, atual)) {
 						
+					//verificaçaõ se já possuu isso no inventario
+					
 					atual.depth = depthPlayer(atual.getY());
 						
-					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] =  "lifePack";
-						inv[index] = Game.spritesheet.getSprite(0, 16, 16, 16);
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+//								handItem = inventario[index];
+//								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -309,12 +316,16 @@ public void checkCollisionLifePack() {
 					
 					atual.depth = depthPlayer(atual.getY());
 						
-					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] =  "fósforo";
-						inv[index] = Game.spritesheet.getSprite(0, 128, 16, 16);
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+								handItem = inventario[index];
+								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -349,13 +360,16 @@ public void checkCollisionLifePack() {
 					
 					atual.depth = depthPlayer(atual.getY());
 					
-					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] = "gun";
-						inv[index] = Game.spritesheet.getSprite(16, 16, 16, 16);
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
-						Sound.Clips.reload.play();
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+								handItem = inventario[index];
+								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -372,12 +386,16 @@ public void checkCollisionLifePack() {
 						
 					atual.depth = depthPlayer(atual.getY());
 						
-					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] = "machado";
-						inv[index] = Game.spritesheet.getSprite(0, 96, 16, 16);
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+								handItem = inventario[index];
+								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -394,16 +412,16 @@ public void checkCollisionLifePack() {
 					
 					atual.depth = depthPlayer(atual.getY());
 					
-					if(getItem && index >= 0 && index <= inventario.length) {
-						if(((Firewood) atual).tipo.equals("lenha de carvalho")) {
-							inventario[index] = "lenha de carvalho";
-						} else if(((Firewood) atual).tipo.equals("lenha de pinheiro")) {
-							inventario[index] = "lenha de pinheiro";
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+//								handItem = inventario[index];
+//								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
 						}
-						inv[index] = atual.getSprite();
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
 					}
 				}
 			}
@@ -417,7 +435,7 @@ public void checkCollisionLifePack() {
 			
 			if(atual instanceof Tree) {
 				if(Entity.isColidding(this, atual)) {
-
+					
 					atual.depth = depthPlayer(atual.getY());
 					
 					if(useItem && hasAxe) {
@@ -429,7 +447,7 @@ public void checkCollisionLifePack() {
 		}
 	}
 	
-	public void checkCollisionSeedCarvalho() {
+	public void checkCollisionSeed() {
 		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
@@ -439,17 +457,16 @@ public void checkCollisionLifePack() {
 					
 					atual.depth = depthPlayer(atual.getY());
 					
-					if(getItem && index >= 0 && index <= inventario.length) {
-						
-						if(((Seed) atual).tipo.equals("semente de carvalho")) {
-							inventario[index] = "semente de carvalho";
-						}else if (((Seed) atual).tipo.equals("semente de pinheiro")) {
-							inventario[index] = "semente de pinheiro";
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+//								handItem = inventario[index];
+//								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
 						}
-						inv[index] = atual.getSprite();
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
 					}
 				}
 			}
@@ -466,12 +483,16 @@ public void checkCollisionLifePack() {
 					
 					atual.depth = depthPlayer(atual.getY());
 						
-					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] = "enxada";
-						inv[index] = Entity.HOE_EN;
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+								handItem = inventario[index];
+								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -488,12 +509,16 @@ public void checkCollisionLifePack() {
 						
 					atual.depth = depthPlayer(atual.getY());
 						
-					if(getItem && index >= 0 && index <= inventario.length) {
-						inventario[index] =  "vara de pesca";
-						inv[index] = Entity.FISHING_ROD_EN;
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
+					if(getItem) {
+						if(!checkPackInv(atual)) { 
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+								handItem = inventario[index];
+								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -505,14 +530,21 @@ public void checkCollisionLifePack() {
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
-				if(atual instanceof Root) {
-					if(Entity.isColidding(this, atual)) {
-						inventario[index] = "raiz";
-						inv[index] = Entity.RAIZ_EN;
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
+			if(atual instanceof Root) {
+				if(Entity.isColidding(this, atual)) {
+						
+					atual.depth = depthPlayer(atual.getY());
+						
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+//								handItem = inventario[index];
+//								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -538,14 +570,21 @@ public void checkCollisionLifePack() {
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
 			int index = checkPositionGetInv();
-			if(getItem && index >= 0 && index <= inventario.length) {
-				if(atual instanceof Fish) {
-					if(Entity.isColidding(this, atual)) {
-						inventario[index] = "peixe";
-						inv[index] = Entity.FISH_EN;
-						handItem = inventario[index];
-						handIndexItem = index;
-						Game.entities.remove(atual);
+			if(atual instanceof Fish) {
+				if(Entity.isColidding(this, atual)) {
+						
+					atual.depth = depthPlayer(atual.getY());
+						
+					if(getItem) {
+						if(!checkPackInv(atual)) {
+							if (index >= 0 && index <= inventario.length) {
+								inventario[index] = atual;
+								inv[index] = atual.getSprite();
+//								handItem = inventario[index];
+//								handIndexItem = index;
+								Game.entities.remove(atual);
+							}
+						}
 					}
 				}
 			}
@@ -556,9 +595,18 @@ public void checkCollisionLifePack() {
 		
 		int index = checkPositionGetInv();
 		
-		if(index >= 0 && index <= inventario.length) {	
-			inventario[index] =  "peixe";
-			inv[index] = Game.spritesheet.getSprite(16, 192, 16, 16);
+		Fish fish =  new Fish(0, 0, 16, 16, Entity.FISH_EN);
+		fish.tipo = "peixe";
+		
+		if(!checkPackInv(fish)) {
+			if (index >= 0 && index <= inventario.length) {
+				inventario[index] = fish;
+				inv[index] = fish.getSprite();
+//				handItem = inventario[index];
+//				handIndexItem = index;
+			}
+		}else {
+			fish = null;
 		}
 	}
 	
@@ -609,9 +657,15 @@ public void checkCollisionLifePack() {
 				
 			Tile t = World.tiles[i];
 				
-			if(World.isColiddingTile(this, t) && hasHoe && useItem && !(t.en instanceof Ground)){
-				Ground gd = new Ground(t.getX(), t.getY(), 16, 16, Entity.GROUND_EN, t.psTiles, t.xTile, t.yTile);
+			if(World.isColiddingFloorTileToGround(this, t) 
+					&& hasHoe 
+					&& useItem 
+					&& t instanceof FloorTile
+					&& !(t.en instanceof Ground)){
+				Ground gd = new Ground(t.getX(), t.getY(), 16, 16, Entity.GROUND_EN, t.psTiles);
+				gd.tipo = "terreno";
 				gd.show = true;
+				gd.psTiles = t.psTiles;
 				World.tiles[t.psTiles].en = gd;
 				Game.entities.add(gd);
 			}
@@ -629,38 +683,32 @@ public void checkCollisionLifePack() {
 					depthPlayer(atual.getY());
 					
 					if(inventario[handIndexItem] != null) {
-						if(useItem && inventario[handIndexItem].equals("semente de carvalho")) {
+						if(useItem && inventario[handIndexItem] instanceof Seed) {
+							if(inventario[handIndexItem].tipo.equals("semente de carvalho")) {
+								((Ground) atual).tipo = "terreno de carvalho";
+							}else if (inventario[handIndexItem].tipo.equals("semente de pinheiro")) {
+								((Ground) atual).tipo = "terreno de pinheiro";
+							}
+							
 							((Ground) atual).plant = true;
-							((Ground) atual).tipo = "semente de carvalho";
 							inventario[handIndexItem] = null;
 							inv[handIndexItem] = null;
-						} else if(useItem && inventario[handIndexItem].equals("semente de pinheiro")) {
-							((Ground) atual).plant = true;
-							((Ground) atual).tipo = "semente de pinheiro";
-							inventario[handIndexItem] = null;
-							inv[handIndexItem] = null;
+						
 						}
 					}
 				}
 			}
 		}
-		
 	}
 	
 	public boolean checkColisionGroundToTree(Ground gd) {
 		
-		for(int i = 0; i < Game.entities.size(); i++) {
-			Entity atual = Game.entities.get(i);
-			
-			if(atual == gd) {
-				if(Entity.isColidding(this, atual)) {
-					return true;
-				}
-			}
+		if(Entity.isColidding(this, gd)) {
+			return true;
 		}
 		
 		return false;
-		
+
 	}
 	
 	public void checkCollisionStumpTile() {
@@ -691,7 +739,7 @@ public void checkCollisionLifePack() {
 	
 	public int depthPlayer(int yAtual) {
 		
-		if(y > yAtual - 2) { // colocar o player atras da árvore
+		if(y > yAtual - 2) { // colocar o player atras dos objetos e dar noção de profundidade
 			depth = 5;
 			return  1;
 		
@@ -699,6 +747,27 @@ public void checkCollisionLifePack() {
 			depth = 1;
 			return 5;
 		}
+	}
+	
+	//chegar se já existe um pack no inventario do item que estiver pegando
+	public boolean checkPackInv(Entity atual) {
+		
+		if(atual.pack) {
+			for(int i=0; i<inventario.length; i++) {
+				if(inventario[i] != null) {
+					if(atual.id == inventario[i].id &&
+						inventario[i].itensPack.size()<inventario[i].qtPack){
+							inventario[i].itensPack.add(atual);
+//							handItem = inventario[i];
+//							handIndexItem = i;
+							Game.entities.remove(atual);
+							return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	//pega o index do Item que foi clicado no inventario
@@ -743,7 +812,7 @@ public void checkCollisionLifePack() {
 		if(inventario[clickSelectIndexInv] != null && i < 4 && j < 6 && i >= 0 && j >= 0) {
 			
 			//Joga o item para a mochila
-			backpack[i][j] = inventario[clickSelectIndexInv];
+			bagpack[i][j] = inventario[clickSelectIndexInv];
 			bag[i][j] = inv[clickSelectIndexInv];
 			
 			//Se o Item que foi selecionado com o click estiver na mão, retira da mão e do inventario
@@ -768,17 +837,17 @@ public void checkCollisionLifePack() {
 		i = index[0]; // retorna as posições da matriz em um vetor
 		j = index[1];
 		
-		if(backpack[j][i] != null) {
+		if(bagpack[j][i] != null) {
 			
 			int indexInv = checkPositionGetInv();
 			
 			//verifica se o inventario não está cheio e o player estiver com o espaço do inventario selecionado para a mão
 			if((indexInv >= 0 && indexInv < inventario.length)) {
-				inventario[indexInv] = backpack[j][i];
-				handItem = backpack[j][i];
+				inventario[indexInv] = bagpack[j][i];
+				handItem = bagpack[j][i];
 				inv[indexInv] = bag[j][i];
 				handIndexItem = indexInv;
-				backpack[j][i] = null;
+				bagpack[j][i] = null;
 				bag[j][i] = null;
 			}
 		}
@@ -791,13 +860,13 @@ public void checkCollisionLifePack() {
 		
 		for(int i=0; i<4; i++) {
 			for(int j=0; j<6; j++) {
-				if(backpack[i][j] != null && backpack[i][j].equals("isqueiro"))
+				if(bagpack[i][j] != null && bagpack[i][j].tipo.equals("isqueiro"))
 					lighterBug = true;
 			}
 		}
 		
 		for(int i=0;i<5;i++) {
-			if(inventario[i] != null && inventario[i].equals("isqueiro"))
+			if(inventario[i] != null && inventario[i].tipo.equals("isqueiro"))
 				lighterInv = true;
 		}
 		
@@ -839,109 +908,25 @@ public void checkCollisionLifePack() {
 		if(dropItem) {
 			dropItem = false;
 			int hi = handIndexItem; //Estas variaveis locais evitam que os valores sejam alocados nas posiõs erradas do vetor
-			String h = handItem;    //após o processamento o checkScrollItem, no qual modifica o atributo handIndexItem do Player
 			
 			if(handItem != null){
 				checkScrollItem(hi); // Método que modificará os atributos do Player
-				if(inventario[hi] == "gun" && h == "gun") {
+				if(inventario[hi] != null) {
+					
+					//largar o objeto no chão
+					inventario[hi].setX(x);
+					inventario[hi].setY(y);
+					inventario[hi].show =  true;
+					Game.entities.add(inventario[hi]);	
+					World.tiles[inventario[hi].xTile + (inventario[hi].yTile*World.WIDTH)].en = inventario[hi];
+					
+					//retira do inventario e da mão do player
 					inventario[hi] = null;
 					inv[hi] = null;
-					Wapon wapon = new Wapon(Game.player.getX(),Game.player.getY(), 16, 16, Entity.WEAPON_EN);
-					Game.entities.add(wapon);	
-					wapon.show =  true;
+					handIndexItem = hi;
+					handItem = inventario[hi];
 					Sound.Clips.dropItem.play();
-					
-//					int ps =(int)x+(int)(y*World.WIDTH); 
-//					if(World.tiles[ps].show)	
-					
-				}else if(inventario[hi] == "lifePack" && h  == "lifePack") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					LifePack lifePack = new LifePack(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIFE_PACK_EN);
-					Game.entities.add(lifePack);
-					lifePack.show = true;
-					Sound.Clips.dropItem.play();
-					
-				}else if(inventario[hi] == "machado" && h  == "machado") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Axe axe = new Axe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.AXE_EN);
-					Game.entities.add(axe);
-					axe.show =  true;
-					Sound.Clips.dropItem.play();
-					
-				}else if(inventario[hi] == "lenha de carvalho" && h  == "lenha de carvalho") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Firewood fireWood = new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_CARVALHO_EN);
-					Game.entities.add(fireWood);
-					fireWood.show = true;
-					fireWood.tipo = "lenha de carvalho";
-					Sound.Clips.dropItem.play();
-					
-				}else if(inventario[hi] == "lenha de pinheiro" && h  == "lenha de pinheiro") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Firewood fireWood = new Firewood(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FIREWOOD_PINHEIRO_EN);
-					Game.entities.add(fireWood);
-					fireWood.tipo = "lenha de pinheiro";
-					fireWood.show = true;
-						
-				}else if(inventario[hi] == "fósforo" && h  == "fósforo") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Lighter lighter = new Lighter(Game.player.getX(),Game.player.getY(), 16, 16, Entity.LIGHTER_EN);
-					Game.entities.add(lighter);
-					lighter.show =  true;
-					useLighter = false;
-					
-				}else if(inventario[hi] == "vara de pesca" && h  == "vara de pesca") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					FishingRod fr = new FishingRod(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FISHING_ROD_EN);
-					Game.entities.add(fr);
-					fr.show =  true;
-					hasFishingRod = false;
-					
-				}else if(inventario[hi] == "peixe" && h  == "peixe") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Fish fish = new Fish(Game.player.getX(),Game.player.getY(), 16, 16, Entity.FISH_EN);
-					Game.entities.add(fish);
-					fish.show =  true;
-					
-				}else if(inventario[hi] == "semente de carvalho" && h  == "semente de carvalho") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Seed sd1 = new Seed(Game.player.getX(),Game.player.getY(), 16, 16, Entity.SEED_CARVALHO_EN);
-					sd1.tipo = "semente de carvalho";
-					Game.entities.add(sd1);
-					sd1.show =  true;
-					
-				}else if(inventario[hi] == "semente de pinheiro" && h  == "semente de pinheiro") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Seed sd1 = new Seed(Game.player.getX(),Game.player.getY(), 16, 16, Entity.SEED_PINHEIRO_EN);
-					sd1.tipo = "semente de pinheiro";
-					Game.entities.add(sd1);
-					sd1.show =  true;
-					
-				}else if(inventario[hi] == "enxada" && h  == "enxada") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Hoe hoe = new Hoe(Game.player.getX(),Game.player.getY(), 16, 16, Entity.HOE_EN);
-					Game.entities.add(hoe);
-					hoe.show =  true;
-					
-				}else if(inventario[hi] == "raiz" && h  == "raiz") {
-					inventario[hi] = null;
-					inv[hi] = null;
-					Root root = new Root(Game.player.getX(),Game.player.getY(), 16, 16, Entity.RAIZ_EN);
-					Game.entities.add(root);
-					root.show =  true;
 				}
-				
-				Sound.Clips.dropItem.play();
 			}
 		}
 	}
@@ -960,7 +945,7 @@ public void checkCollisionLifePack() {
 		
 			if(inventario[index] != null) {
 				handItem = inventario[index];
-				this.handIndexItem = index;
+				handIndexItem = index;
 			}
 		
 		}else {
@@ -975,7 +960,7 @@ public void checkCollisionLifePack() {
 				this.handIndexItem = index;
 			}else {
 				handItem = null;
-				this.handIndexItem = 0;
+				handIndexItem = 0;
 			}
 		}
 	}
@@ -985,31 +970,31 @@ public void checkCollisionLifePack() {
 		if(useItem) {
 			
 			int hi = handIndexItem;
-			String h = handItem;
+			Entity h = handItem;
 			useItem = false;
 				
-			if(inventario[hi] == "lifePack" && h == "lifePack") {
+			if(inventario[hi] instanceof LifePack && h instanceof LifePack) {
 				useLifePack(hi);
 					
 			}else {
 						
-				while (handItem == "lifePack") {
+				while (handItem instanceof LifePack) {
 					checkScrollItem(handIndexItem);
 				}
 						
 				hi = handIndexItem;
 				h = handItem;
 						
-				if(inventario[hi] == "lifePack" && h == "lifePack") {
+				if(inventario[hi] instanceof LifePack && h instanceof LifePack) {
 					useLifePack(hi);
 				}
 						
 			}
 			
-			if(inventario[hi] == "fósforo" && h == "fósforo" && !useLighter && (Game.hour >= 18 || (Game.hour <= 7 && Game.hour >=0))) {
+			if(inventario[hi] instanceof Lighter && h instanceof Lighter  && !useLighter && (Game.hour >= 18 || (Game.hour <= 7 && Game.hour >=0))) {
 				useLighter = true;
 				Sound.Clips.lighter.play();
-			}else  if(inventario[hi] == "fósforo" && useLighter){
+			}else  if(inventario[hi] instanceof Lighter  && useLighter){
 				useLighter = false;
 			}
 			
@@ -1065,25 +1050,25 @@ public void checkCollisionLifePack() {
 	
 	public void checkHasItem() {
 		
-		if(handItem == "gun" && inventario[handIndexItem] == "gun") {
+		if(handItem instanceof Wapon && inventario[handIndexItem] instanceof Wapon) {
 			hasGun = true;
 		}else {
 			hasGun = false;
 		}
 		
-		if(handItem == "machado" && inventario[handIndexItem] == "machado") {
+		if(handItem instanceof Axe && inventario[handIndexItem] instanceof Axe) {
 			hasAxe = true;
 		}else {
 			hasAxe = false;
 		}
 		
-		if(handItem == "vara de pesca" && inventario[handIndexItem] == "vara de pesca") {
+		if(handItem instanceof FishingRod && inventario[handIndexItem] instanceof FishingRod) {
 			hasFishingRod = true;
 		}else {
 			hasFishingRod = false;
 		}
 		
-		if(handItem == "enxada" && inventario[handIndexItem] == "enxada") {
+		if(handItem instanceof Hoe && inventario[handIndexItem] instanceof Hoe) {
 			hasHoe = true;
 		}else {
 			hasHoe = false;
@@ -1203,7 +1188,7 @@ public void checkCollisionLifePack() {
 		
 		depth = 5;
 		
-		revealMap();
+//		revealMap();
 		
 		checkCollisionLifePack();
 		checkCollisionAmmo();
@@ -1213,7 +1198,7 @@ public void checkCollisionLifePack() {
 		checkCollisionDoor();
 		checkKillEnemy();
 		checkCollisionFish();
-		checkCollisionSeedCarvalho();
+		checkCollisionSeed();
 		checkCollisionHoe();
 		checkColisionGround();
 		createGround();

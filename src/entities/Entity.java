@@ -3,6 +3,7 @@ package entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import main.Game;
@@ -22,8 +23,10 @@ public class Entity {
 	
 	public int id;
 	
+	public String tipo;
 	public boolean pack;
-	public int qtPack = 64;
+	public int qtPack;
+	public ArrayList<Entity> itensPack = new ArrayList<>();
 	
 	public int psTiles, xTile, yTile;
 	public boolean show;
@@ -109,11 +112,13 @@ public class Entity {
 		Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskx, e1.getY() + e1.masky, e1.mwidth, e1.mheigth);
 		Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskx, e2.getY() + e2.masky, e2.mwidth, e2.mheigth);
 		
-		if(e1Mask.intersects(e2Mask) && e1.z == e2.z) {
-			return true;
-		}else {
-			return false;	
-		}
+		return e1Mask.intersects(e2Mask);
+		
+//		if(e1Mask.intersects(e2Mask) && e1.z == e2.z) {
+//			return true;
+//		}else {
+//			return false;	
+//		}
 		
 	}
 	
@@ -155,7 +160,8 @@ public class Entity {
 	
 	public void render(Graphics g) {
 		
-		g.drawImage(sprite ,this.getX() - Camera.x, this.getY() - Camera.y , null);
+//		if(show)
+			g.drawImage(sprite ,this.getX() - Camera.x, this.getY() - Camera.y , null);
 		
 //		g.setColor(Color.red);
 //		g.fillRect(this.getX() + maskx - Camera.x, this.getY() + masky - Camera.y, maskw, maskh);

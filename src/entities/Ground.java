@@ -17,11 +17,9 @@ public class Ground extends Entity{
 	public int cont;
 	public String tipo;
 
-	public Ground(double x, double y, int width, int height, BufferedImage sprite, int ps, int xTile, int yTile) {
+	public Ground(double x, double y, int width, int height, BufferedImage sprite, int ps) {
 		super(x, y, width, height, sprite);
 		this.psTiles = ps;
-		this.xTile = xTile;
-		this.yTile = yTile;
 		depth = 0;
 	}
 	
@@ -42,16 +40,18 @@ public class Ground extends Entity{
 				
 				Tree tr = null;
 				
-				if(tipo.equals("semente de carvalho")) {
-					 tr = new Tree(this.x, this.y, 16, 16, Entity.CARVALHO_EN, psTiles, this.xTile, this.yTile);
-				}else if (tipo.equals("semente de pinheiro")){
-					tr = new Tree(this.x, this.y, 16, 16, Entity.PINHEIRO_EN, psTiles, this.xTile, this.yTile);
+				if(tipo.equals("terreno de carvalho")) {
+					 tr = new Oak(this.x, this.y, 16, 16, Entity.CARVALHO_EN);
+					 tr.tipo = "carvalho";
+				}else if (tipo.equals("terreno de pinheiro")){
+					tr = new Pine(this.x, this.y, 16, 16, Entity.PINHEIRO_EN);
+					tr.tipo = "pinheiro";
 				}
 				
 				Game.entities.add(tr);
 				tr.show = true;
+				tr.psTiles = psTiles;
 				World.tiles[psTiles].en = tr;
-				
 				plant = false;
 				Game.entities.remove(this);
 				
@@ -71,13 +71,10 @@ public class Ground extends Entity{
 		}
 		
 		if(life == 0) {
-			
 			World.tiles[psTiles] = new FloorTile((int)x, (int)y, Tile.TILE_FLOOR);
 			World.tiles[psTiles].show = true;
 			Game.entities.remove(this);
-			
 		}
-
 		
 	}
 	

@@ -3,15 +3,12 @@ package entities;
 import java.awt.image.BufferedImage;
 
 public class Firewood extends Entity{
-
-	public String tipo;
 	
 	public Firewood(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
 		
 		pack = true;
-		qtPack = 64;
-		id = 1;
+		qtPack = 5;
 		
 	}
 

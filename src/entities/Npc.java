@@ -20,7 +20,7 @@ public class Npc extends Entity{
 	
 	public Npc(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
-		this.depth = 1;
+		this.depth = 7;
 		frases[0] = "Você irá morrer fazendeiro!";
 		
 	}

@@ -21,6 +21,8 @@ import entities.Lighter;
 import entities.Oak;
 import entities.Particle;
 import entities.Pine;
+import entities.Player;
+import entities.Stump;
 import entities.Tree;
 import entities.Wapon;
 import graficos.Spritsheet;
@@ -47,22 +49,14 @@ public class World {
 					int pixelAtual = pixels[xx + (yy*map.getWidth())];
 					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 					tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
-					tiles[xx + (yy*WIDTH)].xTile = xx;
-					tiles[xx + (yy*WIDTH)].yTile = yy;
-					
 					
 					if(pixelAtual == 0xFF000000) { //chão
 						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
-						tiles[xx + (yy*WIDTH)].xTile = xx;
-						tiles[xx + (yy*WIDTH)].yTile = yy;
-						
 						
 					}else if(pixelAtual == 0xFFFFFFFF) { //Parede
 						tiles[xx + (yy*WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
 						tiles[xx + (yy*WIDTH)].psTiles = xx + (yy*WIDTH);
-						tiles[xx + (yy*WIDTH)].xTile = xx;
-						tiles[xx + (yy*WIDTH)].yTile = yy;
 						
 					}else if(pixelAtual == 0xFF0000FF) { //Player
 						Game.player.setX(xx*16);
@@ -79,16 +73,19 @@ public class World {
 						
 					}else if(pixelAtual == 0xFFFF6A00) { //Arma
 						Wapon wapon = new Wapon(xx*16, yy*16, 16, 16, Entity.WEAPON_EN);
+						wapon.tipo = "gun";
 						Game.entities.add(wapon);
 						wapon.psTiles = xx + (yy*WIDTH);
 						
 					}else if(pixelAtual == 0xFF00FF00) { //Cura
 						LifePack lifePack = new LifePack(xx*16, yy*16, 16, 16, Entity.LIFE_PACK_EN);
+						lifePack.tipo = "lifepack";
 						Game.entities.add(lifePack);
 						lifePack.psTiles = xx + (yy*WIDTH);
 		
 					}else if(pixelAtual == 0xFFFFFF00) { //Munição
 						Bullet bullet = new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN);
+						bullet.tipo = "bullet";
 						Game.entities.add(bullet);
 						bullet.psTiles = xx + (yy*WIDTH);
 		
@@ -104,27 +101,25 @@ public class World {
 						
 						//método para randomizar a instancia de arvores
 						
+						Tree tree = null;
+						
 						if(Game.rand.nextInt(11) <=5) {
-							Tree tree = new Oak(xx*16, yy*16, 16, 16, Entity.CARVALHO_EN);
-							Game.entities.add(tree);
-							tiles[xx + (yy*WIDTH)].en = tree;
-							tree.psTiles = xx + (yy*WIDTH);
-							tree.xTile = xx;
-							tree.yTile = yy;
+							 tree = new Oak(xx*16, yy*16, 16, 16, Entity.CARVALHO_EN);
 						}else {
-							Tree tree = new Pine(xx*16, yy*16, 16, 16, Entity.PINHEIRO_EN);
-							Game.entities.add(tree);
-							tiles[xx + (yy*WIDTH)].en = tree;
-							tree.psTiles = xx + (yy*WIDTH);
-							tree.xTile = xx;
-							tree.yTile = yy;
+							tree = new Pine(xx*16, yy*16, 16, 16, Entity.PINHEIRO_EN);
 						}
 						
-					
+						Game.entities.add(tree);
+						tiles[xx + (yy*WIDTH)].en = tree;
+						tree.psTiles = xx + (yy*WIDTH);
+						tree.xTile = xx;
+						tree.yTile = yy;
+						
 					}
 					
 					else if(pixelAtual == 0xFF7F3300) { // Machado
 						Axe axe = new Axe(xx*16, yy*16, 16, 16, Entity.AXE_EN);
+						axe.tipo = "machado";
 						Game.entities.add(axe);
 						axe.psTiles = xx + (yy*WIDTH);
 						tiles[xx + (yy*WIDTH)].en = axe;
@@ -141,6 +136,7 @@ public class World {
 						
 					}else if(pixelAtual == 0xFF808080) { //Isqueiro
 						Lighter lighter = new Lighter(xx*16, yy*16, 16, 16, Entity.LIGHTER_EN);
+						lighter.tipo = "isqueiro";
 						Game.entities.add(lighter);
 						lighter.psTiles = xx + (yy*WIDTH);
 						tiles[xx + (yy*WIDTH)].en = lighter;
@@ -154,6 +150,7 @@ public class World {
 						
 					}else if (pixelAtual == 0xFF5B7F00) {//Vara de pesca
 						FishingRod fr = new FishingRod(xx*16, yy*16, 16, 16, Entity.FISHING_ROD_EN);
+						fr.tipo = "vara de pesca";
 						Game.entities.add(fr);
 						fr.psTiles = xx + (yy*WIDTH);
 						tiles[xx + (yy*WIDTH)].en = fr;
@@ -161,6 +158,7 @@ public class World {
 						
 					}else if (pixelAtual == 0xFF808042) {//Enxada
 						Hoe hoe = new Hoe(xx*16, yy*16, 16, 16, Entity.HOE_EN);
+						hoe.tipo = "enxada";
 						Game.entities.add(hoe);
 						hoe.psTiles = xx + (yy*WIDTH);
 						tiles[xx + (yy*WIDTH)].en = hoe;
@@ -233,18 +231,29 @@ public class World {
 		for(int xx = 0; xx< WIDTH; xx++) {
 			for(int yy = 0; yy < HEIGHT; yy++) {
 				
-				if(!tiles[xx + (yy*WIDTH)].show)
-					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x000000;
-				else {
+//				if(!tiles[xx + (yy*WIDTH)].show)
+//					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x000000;
+//				else {
 					Game.minimapaPixels[xx + (yy*WIDTH)] = 0xEFD551;
-				}
+//				}
 				
-				if(tiles[xx + (yy*WIDTH)] instanceof WallTile && tiles[xx + (yy*WIDTH)].show) {
+				if(tiles[xx + (yy*WIDTH)] instanceof WallTile) { //&& tiles[xx + (yy*WIDTH)].show) {
 					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x87782D;
 				}
 				
-				if(tiles[xx + (yy*WIDTH)] instanceof WaterTile && tiles[xx + (yy*WIDTH)].show) {
+				if(tiles[xx + (yy*WIDTH)] instanceof WaterTile) { //&& tiles[xx + (yy*WIDTH)].show) {
 					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x0094FF;
+				}
+				
+				if(tiles[xx + (yy*WIDTH)].en instanceof Tree) {//&& tiles[xx + (yy*WIDTH)].show) {	
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0x00FF21;
+				}
+				
+				if(!(tiles[xx + (yy*WIDTH)].en instanceof Tree) &&
+						!(tiles[xx + (yy*WIDTH)].en instanceof Player) &&
+						tiles[xx + (yy*WIDTH)].en != null){ //&& 
+						//tiles[xx + (yy*WIDTH)].show) {
+					Game.minimapaPixels[xx + (yy*WIDTH)] = 0xFF0000;
 				}
 				
 				for(int i=0; i < Game.enemies.size(); i++) {
@@ -270,7 +279,7 @@ public class World {
 		
 		int xPlayer = Game.player.getX()/16;
 		int yPlayer = Game.player.getY()/16;
-		Game.minimapaPixels[xPlayer + (yPlayer*WIDTH)] = 0x00C2FF;
+		Game.minimapaPixels[xPlayer + (yPlayer*WIDTH)] = 0x000000;
 		
 //		for(int i = 0; i < Game.enemies.size(); i++) {
 //			Game.minimapaPixels[(Game.enemies.get(i).getX()/16) + ((Game.enemies.get(i).getY()/16)*WIDTH)] = 0xFF0000;
@@ -350,13 +359,14 @@ public class World {
 				
 	}
 	
-	public static boolean isColiddingTile(Entity e, Tile t ) {
+	public static boolean isColiddingFloorTileToGround(Entity e, Tile t ) {
 		
 		Rectangle e1Mask = new Rectangle(e.getX(), e.getY() , 16, 16);
 		Rectangle e2Mask = new Rectangle(t.getX() , t.getY() , 16,16);
 		
 		if(t instanceof FloorTile &&
 				!(t.en instanceof Tree) &&
+				!(t.en instanceof Stump) &&
 				e1Mask.intersects(e2Mask) &&
 				e.getX() >= (t.getX()-1) &&
 				e.getY() >= (t.getY())-1) {

@@ -9,7 +9,7 @@ public class Fish extends Entity {
 		
 		pack = true;
 		qtPack = 64;
-		id = 2;
+		id = 3;
 
 	}
 

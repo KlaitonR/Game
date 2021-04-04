@@ -50,14 +50,15 @@ public class UI {
 	}
 	
 	private void invSystem(Graphics g) {
+		
 		if(Game.player.handItem != null) {
 			g.setFont(newfont);
 			g.setColor(Color.white);
 			//Ajudar a centralizar o texto
-			if(Game.player.handItem.length() > 5)
-				g.drawString(Game.player.handItem, 105, 132);
+			if(Game.player.handItem.tipo.length() > 5)
+				g.drawString(Game.player.handItem.tipo, 105, 132);
 			else
-				g.drawString(Game.player.handItem, 115, 132);
+				g.drawString(Game.player.handItem.tipo, 115, 132);
 		}
 				
 		Graphics2D g2 = (Graphics2D) g;
@@ -82,6 +83,14 @@ public class UI {
 		for(int i=0; i < Game.player.inv.length; i++) {
 					
 			g.drawImage(Game.player.inv[i], 52 + (i*30), 137, null);
+			
+			if(Game.player.inv[i] != null &&
+				Game.player.inventario[i] != null &&
+				Game.player.inventario[i].itensPack.size()+1 > 1 ){
+					g.setFont(new Font("arial", Font.BOLD, 9));
+					g.setColor(Color.white);
+					g.drawString(Game.player.inventario[i].itensPack.size()+1 + "", 48 + (i*30), 152);
+			}
 					
 			if(Game.player.handIndexItem == i) { //Indica qual item está na mão do Player
 				g2.setColor(new Color(255,255,255,150));
@@ -200,10 +209,17 @@ public class UI {
 		//Apenas renderizando oque foi colocado no buffer do inventario
 		for(int j=0; j < 6; j++) {
 			for(int i=0; i < 4; i++) {
-					g.drawImage(Game.player.bag[i][j], 80 + (i*25), 12 + (j*20), null);
+				g.drawImage(Game.player.bag[i][j], 82 + (i*25), 12 + (j*20), null);
+				
+				if(Game.player.bag[i][j] != null &&
+					Game.player.bagpack[i][j] != null &&
+					Game.player.bagpack[i][j].itensPack.size()+1 > 1 ){
+						g.setFont(new Font("arial", Font.BOLD, 9));
+						g.setColor(Color.white);
+						g.drawString(Game.player.bagpack[i][j].itensPack.size()+1 + "", 78 + (i*25), 27 + (j*20));
 				}
 			}
-		
+		}
 	}
 	
 	
