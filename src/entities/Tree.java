@@ -39,13 +39,13 @@ public class Tree extends Entity{
 		sp.psTiles = psTiles;
 		
 		//sementes
-		Seed sd1 = new Seed(this.x - 6, this.y - 3, 16, 16, seed);
-		Game.entities.add(sd1);
-		sd1.show = true;
-		
-		Seed sd2 = new Seed(this.x + 5, this.y + 5, 16, 16, seed);
-		Game.entities.add(sd2);
-		sd2.show = true;
+//		Seed sd1 = new Seed(this.x - 6, this.y - 3, 16, 16, seed);
+//		Game.entities.add(sd1);
+//		sd1.show = true;
+//		
+//		Seed sd2 = new Seed(this.x + 5, this.y + 5, 16, 16, seed);
+//		Game.entities.add(sd2);
+//		sd2.show = true;
 		
 		if(this instanceof Oak) {
 			fireWood1.tipo = "lenha de carvalho";
@@ -54,10 +54,10 @@ public class Tree extends Entity{
 			fireWood2.id = 1;
 			fireWood3.tipo = "lenha de carvalho";
 			fireWood3.id = 1;
-			sd1.tipo = "semente de carvalho";
-			sd1.id = 10;
-			sd2.tipo = "semente de carvalho";
-			sd2.id = 10;
+//			sd1.tipo = "semente de carvalho";
+//			sd1.id = 10;
+//			sd2.tipo = "semente de carvalho";
+//			sd2.id = 10;
 		}else if (this instanceof Pine) {
 			fireWood1.tipo = "lenha de pinheiro";
 			fireWood1.id = 11;
@@ -65,10 +65,10 @@ public class Tree extends Entity{
 			fireWood2.id = 11;
 			fireWood3.tipo = "lenha de pinheiro";
 			fireWood3.id = 11;
-			sd1.tipo = "semente de pinheiro";
-			sd1.id = 12;
-			sd2.tipo = "semente de pinheiro";
-			sd2.id = 12;
+//			sd1.tipo = "semente de pinheiro";
+//			sd1.id = 12;
+//			sd2.tipo = "semente de pinheiro";
+//			sd2.id = 12;
 		}
 		
 		World.tiles[psTiles].en = null;

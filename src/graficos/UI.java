@@ -20,8 +20,8 @@ public class UI {
 	public UI(Spritsheet spritButton) {
 		
 		button = new BufferedImage[2];
-		button[0] = Game.spritButton.getSprite(0, 0, 5, 5);
-		button[1] = Game.spritButton.getSprite(0, 5, 5, 5);
+		button[0] = Game.spriteButton.getSprite(0, 0, 5, 5);
+		button[1] = Game.spriteButton.getSprite(0, 5, 5, 5);
 		
 		try {
 			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(14f);
@@ -55,10 +55,17 @@ public class UI {
 			g.setFont(newfont);
 			g.setColor(Color.white);
 			//Ajudar a centralizar o texto
-			if(Game.player.handItem.tipo.length() > 5)
-				g.drawString(Game.player.handItem.tipo, 105, 132);
-			else
+			if(Game.player.handItem.tipo.length() < 5)
 				g.drawString(Game.player.handItem.tipo, 115, 132);
+			else if (Game.player.handItem.tipo.length() >= 5 &&
+			Game.player.handItem.tipo.length() < 10) {
+				g.drawString(Game.player.handItem.tipo, 105, 132);
+			}else if (Game.player.handItem.tipo.length() >= 10 &&
+					Game.player.handItem.tipo.length() < 15) {	
+				g.drawString(Game.player.handItem.tipo, 95, 132);
+			}else if(Game.player.handItem.tipo.length() >= 15) {
+				g.drawString(Game.player.handItem.tipo, 85, 132);
+			}
 		}
 				
 		Graphics2D g2 = (Graphics2D) g;
@@ -89,7 +96,7 @@ public class UI {
 				Game.player.inventario[i].itensPack.size()+1 > 1 ){
 					g.setFont(new Font("arial", Font.BOLD, 9));
 					g.setColor(Color.white);
-					g.drawString(Game.player.inventario[i].itensPack.size()+1 + "", 48 + (i*30), 152);
+					g.drawString((Game.player.inventario[i].itensPack.size() + 1) + "", 48 + (i*30), 152);
 			}
 					
 			if(Game.player.handIndexItem == i) { //Indica qual item está na mão do Player
@@ -216,12 +223,11 @@ public class UI {
 					Game.player.bagpack[i][j].itensPack.size()+1 > 1 ){
 						g.setFont(new Font("arial", Font.BOLD, 9));
 						g.setColor(Color.white);
-						g.drawString(Game.player.bagpack[i][j].itensPack.size()+1 + "", 78 + (i*25), 27 + (j*20));
+						g.drawString((Game.player.bagpack[i][j].itensPack.size() + 1) + "", 78 + (i*25), 27 + (j*20));
 				}
 			}
 		}
 	}
-	
 	
 	public void render(Graphics g) {
 

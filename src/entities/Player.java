@@ -199,78 +199,77 @@ public class Player extends Entity{
 		downPlayerDamageWithHoe = new BufferedImage[4];
 		
 		for(int i = 0; i<4; i++) {
-			rightPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 0, 16, 16);
-			leftPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 16, 16, 16);
-			upPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 32, 16, 16);
-			downPlayer[i] = Game.spritesheet.getSprite(32 + (i*16), 48, 16, 16);
+			rightPlayer[i] = Game.spritePlayer.getSprite(0 + (i*16), 0, 16, 16);
+			leftPlayer[i] = Game.spritePlayer.getSprite(0 + (i*16), 16, 16, 16);
+			upPlayer[i] = Game.spritePlayer.getSprite(0 + (i*16), 32, 16, 16);
+			downPlayer[i] = Game.spritePlayer.getSprite(0 + (i*16), 48, 16, 16);
 			
-			rightPlayerDamage[i] = Game.spritesheet.getSprite(32 + (i*16), 64, 16, 16);
-			leftPlayerDamage[i] = Game.spritesheet.getSprite(32 + (i*16), 80, 16, 16);
-			upPlayerDamage[i] = Game.spritesheet.getSprite(32 + (i*16), 96, 16, 16);
-			downPlayerDamage[i] = Game.spritesheet.getSprite(32 + (i*16), 112, 16, 16);
+			rightPlayerDamage[i] = Game.spritePlayer.getSprite(0 + (i*16), 64, 16, 16);
+			leftPlayerDamage[i] = Game.spritePlayer.getSprite(0 + (i*16), 80, 16, 16);
+			upPlayerDamage[i] = Game.spritePlayer.getSprite(0 + (i*16), 96, 16, 16);
+			downPlayerDamage[i] = Game.spritePlayer.getSprite(0 + (i*16), 112, 16, 16);
 			
-			rightPlayerWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 128, 16, 16);
-			leftPlayerWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 144, 16, 16);
-			upPlayerWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 160, 16, 16);
-			downPlayerWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 176, 16, 16);
+			rightPlayerWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 128, 16, 16);
+			leftPlayerWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 144, 16, 16);
+			upPlayerWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 160, 16, 16);
+			downPlayerWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 176, 16, 16);
 			
-			rightPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 192, 16, 16);
-			leftPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 208, 16, 16);
-			upPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 224, 16, 16);
-			downPlayerDamageWithGun[i] = Game.spritesheet.getSprite(32 + (i*16), 240, 16, 16);
+			rightPlayerDamageWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 192, 16, 16);
+			leftPlayerDamageWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 208, 16, 16);
+			upPlayerDamageWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 224, 16, 16);
+			downPlayerDamageWithGun[i] = Game.spritePlayer.getSprite(0 + (i*16), 240, 16, 16);
 			
-			rightPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 0, 16, 16);
-			leftPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 16, 16, 16);
-			upPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 32, 16, 16);
-			downPlayerWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 48, 16, 16);
+			rightPlayerWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 0, 16, 16);
+			leftPlayerWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 16, 16, 16);
+			upPlayerWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 32, 16, 16);
+			downPlayerWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 48, 16, 16);
 			
-			rightPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 64, 16, 16);
-			leftPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 80, 16, 16);
-			upPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 96, 16, 16);
-			downPlayerDamageWithAxe[i] = Game.spritesheet.getSprite(160 + (i*16), 112, 16, 16);
+			rightPlayerDamageWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 64, 16, 16);
+			leftPlayerDamageWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 80, 16, 16);
+			upPlayerDamageWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 96, 16, 16);
+			downPlayerDamageWithAxe[i] = Game.spritePlayer.getSprite(64 + (i*16), 112, 16, 16);
 			
-			rightPlayerWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 128, 16, 16);
-			leftPlayerWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 144, 16, 16);
-			upPlayerWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 160, 16, 16);
-			downPlayerWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 176, 16, 16);
+			rightPlayerWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 128, 16, 16);
+			leftPlayerWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 144, 16, 16);
+			upPlayerWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 160, 16, 16);
+			downPlayerWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 176, 16, 16);
 			
-			rightPlayerDamageWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 192, 16, 16);
-			leftPlayerDamageWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 208, 16, 16);
-			upPlayerDamageWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 224, 16, 16);
-			downPlayerDamageWithFishingRod[i] = Game.spritesheet.getSprite(160 + (i*16), 240, 16, 16);
+			rightPlayerDamageWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 192, 16, 16);
+			leftPlayerDamageWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 208, 16, 16);
+			upPlayerDamageWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 224, 16, 16);
+			downPlayerDamageWithFishingRod[i] = Game.spritePlayer.getSprite(64 + (i*16), 240, 16, 16);
+		
+			rightPlayerWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 0, 16, 16);
+			leftPlayerWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 16, 16, 16);
+			upPlayerWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 32, 16, 16);
+			downPlayerWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 48, 16, 16);
 			
-			//
-			rightPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 32, 16, 16);
-			leftPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 48, 16, 16);
-			upPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 64, 16, 16);
-			downPlayerWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 80, 16, 16);
-			
-			rightPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 96, 16, 16);
-			leftPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 112, 16, 16);
-			upPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 128, 16, 16);
-			downPlayerDamageWithHoe[i] = Game.spritesheet.getSprite(240 + (i*16), 144, 16, 16);
+			rightPlayerDamageWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 64, 16, 16);
+			leftPlayerDamageWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 80, 16, 16);
+			upPlayerDamageWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 96, 16, 16);
+			downPlayerDamageWithHoe[i] = Game.spritePlayer.getSprite(128 + (i*16), 112, 16, 16);
 			
 		}
 		
-		rightPlayerJumping = Game.spritesheet.getSprite(96, 128, 16, 16);
-		leftPlayerJumping  = Game.spritesheet.getSprite(112, 128, 16, 16);
-		upPlayerJumping = Game.spritesheet.getSprite(128, 128, 16, 16);
-		downPlayerJumping = Game.spritesheet.getSprite(144, 128, 16, 16);
+		rightPlayerJumping = Game.spritePlayer.getSprite(0, 256, 16, 16);
+		leftPlayerJumping  = Game.spritePlayer.getSprite(16, 256, 16, 16);
+		upPlayerJumping = Game.spritePlayer.getSprite(32, 256, 16, 16);
+		downPlayerJumping = Game.spritePlayer.getSprite(48, 256, 16, 16);
 		
-		rightPlayerDamageJumping = Game.spritesheet.getSprite(96, 144, 16, 16);
-		leftPlayerDamageJumping  = Game.spritesheet.getSprite(112, 144, 16, 16);
-		upPlayerDamageJumping = Game.spritesheet.getSprite(128, 144, 16, 16);
-		downPlayerDamageJumping = Game.spritesheet.getSprite(144, 144, 16, 16);
+		rightPlayerDamageJumping = Game.spritePlayer.getSprite(0, 272, 16, 16);
+		leftPlayerDamageJumping  = Game.spritePlayer.getSprite(16, 272, 16, 16);
+		upPlayerDamageJumping = Game.spritePlayer.getSprite(32, 272, 16, 16);
+		downPlayerDamageJumping = Game.spritePlayer.getSprite(48, 272, 16, 16);
 		
-		rightPlayerGunJumping = Game.spritesheet.getSprite(48, 128, 16, 16);
-		leftPlayerGunJumping  = Game.spritesheet.getSprite(48,  144, 16, 16);
-		upPlayerGunJumping = Game.spritesheet.getSprite(48,  160, 16, 16);
-		downPlayerGunJumping = Game.spritesheet.getSprite(48, 176, 16, 16);
+		rightPlayerGunJumping = Game.spritePlayer.getSprite(48, 128, 16, 16);
+		leftPlayerGunJumping  = Game.spritePlayer.getSprite(48,  144, 16, 16);
+		upPlayerGunJumping = Game.spritePlayer.getSprite(48,  160, 16, 16);
+		downPlayerGunJumping = Game.spritePlayer.getSprite(48, 176, 16, 16);
 		
-		rightPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 192, 16, 16);
-		leftPlayerGunDamageJumping  = Game.spritesheet.getSprite(48, 208, 16, 16);
-		upPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 224, 16, 16);
-		downPlayerGunDamageJumping = Game.spritesheet.getSprite(48, 240, 16, 16);
+		rightPlayerGunDamageJumping = Game.spritePlayer.getSprite(48, 192, 16, 16);
+		leftPlayerGunDamageJumping  = Game.spritePlayer.getSprite(48, 208, 16, 16);
+		upPlayerGunDamageJumping = Game.spritePlayer.getSprite(48, 224, 16, 16);
+		downPlayerGunDamageJumping = Game.spritePlayer.getSprite(48, 240, 16, 16);
 		
 		inventario = new Entity[5];
 		bagpack = new Entity[4][6];
@@ -294,8 +293,8 @@ public class Player extends Entity{
 							if (index >= 0 && index <= inventario.length) {
 								inventario[index] = atual;
 								inv[index] = atual.getSprite();
-//								handItem = inventario[index];
-//								handIndexItem = index;
+								handItem = inventario[index];
+								handIndexItem = index;
 								Game.entities.remove(atual);
 							}
 						}
@@ -417,8 +416,8 @@ public class Player extends Entity{
 							if (index >= 0 && index <= inventario.length) {
 								inventario[index] = atual;
 								inv[index] = atual.getSprite();
-//								handItem = inventario[index];
-//								handIndexItem = index;
+								handItem = inventario[index];
+								handIndexItem = index;
 								Game.entities.remove(atual);
 							}
 						}
@@ -462,8 +461,8 @@ public class Player extends Entity{
 							if (index >= 0 && index <= inventario.length) {
 								inventario[index] = atual;
 								inv[index] = atual.getSprite();
-//								handItem = inventario[index];
-//								handIndexItem = index;
+								handItem = inventario[index];
+								handIndexItem = index;
 								Game.entities.remove(atual);
 							}
 						}
@@ -540,8 +539,8 @@ public class Player extends Entity{
 							if (index >= 0 && index <= inventario.length) {
 								inventario[index] = atual;
 								inv[index] = atual.getSprite();
-//								handItem = inventario[index];
-//								handIndexItem = index;
+								handItem = inventario[index];
+								handIndexItem = index;
 								Game.entities.remove(atual);
 							}
 						}
@@ -580,8 +579,8 @@ public class Player extends Entity{
 							if (index >= 0 && index <= inventario.length) {
 								inventario[index] = atual;
 								inv[index] = atual.getSprite();
-//								handItem = inventario[index];
-//								handIndexItem = index;
+								handItem = inventario[index];
+								handIndexItem = index;
 								Game.entities.remove(atual);
 							}
 						}
@@ -752,16 +751,183 @@ public class Player extends Entity{
 	//chegar se já existe um pack no inventario do item que estiver pegando
 	public boolean checkPackInv(Entity atual) {
 		
-		if(atual.pack) {
-			for(int i=0; i<inventario.length; i++) {
-				if(inventario[i] != null) {
-					if(atual.id == inventario[i].id &&
-						inventario[i].itensPack.size()<inventario[i].qtPack){
+		if(atual != null && atual.pack) {
+			if(atual.itensPack.size() == 0) {
+				for(int i=0; i<inventario.length; i++) {
+					if(inventario[i] != null) {
+						if(atual.id == inventario[i].id &&
+							inventario[i].itensPack.size() < inventario[i].qtPack){
+							
+							//verifica se o item não está na mochila
+							for(int k=0; k<4; k++) {
+								for(int l=0; l<6; l++) {
+									if(bagpack[k][l] == atual) {
+										bagpack[k][l] = null;
+										bag[k][l] = null;
+									}
+								}
+							}
+							
 							inventario[i].itensPack.add(atual);
-//							handItem = inventario[i];
-//							handIndexItem = i;
+	//						handItem = inventario[i];
+	//						handIndexItem = i;
 							Game.entities.remove(atual);
 							return true;
+						}
+					}
+				}
+			}
+			else if (atual.itensPack.size() > 0 &&   // Se o pack tiver  lista maior q zero e menor que o qtPack do inventario
+			atual.itensPack.size() < atual.qtPack){
+				for(int i=0; i<inventario.length; i++) {
+					if(inventario[i] != null) {
+						//verifica se o id do pack do chão é o mesmo id do pack do inventario
+						// e se o pack do inventario já está cheio
+						if(atual.id == inventario[i].id && inventario[i].itensPack.size() < inventario[i].qtPack) {
+							//verifica se a soma do pack do chão e do pack do inventario +1 (o próprio pack do chão)
+							//supera a qtPack do inventario
+							//Se não superar, apenas adiciona os items da lista do pack do chão ao pack do inventario
+							if((inventario[i].itensPack.size() + atual.itensPack.size() + 1) <= inventario[i].qtPack){
+								
+								//verifica se o item não está na mochila
+								for(int k=0; k<4; k++) {
+									for(int l=0; l<6; l++) {
+										if(bagpack[k][l] == atual) {
+											bagpack[k][l] = null;
+											bag[k][l] = null;
+										}
+									}
+								}
+								
+								if(atual.itensPack.size() > 0) {
+									inventario[i].itensPack.addAll(atual.itensPack);
+									atual.itensPack.removeAll(atual.itensPack);
+								}
+								inventario[i].itensPack.add(atual);
+								Game.entities.remove(atual);
+								return true;
+								
+							}else { // Se superar, calcula os itens que sobrarão
+								
+								//verifica se o pack é apenas o item, ou se tem algo na lista
+								//Se não tiver nada na lista, apenas ignora e retorna false
+								if(atual.itensPack.size() > 0) {
+							
+									int completa = 0;
+									//Calcula quantos item completaram o pack do inventario
+									completa = inventario[i].qtPack - inventario[i].itensPack.size(); 
+					
+									//adicionando os itens do pack no chão ao pack do inventario
+									for(int j = 0; j < atual.itensPack.size(); j++) {
+										if(j < completa) {
+											inventario[i].itensPack.add(atual.itensPack.get(j));
+										}
+									}
+					
+									int cont = 0;
+	
+									//removendo os itens do pack do chão que foram pegos do pack do chão para o pack do inventario
+									while (cont < completa) {
+											atual.itensPack.remove(0);
+											cont++;
+									}	
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean checkPackBag(Entity atual) {
+		
+		if(atual.pack) {
+			if(atual.itensPack.size() == 0) {
+				for(int i=0; i<4; i++) {
+					for(int j=0; j<6; j++) {
+						if(bagpack[i][j] != null) {
+							if(atual.id == bagpack[i][j].id &&
+									bagpack[i][j].itensPack.size() < bagpack[i][j].qtPack){
+								
+								
+								for(int k=0; k<inventario.length; k++) {
+									if(inventario[k] == atual) {
+										inventario[k] = null;
+										inv[k] = null;
+										handItem = null;
+									}
+								}
+								
+								bagpack[i][j].itensPack.add(atual);
+								
+								return true;
+							}
+						}
+					}
+				}
+			}
+			else if (atual.itensPack.size() > 0 &&   // Se o pack tiver  lista maior q zero e menor que o qtPack do inventario
+			atual.itensPack.size() < atual.qtPack){
+				for(int i=0; i<4; i++) {
+					for(int j=0; j<6; j++) {
+						if(bagpack[i][j] != null) {
+							//Verifica se o item do inventario e da bag possuem mesmo id e se o pack da bag não está completo
+							if(atual.id == bagpack[i][j].id && bagpack[i][j].itensPack.size() < bagpack[i][j].qtPack) {
+								//verifica se a soma do pack do chão e do pack do inventario +1 (o próprio pack do chão)
+								//supera a qtPack do inventario
+								//Se não superar, apenas adiciona os items da lista do pack do chão ao pack do inventario
+								if((bagpack[i][j].itensPack.size() + atual.itensPack.size() + 1) <= bagpack[i][j].qtPack){
+									
+									for(int k=0; k<inventario.length; k++) {
+										if(inventario[k] == atual) {
+											inventario[k] = null;
+											inv[k] = null;
+											handItem = null;
+										}
+									}
+									
+									if(atual.itensPack.size() > 0) {
+										bagpack[i][j].itensPack.addAll(atual.itensPack);
+										atual.itensPack.removeAll(atual.itensPack);
+									}
+									
+									bagpack[i][j].itensPack.add(atual);
+								
+									return true;
+									
+								}else { // Se superar, calcula os itens que sobrarão
+									
+									//verifica se o pack é apenas o item, ou se tem algo na lista
+									//Se não tiver nada na lista, apenas ignora e retorna false
+									if(atual.itensPack.size() > 0) {
+										
+										int completa = 0;
+										//Calcula quantos item completaram o pack do inventario
+										completa = bagpack[i][j].qtPack - bagpack[i][j].itensPack.size(); 
+										
+										//adicionando os itens do pack da bag ao pack do inventario
+										for(int k = 0; k < atual.itensPack.size(); k++) {
+											if(k < completa) {
+												bagpack[i][j].itensPack.add(atual.itensPack.get(k));
+											}
+										}
+										
+										//removendo os itens do pack do bag que foram pegos do pack do bag para o pack do inventario
+										int cont = 0;
+										
+										//removendo os itens do pack do bag que foram pegos do pack do bag para o pack do inventario
+										while (cont < completa) {
+												atual.itensPack.remove(0);
+												cont++;
+										}	
+						
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -811,18 +977,20 @@ public class Player extends Entity{
 		//verifica se na posição selecionada do inv não está vazia, e se a mochila está cheia
 		if(inventario[clickSelectIndexInv] != null && i < 4 && j < 6 && i >= 0 && j >= 0) {
 			
-			//Joga o item para a mochila
-			bagpack[i][j] = inventario[clickSelectIndexInv];
-			bag[i][j] = inv[clickSelectIndexInv];
-			
-			//Se o Item que foi selecionado com o click estiver na mão, retira da mão e do inventario
-			if(inventario[clickSelectIndexInv].equals(handItem) && clickSelectIndexInv == handIndexItem) {
-				handItem = null;
-				inventario[clickSelectIndexInv] = null;
-				inv[clickSelectIndexInv] = null;
-			}else { // se não, apenas retira do inventario
-				inventario[clickSelectIndexInv] = null;
-				inv[clickSelectIndexInv] = null;
+			if(!checkPackBag(inventario[clickSelectIndexInv])) {
+				//Joga o item para a mochila
+				bagpack[i][j] = inventario[clickSelectIndexInv];
+				bag[i][j] = inv[clickSelectIndexInv];
+				
+				//Se o Item que foi selecionado com o click estiver na mão, retira da mão e do inventario
+				if(inventario[clickSelectIndexInv].equals(handItem) && clickSelectIndexInv == handIndexItem) {
+					handItem = null;
+					inventario[clickSelectIndexInv] = null;
+					inv[clickSelectIndexInv] = null;
+				}else { // se não, apenas retira do inventario
+					inventario[clickSelectIndexInv] = null;
+					inv[clickSelectIndexInv] = null;
+				}
 			}
 		}
 	}
@@ -841,14 +1009,17 @@ public class Player extends Entity{
 			
 			int indexInv = checkPositionGetInv();
 			
-			//verifica se o inventario não está cheio e o player estiver com o espaço do inventario selecionado para a mão
-			if((indexInv >= 0 && indexInv < inventario.length)) {
-				inventario[indexInv] = bagpack[j][i];
-				handItem = bagpack[j][i];
-				inv[indexInv] = bag[j][i];
-				handIndexItem = indexInv;
-				bagpack[j][i] = null;
-				bag[j][i] = null;
+			if(!checkPackInv(bagpack[j][i])) {
+			
+				//verifica se o inventario não está cheio e o player estiver com o espaço do inventario selecionado para a mão
+				if((indexInv >= 0 && indexInv < inventario.length)) {
+					inventario[indexInv] = bagpack[j][i];
+					handItem = bagpack[j][i];
+					inv[indexInv] = bag[j][i];
+					handIndexItem = indexInv;
+					bagpack[j][i] = null;
+					bag[j][i] = null;
+				}
 			}
 		}
 	}

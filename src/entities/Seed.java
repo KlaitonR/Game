@@ -9,7 +9,7 @@ public class Seed extends Entity{
 		
 //		depth = 1;
 		pack = true;
-		qtPack = 63;
+		qtPack = 10;
 		
 		}
 

@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import entities.BulletShoot;
 import entities.Enemy;
 import entities.Entity;
+import entities.Mob;
 import entities.Npc;
 import entities.Particle;
 import entities.Player;
@@ -48,10 +49,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	static public ArrayList <Entity> entities;
 	static public ArrayList <Enemy> enemies;
+	static public ArrayList <Mob> mobs;
 	static public ArrayList <BulletShoot> bulletShootes;
 	static public ArrayList <Particle> particles;
 	static public Spritsheet spritesheet;
-	static public Spritsheet spritButton;
+	static public Spritsheet spritePlayer;
+	static public Spritsheet spriteMobs;
+	static public Spritsheet spriteButton;
 	
 	public static World world;
 	public static Player player;
@@ -120,8 +124,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 //		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
-		spritButton =  new Spritsheet("/button.png");
-		ui = new UI(spritButton);
+		spriteButton =  new Spritsheet("/button.png");
+		ui = new UI(spriteButton);
 		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		
@@ -152,10 +156,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		entities =  new ArrayList<Entity>();
 		enemies =  new ArrayList<Enemy>();
+		mobs = new ArrayList<Mob>();
 		bulletShootes = new  ArrayList<BulletShoot>();
 		particles =  new ArrayList<Particle>();
 		spritesheet =  new Spritsheet("/spritesheet.png");
-		player  = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
+		spritePlayer =  new Spritsheet("/spritePlayer.png");
+		spriteMobs =  new Spritsheet("/spriteMobs.png");
+		player  = new Player(0, 0, 16, 16, spritePlayer.getSprite(0, 0, 16, 16));
 		entities.add(player);
 		world =  new World("/level1.png");
 		

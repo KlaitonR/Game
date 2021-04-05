@@ -34,21 +34,21 @@ public class Entity {
 	public int maskx, masky, mwidth, mheigth;
 	
 	private BufferedImage sprite;
-	public static BufferedImage LIFE_PACK_EN = Game.spritesheet.getSprite(0, 16, 16, 16);
-	public static BufferedImage WEAPON_EN = Game.spritesheet.getSprite(16, 16, 16, 16);
+	public static BufferedImage LIFE_PACK_EN = Game.spritesheet.getSprite(0, 48, 16, 16);
+	public static BufferedImage WEAPON_EN = Game.spritesheet.getSprite(0, 64, 16, 16);
 	public static BufferedImage BULLET_EN = Game.spritesheet.getSprite(0, 32, 16, 16);
 	public static BufferedImage ENEMY_EN = Game.spritesheet.getSprite(6*16, 16, 16, 16);
-	public static BufferedImage CARVALHO_EN = Game.spritesheet.getSprite(0, 48, 16, 16);
-	public static BufferedImage PINHEIRO_EN = Game.spritesheet.getSprite(0, 240, 16, 16);
-	public static BufferedImage RAIZ_EN = Game.spritesheet.getSprite(0, 224, 16, 16);
-	public static BufferedImage FIREWOOD_CARVALHO_EN = Game.spritesheet.getSprite(0, 64, 16, 16);
-	public static BufferedImage FIREWOOD_PINHEIRO_EN = Game.spritesheet.getSprite(16, 240, 16, 16);
-	static public BufferedImage STUMP_EN = Game.spritesheet.getSprite(0, 144, 16, 16);
+	public static BufferedImage CARVALHO_EN = Game.spritesheet.getSprite(48, 0, 16, 16);
+	public static BufferedImage PINHEIRO_EN = Game.spritesheet.getSprite(64, 0, 16, 16);
+	public static BufferedImage RAIZ_EN = Game.spritesheet.getSprite(32, 16, 16, 16);
+	public static BufferedImage FIREWOOD_CARVALHO_EN = Game.spritesheet.getSprite(48, 16, 16, 16);
+	public static BufferedImage FIREWOOD_PINHEIRO_EN = Game.spritesheet.getSprite(64, 16, 16, 16);
+	static public BufferedImage STUMP_EN = Game.spritesheet.getSprite(32, 0, 16, 16);
 	public static BufferedImage AXE_EN = Game.spritesheet.getSprite(0, 96, 16, 16);
 	public static BufferedImage LIGHTER_EN = Game.spritesheet.getSprite(0, 128, 16, 16);
-	static public BufferedImage DOOR_EN = Game.spritesheet.getSprite(16, 48, 16, 16);
-	static public BufferedImage SEED_CARVALHO_EN = Game.spritesheet.getSprite(0, 176, 16, 16);
-	static public BufferedImage SEED_PINHEIRO_EN = Game.spritesheet.getSprite(16, 176, 16, 16); 
+	static public BufferedImage DOOR_EN = Game.spritesheet.getSprite(16, 16, 16, 16);
+	static public BufferedImage SEED_CARVALHO_EN = Game.spritesheet.getSprite(48, 32, 16, 16);
+	static public BufferedImage SEED_PINHEIRO_EN = Game.spritesheet.getSprite(64, 32, 16, 16); 
 	static public BufferedImage PLAT_EN = Game.spritesheet.getSprite(16, 176, 16, 16);
 	static public BufferedImage FISHING_ROD_EN = Game.spritesheet.getSprite(0, 208, 16, 16);
 	static public BufferedImage FISH_EN = Game.spritesheet.getSprite(16, 192, 16, 16);
@@ -58,6 +58,9 @@ public class Entity {
 	static public BufferedImage GROUND_F2_EN = Game.spritesheet.getSprite(16, 160, 16, 16);
 	static public BufferedImage GROUND_F3_EN = Game.spritesheet.getSprite(0, 192, 16, 16);
 	public static BufferedImage FISHING_EN;
+	static public BufferedImage PIG_BEEF_EN = Game.spritesheet.getSprite(32, 192, 16, 16);
+	
+	static public BufferedImage PIG_MOB = Game.spritesheet.getSprite(0, 192, 16, 16);
 	
 	public BufferedImage getSprite() {
 		return sprite;
@@ -70,6 +73,10 @@ public class Entity {
 	protected List<Node> path;
 	
 	public int depth;
+	
+	public Entity () {
+		
+	}
 	
 	public Entity (double x, double y, int width, int height, BufferedImage sprite) {
 		this.x = x;
