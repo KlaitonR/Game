@@ -1279,10 +1279,12 @@ public class Player extends Entity{
 	
 	public void addItemCreation() {
 		
-		int indexCreation = Game.sysCre.indexCreation();
 		if(inventario[clickSelectIndexInv] != null) {
-			if(indexCreation >= 0 && indexCreation < Game.sysCre.slot.length) {
-				if(!Game.sysCre.checkPackCreation(inventario[clickSelectIndexInv])) {
+			if(!Game.sysCre.checkPackCreation(inventario[clickSelectIndexInv])) {
+				
+				int indexCreation = Game.sysCre.indexCreation();
+				
+				if(indexCreation >= 0 && indexCreation < Game.sysCre.slot.length) {
 					Game.sysCre.addItem(inventario[clickSelectIndexInv]);
 					handItem = null;
 					inv[clickSelectIndexInv] = null;

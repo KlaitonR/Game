@@ -131,7 +131,7 @@ public class SystemCreation {
 		
 	}
 	
-public void dropItem(int x, int y, int index) {
+	public void dropItem(int x, int y, int index) {
 		
 			if(slot[index] != null) {
 				slot[index].setX(x);
