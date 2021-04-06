@@ -7,6 +7,10 @@ public class PigBeef extends Beef{
 	public PigBeef(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
 
+		pack = true;
+		id = 11;
+		qtPack = 63;
+		
 	}
 
 }

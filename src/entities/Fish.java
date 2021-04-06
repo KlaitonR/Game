@@ -8,7 +8,7 @@ public class Fish extends Entity {
 		super(x, y, width, height, sprite);
 		
 		pack = true;
-		qtPack = 64;
+		qtPack = 63;
 		id = 3;
 
 	}

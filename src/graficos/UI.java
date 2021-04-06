@@ -15,7 +15,9 @@ public class UI {
 	
 	private BufferedImage [] button;
 	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
+	public InputStream stream02 = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
 	public Font newfont;
+	public Font fontSystemCreat;
 	
 	public UI(Spritsheet spritButton) {
 		
@@ -25,6 +27,7 @@ public class UI {
 		
 		try {
 			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(14f);
+			fontSystemCreat = Font.createFont(Font.TRUETYPE_FONT, stream02).deriveFont(22f);
 		}catch (FontFormatException f) {
 			f.printStackTrace();
 		}catch(IOException e){
@@ -229,6 +232,148 @@ public class UI {
 		}
 	}
 	
+	public void systemCreation(Graphics g) {
+		
+		g.setColor(new Color(0xA0A0A0));
+		g.fillRect(75, 65, 100, 65);
+				
+		//Janela de Criação
+		//barra esquerda
+		g.setColor(Color.black); 
+		g.fillRect(175, 57, 1, 73);
+		//barra direita
+		g.setColor(Color.black); 
+		g.fillRect(74, 65, 1, 65);
+		//barra de cima
+		g.setColor(Color.black); 
+		g.fillRect(74, 57, 101, 8);
+		//baara de baixo
+		g.setColor(Color.black); 
+		g.fillRect(74, 130, 102, 1);
+		
+		g.setFont(newfont);
+		g.setColor(Color.white);
+		g.drawString("Criação", 111, 64);
+		
+		//Espaço para criar Itens 01
+		g.setColor(new Color(0xC0C0C0));
+		g.fillRect(80, 70, 20, 20);
+	
+		//barra direita
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(80, 70, 1, 20);
+		//barra de cima
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(80, 70, 20, 1);
+		
+		//Espaço para criar Itens 02
+		g.setColor(new Color(0xC0C0C0));
+		g.fillRect(110, 70, 20, 20);
+			
+		//barra direita
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(110, 70, 1, 20);
+		//barra de cima
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(110, 70, 20, 1);
+		
+		//Espaço para criar Itens 03
+		g.setColor(new Color(0xC0C0C0));
+		g.fillRect(80, 105, 20, 20);
+							
+		//barra direita
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(80, 105, 1, 20);
+		//barra de cima
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(80, 105, 20, 1);
+		
+		//Espaço para criar Itens 04
+		g.setColor(new Color(0xC0C0C0));
+		g.fillRect(110, 105, 20, 20);
+					
+		//barra direita
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(110, 105, 1, 20);
+		//barra de cima
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(110, 105, 20, 1);
+		
+		//Espaço para criar Itens 05
+		g.setColor(new Color(0xC0C0C0));
+		g.fillRect(150, 88, 20, 20);
+							
+		//barra direita
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(150, 88, 1, 20);
+		//barra de cima
+		g.setColor(new Color(0x404040)); 
+		g.fillRect(150, 88, 20, 1);
+		
+		//Sinal de +
+		g.setFont(fontSystemCreat);
+		g.setColor(Color.white);
+		g.drawString("+", 102, 102);
+		
+		//Sinal de =
+		g.setFont(fontSystemCreat);
+		g.setColor(Color.white);
+		g.drawString("=", 138, 102);
+		
+		//Apenas renderizando oque foi colocado no buffer do inventari
+							
+		g.drawImage(Game.sysCre.itens[0], 83, 72, null);
+		
+		g.drawImage(Game.sysCre.itens[1], 113, 72, null);
+		
+		g.drawImage(Game.sysCre.itens[2], 83, 107, null);
+		
+		g.drawImage(Game.sysCre.itens[3], 113, 107, null);
+		
+		g.drawImage(Game.sysCre.itens[4], 153, 90, null);
+					
+		if(Game.sysCre.slot[0] != null &&
+				Game.sysCre.slot[0] != null &&
+						Game.sysCre.slot[0].itensPack.size()+1 > 1 ){
+			g.setFont(new Font("arial", Font.BOLD, 9));
+			g.setColor(Color.white);
+			g.drawString((Game.sysCre.slot[0].itensPack.size() + 1) + "", 83, 89);
+		}
+		
+		if(Game.sysCre.slot[1] != null &&
+				Game.sysCre.slot[1] != null &&
+						Game.sysCre.slot[1].itensPack.size()+1 > 1 ){
+			g.setFont(new Font("arial", Font.BOLD, 9));
+			g.setColor(Color.white);
+			g.drawString((Game.sysCre.slot[1].itensPack.size() + 1) + "", 113, 89);
+		}
+		
+		if(Game.sysCre.slot[2] != null &&
+				Game.sysCre.slot[2] != null &&
+						Game.sysCre.slot[2].itensPack.size()+1 > 1 ){
+			g.setFont(new Font("arial", Font.BOLD, 9));
+			g.setColor(Color.white);
+			g.drawString((Game.sysCre.slot[2].itensPack.size() + 1) + "", 83, 124);
+		}
+		
+		if(Game.sysCre.slot[3] != null &&
+				Game.sysCre.slot[3] != null &&
+						Game.sysCre.slot[3].itensPack.size()+1 > 1 ){
+			g.setFont(new Font("arial", Font.BOLD, 9));
+			g.setColor(Color.white);
+			g.drawString((Game.sysCre.slot[3].itensPack.size() + 1) + "", 113, 124);
+		}
+		
+		if(Game.sysCre.slot[4] != null &&
+				Game.sysCre.slot[4] != null &&
+						Game.sysCre.slot[4].itensPack.size()+1 > 1 ){
+			g.setFont(new Font("arial", Font.BOLD, 9));
+			g.setColor(Color.white);
+			g.drawString((Game.sysCre.slot[4].itensPack.size() + 1) + "", 153, 106);
+		}
+		
+	}
+	
 	public void render(Graphics g) {
 
 		lifePlayer(g);
@@ -239,5 +384,8 @@ public class UI {
 		if(Game.player.useBag)
 			systemBag(g);
 		
+		if(Game.player.creation)
+			systemCreation(g);
+	
 	}
 }

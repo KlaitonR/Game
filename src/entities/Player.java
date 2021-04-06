@@ -40,9 +40,11 @@ public class Player extends Entity{
 	public boolean mouseShoot;
 	public boolean useLighter;
 	public boolean openDoor;
+	public boolean creation;
 	public boolean useBag;
 	public boolean clickInv;
 	public boolean clickBag;
+	public boolean clickCreation;
 	public double life = 100, maxLife = 100;
 	public int ammo = 1000;
 	public int fishingTime, maxFishingfTime = Game.rand.nextInt(180 - 60) + 60;
@@ -57,6 +59,7 @@ public class Player extends Entity{
 	public boolean scrollItemDir;
 	public int clickSelectIndexInv;
 	public int[] clickSelectIndexBag;
+	public int clickSelectIndexCreation;
 	
 	public boolean openLvls;
 	public boolean offLvls = true;
@@ -768,9 +771,15 @@ public class Player extends Entity{
 								}
 							}
 							
+							//verifica se o item não está no creation
+							for(int m=0; m<Game.sysCre.slot.length; m++) {
+								if(Game.sysCre.slot[m] == atual) {
+									Game.sysCre.slot[m] = null;
+									Game.sysCre.itens[m] = null;
+								}
+							}
+							
 							inventario[i].itensPack.add(atual);
-	//						handItem = inventario[i];
-	//						handIndexItem = i;
 							Game.entities.remove(atual);
 							return true;
 						}
@@ -796,6 +805,14 @@ public class Player extends Entity{
 											bagpack[k][l] = null;
 											bag[k][l] = null;
 										}
+									}
+								}
+								
+								//verifica se o item não está no creation
+								for(int m=0; m<Game.sysCre.slot.length; m++) {
+									if(Game.sysCre.slot[m] == atual) {
+										Game.sysCre.slot[m] = null;
+										Game.sysCre.itens[m] = null;
 									}
 								}
 								
@@ -857,7 +874,6 @@ public class Player extends Entity{
 									if(inventario[k] == atual) {
 										inventario[k] = null;
 										inv[k] = null;
-										handItem = null;
 									}
 								}
 								
@@ -885,7 +901,6 @@ public class Player extends Entity{
 										if(inventario[k] == atual) {
 											inventario[k] = null;
 											inv[k] = null;
-											handItem = null;
 										}
 									}
 									
@@ -941,8 +956,14 @@ public class Player extends Entity{
 		clickSelectIndexInv = index;
 	}
 	
+	//pega os indexs do Item que foi clicado na mochila
 	public void checkClickPositionItemBag(int[] index) {
 		clickSelectIndexBag = index;
+	}
+	
+	//pega o index do Item que foi clicado na janela de criação
+	public void checkClickPositionItemCreation(int index) {
+		clickSelectIndexCreation = index;
 	}
 	
 	//verifica a primeira posição vazia na mochila
@@ -998,7 +1019,7 @@ public class Player extends Entity{
 	public void getItemBag() {
 		
 		int i, j = -1;
-		int [] index = clickSelectIndexBag; // chegar a posição do primeiro espaço vazio que tiver na mochila
+		int [] index = clickSelectIndexBag; // armazena a posição do intem selecionado
 		
 //		System.out.println(index[0] + "  " + index[1]);
 		
@@ -1045,6 +1066,7 @@ public class Player extends Entity{
 			useLighter = false;
 	}
 	
+	//verificar posição vazia do inventario
 	public int checkPositionGetInv() {
 			
 		int index = -1;
@@ -1091,13 +1113,21 @@ public class Player extends Entity{
 					Game.entities.add(inventario[hi]);	
 					World.tiles[inventario[hi].xTile + (inventario[hi].yTile*World.WIDTH)].en = inventario[hi];
 					
+					//verificações de itens 
+					if(inventario[hi] instanceof Lighter) {
+						useLighter = false;
+					}
+					
 					//retira do inventario e da mão do player
 					inventario[hi] = null;
 					inv[hi] = null;
 					handIndexItem = hi;
 					handItem = inventario[hi];
+					
 					Sound.Clips.dropItem.play();
 				}
+				
+				
 			}
 		}
 	}
@@ -1247,6 +1277,22 @@ public class Player extends Entity{
 		
 	}
 	
+	public void addItemCreation() {
+		
+		int indexCreation = Game.sysCre.indexCreation();
+		if(inventario[clickSelectIndexInv] != null) {
+			if(indexCreation >= 0 && indexCreation < Game.sysCre.slot.length) {
+				if(!Game.sysCre.checkPackCreation(inventario[clickSelectIndexInv])) {
+					Game.sysCre.addItem(inventario[clickSelectIndexInv]);
+					handItem = null;
+					inv[clickSelectIndexInv] = null;
+					inventario[clickSelectIndexInv] = null;
+				}
+			}
+		}
+		
+	}
+
 	public void revealMap() {
 		
 		int xx = (int) (x/16);
@@ -1341,20 +1387,6 @@ public class Player extends Entity{
 		}
 	}
 	
-//	public int collidingFishingSpot() {
-//		
-//		for(int i=0; i<Game.entities.size(); i++) {
-//				
-//			if((int)(getX()+(getY()*World.WIDTH)) == Game.entities.get(i).psTiles && Game.entities.get(i) instanceof FishingSpot) {
-//				return (int)(getX()+(getY()*World.WIDTH));
-//			}
-//		}
-//		
-//		return -1;
-//		
-//	}
-	
-	
 	public void tick() {
 		
 		depth = 5;
@@ -1374,7 +1406,6 @@ public class Player extends Entity{
 		checkColisionGround();
 		createGround();
 		checkCollisionRoot();
-		
 		checkCollisionStumpTile();
 		
 		checkDropItem();
@@ -1382,16 +1413,30 @@ public class Player extends Entity{
 		checkHasItem();
 		checkItemBag();
 		
-		if(clickInv) {
+		if(creation) {
+			getItem = false;
+			useBag = false;
+			useItem = false;
+		}else {
+			Game.sysCre.closeCreation((int)x, (int)y);
+		}
+		
+		if(clickInv && useBag) {
 			clickInv = false;
 			putItemBag();
+		}else if (clickInv && creation) {
+			clickInv = false;
+			addItemCreation();
+		}else if (clickCreation && creation) {
+			clickCreation = false;
+			Game.sysCre.removeItem(clickSelectIndexCreation);
 		}
 		
 		if(clickBag) {
 			clickBag = false;
 			getItemBag();
 		}
-		
+	
 		if(!hasGun)
 			checkCollisionGun();
 		

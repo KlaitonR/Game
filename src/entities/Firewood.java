@@ -8,7 +8,7 @@ public class Firewood extends Entity{
 		super(x, y, width, height, sprite);
 		
 		pack = true;
-		qtPack = 10;
+		qtPack = 63;
 		
 	}
 
