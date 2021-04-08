@@ -15,7 +15,7 @@ import world.World;
 
 public class Entity {
 	
-	//último id = 12
+	//último id = 13
 	
 	public double x;
 	public double y;
@@ -62,6 +62,7 @@ public class Entity {
 	public static BufferedImage FISHING_EN;
 	static public BufferedImage PIG_BEEF_EN = Game.spritesheet.getSprite(32, 192, 16, 16);
 	static public BufferedImage CREATION_TABLE_EN = Game.spritesheet.getSprite(16, 304, 16, 16);
+	static public BufferedImage POTION_EN = Game.spritesheet.getSprite(0, 272, 16, 16);
 	
 	static public BufferedImage PIG_MOB = Game.spritesheet.getSprite(0, 192, 16, 16);
 	

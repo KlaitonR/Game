@@ -2,15 +2,15 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
-public class Seed extends Entity{
+public class Potion extends Entity{
 
-	public Seed(double x, double y, int width, int height, BufferedImage sprite) {
+	public Potion(double x, double y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
 		
-//		depth = 1;
 		pack = true;
 		qtPack = 9;
+		id = 13;
 		
 		}
-
+	
 }

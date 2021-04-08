@@ -45,6 +45,7 @@ public class Player extends Entity{
 	public boolean clickInv;
 	public boolean clickBag;
 	public boolean clickCreation;
+	public boolean clickCraft;
 	public double life = 100, maxLife = 100;
 	public int ammo = 1000;
 	public int fishingTime, maxFishingfTime = Game.rand.nextInt(180 - 60) + 60;
@@ -1282,7 +1283,7 @@ public class Player extends Entity{
 		if(inventario[clickSelectIndexInv] != null) {
 			if(!Game.sysCre.checkPackCreation(inventario[clickSelectIndexInv])) {
 				
-				int indexCreation = Game.sysCre.indexCreation();
+				int indexCreation = Game.sysCre.indexSlotNull();
 				
 				if(indexCreation >= 0 && indexCreation < Game.sysCre.slot.length) {
 					Game.sysCre.addItem(inventario[clickSelectIndexInv]);
@@ -1419,6 +1420,9 @@ public class Player extends Entity{
 			getItem = false;
 			useBag = false;
 			useItem = false;
+			
+			Game.sysCre.craftPotion(8,10,2,2);
+			
 		}else {
 			Game.sysCre.closeCreation((int)x, (int)y);
 		}

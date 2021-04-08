@@ -979,7 +979,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					
 			}else if(player.mx >= 280 && player.my >= 136 && player.mx <= 315 && player.my <= 167) { 
 				player.checkClickPositionItemCreation(4);
-				player.clickCreation = true;
+				player.clickCraft = true;
 			}
 				
 		}

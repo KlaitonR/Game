@@ -369,7 +369,7 @@ public class UI {
 						Game.sysCre.slot[4].itensPack.size()+1 > 1 ){
 			g.setFont(new Font("arial", Font.BOLD, 9));
 			g.setColor(Color.white);
-			g.drawString((Game.sysCre.slot[4].itensPack.size() + 1) + "", 153, 106);
+			g.drawString((Game.sysCre.slot[4].itensPack.size() + 1) + "", 152, 106);
 		}
 		
 	}

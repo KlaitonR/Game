@@ -8,7 +8,7 @@ public class Root extends Entity{
 		super(x, y, width, height, sprite);
 		
 		pack = true;
-		qtPack = 63;
+		qtPack = 9;
 		id = 8;
 	}
 
